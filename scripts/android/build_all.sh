@@ -19,7 +19,7 @@ rm -r ../../android/src/main/jniLibs/
 # OS="ANDROID"
 # sed -i "/\/\*${OS}_VERSION/c\\/\*${OS}_VERSION\*\/ const ${OS}_VERSION = \"$COMMIT\";" $VERSIONS_FILE
 
-cp -r ../../native build
+cp -rf ../../native build
 cd build/native/tor-ffi
 
 rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
