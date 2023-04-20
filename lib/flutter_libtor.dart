@@ -20,16 +20,16 @@ typedef TorHelloRust = Void Function();
 typedef TorHelloDart = void Function();
 
 DynamicLibrary load(name) {
-  if (Platform.isAndroid) {
-    return DynamicLibrary.open('lib$name.so');
-  } else if (Platform.isLinux) {
-    return DynamicLibrary.open('target/debug/lib$name.so');
-  } else if (Platform.isIOS || Platform.isMacOS) {
-    // iOS and MacOS are statically linked, so it is the same as the current process
-    return DynamicLibrary.process();
-  } else {
-    throw NotSupportedPlatform('${Platform.operatingSystem} is not supported!');
+  if (Platform.isMacOS || Platform.isIOS) {
+    return DynamicLibrary.open('$name.framework/$name');
   }
+  if (Platform.isAndroid || Platform.isLinux) {
+    return DynamicLibrary.open('lib$name.so');
+  }
+  if (Platform.isWindows) {
+    return DynamicLibrary.open('$name.dll');
+  }
+  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
 }
 
 class NotSupportedPlatform implements Exception {
@@ -37,7 +37,7 @@ class NotSupportedPlatform implements Exception {
 }
 
 class Tor {
-  static late String _libName = "tor_ffi";
+  static late String _libName = "flutter_libtor";
   static late DynamicLibrary _lib;
 
   bool enabled = true;
