@@ -24,4 +24,4 @@ cd build/native/tor-ffi
 
 rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 
-cargo ndk -t armeabi-v7a -t arm64-v8a -t x86_64 -o ../../../../android/src/main/jniLibs build
+cargo ndk -t armeabi-v7a -t arm64-v8a -t x86_64 -o ../../../../../android/src/main/jniLibs build
