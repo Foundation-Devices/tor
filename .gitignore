@@ -2,3 +2,6 @@
 /scripts/*/cache/*
 
 android/src/main/jniLibs/*
+
+/local.properties
+.idea
