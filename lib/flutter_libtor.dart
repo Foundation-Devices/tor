@@ -1,131 +1,293 @@
+// SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
-import 'dart:isolate';
+import 'dart:math';
 
-import 'flutter_libtor_bindings_generated.dart';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
+import 'package:ffi/ffi.dart';
+import 'package:path_provider/path_provider.dart';
 
-/// A very short-lived native function.
-///
-/// For very short-lived functions, it is fine to call them on the main isolate.
-/// They will block the Dart execution while running the native function, so
-/// only do this for native functions which are guaranteed to be short-lived.
-int sum(int a, int b) => _bindings.sum(a, b);
+typedef TorStartRust = Bool Function(Pointer<Utf8>);
+typedef TorStartDart = bool Function(Pointer<Utf8>);
 
-/// A longer lived native function, which occupies the thread calling it.
-///
-/// Do not call these kind of native functions in the main isolate. They will
-/// block Dart execution. This will cause dropped frames in Flutter applications.
-/// Instead, call these native functions on a separate isolate.
-///
-/// Modify this to suit your own use case. Example use cases:
-///
-/// 1. Reuse a single isolate for various different kinds of requests.
-/// 2. Use multiple helper isolates for parallel execution.
-Future<int> sumAsync(int a, int b) async {
-  final SendPort helperIsolateSendPort = await _helperIsolateSendPort;
-  final int requestId = _nextSumRequestId++;
-  final _SumRequest request = _SumRequest(requestId, a, b);
-  final Completer<int> completer = Completer<int>();
-  _sumRequests[requestId] = completer;
-  helperIsolateSendPort.send(request);
-  return completer.future;
+typedef TorHelloRust = Void Function();
+typedef TorHelloDart = void Function();
+
+DynamicLibrary load(name) {
+  if (Platform.isAndroid) {
+    return DynamicLibrary.open('lib$name.so');
+  } else if (Platform.isLinux) {
+    return DynamicLibrary.open('target/debug/lib$name.so');
+  } else if (Platform.isIOS || Platform.isMacOS) {
+    // iOS and MacOS are statically linked, so it is the same as the current process
+    return DynamicLibrary.process();
+  } else {
+    throw NotSupportedPlatform('${Platform.operatingSystem} is not supported!');
+  }
 }
 
-const String _libName = 'flutter_libtor';
-
-/// The dynamic library in which the symbols for [FlutterLibtorBindings] can be found.
-final DynamicLibrary _dylib = () {
-  if (Platform.isMacOS || Platform.isIOS) {
-    return DynamicLibrary.open('$_libName.framework/$_libName');
-  }
-  if (Platform.isAndroid || Platform.isLinux) {
-    return DynamicLibrary.open('lib$_libName.so');
-  }
-  if (Platform.isWindows) {
-    return DynamicLibrary.open('$_libName.dll');
-  }
-  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
-}();
-
-/// The bindings to the native functions in [_dylib].
-final FlutterLibtorBindings _bindings = FlutterLibtorBindings(_dylib);
-
-
-/// A request to compute `sum`.
-///
-/// Typically sent from one isolate to another.
-class _SumRequest {
-  final int id;
-  final int a;
-  final int b;
-
-  const _SumRequest(this.id, this.a, this.b);
+class NotSupportedPlatform implements Exception {
+  NotSupportedPlatform(String s);
 }
 
-/// A response with the result of `sum`.
-///
-/// Typically sent from one isolate to another.
-class _SumResponse {
-  final int id;
-  final int result;
+class Tor {
+  static late String _libName = "tor_ffi";
+  static late DynamicLibrary _lib;
 
-  const _SumResponse(this.id, this.result);
-}
+  bool enabled = true;
+  bool started = false;
+  bool circuitEstablished = false;
 
-/// Counter to identify [_SumRequest]s and [_SumResponse]s.
-int _nextSumRequestId = 0;
+  // Periodically check if circuit has been established
+  Timer? _connectionChecker;
+  bool _shutdownInProgress = false;
 
-/// Mapping from [_SumRequest] `id`s to the completers corresponding to the correct future of the pending request.
-final Map<int, Completer<int>> _sumRequests = <int, Completer<int>>{};
+  // This stream broadcast just the port for now (-1 if circuit not established)
+  final StreamController events = StreamController.broadcast();
 
-/// The SendPort belonging to the helper isolate.
-Future<SendPort> _helperIsolateSendPort = () async {
-  // The helper isolate is going to send us back a SendPort, which we want to
-  // wait for.
-  final Completer<SendPort> completer = Completer<SendPort>();
+  int port = -1;
+  int _controlPort = -1;
 
-  // Receive port on the main isolate to receive messages from the helper.
-  // We receive two types of messages:
-  // 1. A port to send messages on.
-  // 2. Responses to requests we sent.
-  final ReceivePort receivePort = ReceivePort()
-    ..listen((dynamic data) {
-      if (data is SendPort) {
-        // The helper isolate sent us the port on which we can sent it requests.
-        completer.complete(data);
-        return;
+  String _password = "secret";
+
+  static final Tor _instance = Tor._internal();
+
+  factory Tor() {
+    return _instance;
+  }
+
+  static Future<Tor> init() async {
+    var singleton = Tor._instance;
+    return singleton;
+  }
+
+  Tor._internal() {
+    _lib = load(_libName);
+    print("Instance of Tor created!");
+  }
+
+  Future<int> _getRandomUnusedPort({List<int> excluded = const []}) async {
+    var random = Random.secure();
+    int potentialPort = 0;
+
+    retry:
+    while (potentialPort <= 0 || excluded.contains(potentialPort)) {
+      potentialPort = random.nextInt(65535);
+      try {
+        var socket = await ServerSocket.bind("0.0.0.0", potentialPort);
+        socket.close();
+        return potentialPort;
+      } catch (_) {
+        continue retry;
       }
-      if (data is _SumResponse) {
-        // The helper isolate sent us a response to a request we sent.
-        final Completer<int> completer = _sumRequests[data.id]!;
-        _sumRequests.remove(data.id);
-        completer.complete(data.result);
-        return;
-      }
-      throw UnsupportedError('Unsupported message type: ${data.runtimeType}');
-    });
+    }
 
-  // Start the helper isolate.
-  await Isolate.spawn((SendPort sendPort) async {
-    final ReceivePort helperReceivePort = ReceivePort()
-      ..listen((dynamic data) {
-        // On the helper isolate listen to requests and respond to them.
-        if (data is _SumRequest) {
-          final int result = _bindings.sum_long_running(data.a, data.b);
-          final _SumResponse response = _SumResponse(data.id, result);
-          sendPort.send(response);
-          return;
+    return -1;
+  }
+
+  enable() async {
+    enabled = true;
+    events.add(port);
+
+    start();
+  }
+
+  start() async {
+    if (_connectionChecker != null) _connectionChecker!.cancel();
+    final rustFunction = _lib.lookup<NativeFunction<TorStartRust>>('tor_start');
+    final dartFunction = rustFunction.asFunction<TorStartDart>();
+
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+
+    int newPort = await _getRandomUnusedPort();
+    int newControlPort = await _getRandomUnusedPort(excluded: [port]);
+
+    const allowedChars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+    var random = Random.secure();
+    String newPassword = String.fromCharCodes(Iterable.generate(32,
+        (_) => allowedChars.codeUnitAt(random.nextInt(allowedChars.length))));
+
+    new Directory(appDocDir.path + '/tor').create().then((Directory directory) {
+      new File(directory.path + "/torrc").create().then((file) {
+        String torrc = 'DataDirectory ' +
+            directory.path +
+            '\n' +
+            'Log notice file ' +
+            directory.path +
+            '/tor.log' +
+            '\n' +
+            'SocksPort ' +
+            newPort.toString() +
+            '\n' +
+            'ControlPort ' +
+            newControlPort.toString() +
+            '\n' +
+            'HashedControlPassword ' +
+            generatePasswordHash(newPassword) +
+            '\n' +
+            'ClientRejectInternalAddresses 1';
+
+        file.writeAsStringSync(torrc);
+        if (dartFunction(file.path.toNativeUtf8())) {
+          started = true;
+
+          port = newPort;
+          _controlPort = newControlPort;
+          _password = newPassword;
+
+          _connectionChecker = Timer.periodic(Duration(seconds: 5), (timer) {
+            _checkIsCircuitEstablished();
+          });
         }
-        throw UnsupportedError('Unsupported message type: ${data.runtimeType}');
+      });
+    });
+  }
+
+  static String generatePasswordHash(String password) {
+    //https://tor.stackexchange.com/a/22591
+    var random = Random.secure();
+
+    // Obtain 8 random bytes from the system as salt
+    var salt = List<int>.generate(8, (i) => random.nextInt(256));
+
+    // Append the bytes of the user specified password to the salt
+    var salted = salt + password.codeUnits;
+
+    // Repeat this sequence until the length is 65536 (0x10000) bytes
+    List<int> longSalted = [];
+    while (longSalted.length < 65536) {
+      longSalted.addAll(salted);
+    }
+
+    // If repeating the sequence doesn't exactly end up at this number, cut off any excess bytes
+    // Hash the sequence using SHA1
+    var digest = sha1.convert(longSalted.sublist(0, 65536));
+
+    // Your hashed control password will be "16:" + Hex(Salt) + "60" + Hex(Sha1)
+    // where + is string concatenation and Hex() is "convert bytes to uppercase hexadecimal"
+    var hashed = '16:' +
+        hex.encode(salt).toUpperCase() +
+        '60' +
+        hex.encode(digest.bytes).toUpperCase();
+    return hashed;
+  }
+
+  disable() {
+    enabled = false;
+    started = false;
+
+    port = -1;
+    _shutdown();
+  }
+
+  Future _shutdown() async {
+    if (!_shutdownInProgress) {
+      _shutdownInProgress = true;
+      print("Tor: shutting down! Control port is " + _controlPort.toString());
+      events.add(port);
+
+      if (_connectionChecker != null) _connectionChecker!.cancel();
+
+      // This will broadcast we are not using Tor anymore
+      if (_controlPort > 0) {
+        Socket? socket = await _connectToControl(_controlPort);
+
+        if (socket == null) {
+          _shutdownInProgress = false;
+          return;
+        } else {
+          _controlPort = -1;
+        }
+
+        // Wait for auth
+        await Future.delayed(Duration(seconds: 1));
+
+        // Shut down
+        socket.add(utf8.encode('SIGNAL SHUTDOWN\r\n'));
+        socket.close();
+
+        circuitEstablished = false;
+
+        // Give Tor a second to shut down
+        await Future.delayed(Duration(seconds: 1));
+        _shutdownInProgress = false;
+        return;
+      }
+      _shutdownInProgress = false;
+    }
+  }
+
+  restart() {
+    if (enabled && started && circuitEstablished) {
+      _shutdown().then((_) {
+        events.add(port);
+        start();
+      });
+    }
+  }
+
+  _checkIsCircuitEstablished() async {
+    if (_controlPort > 0 && enabled && started) {
+      print("Tor: connecting to control port " + _controlPort.toString());
+      Socket? socket = await _connectToControl(_controlPort);
+
+      if (socket == null) {
+        return;
+      }
+
+      socket.listen((List<int> event) {
+        String response = utf8.decode(event);
+        if (response.contains("250-status/circuit-established=1")) {
+          circuitEstablished = true;
+          events.add(port);
+          _connectionChecker!.cancel();
+        }
       });
 
-    // Send the the port to the main isolate on which we can receive requests.
-    sendPort.send(helperReceivePort.sendPort);
-  }, receivePort.sendPort);
+      socket.add(utf8.encode('getinfo status/circuit-established\r\n'));
 
-  // Wait until the helper isolate has sent us back the SendPort on which we
-  // can start sending requests.
-  return completer.future;
-}();
+      // Wait
+      await Future.delayed(Duration(seconds: 2));
+
+      socket.close();
+    }
+  }
+
+  Future<Socket?> _connectToControl(int port) async {
+    // https://iphelix.medium.com/hacking-the-tor-control-protocol-fb844db6a606
+
+    var socket;
+    try {
+      print('Tor: trying to connect to control port ' + port.toString());
+      socket = await Socket.connect('127.0.0.1', port);
+    } on Exception catch (_) {
+      print("Tor: couldn't connect to control port!");
+      return null;
+    }
+
+    print('Tor: connected to control port!');
+
+    // TODO: check if we have actually authenticated
+    // socket.listen((List<int> event) {
+    //   print("Tor control: " + utf8.decode(event));
+    // });
+
+    // Authenticate
+    socket.add(utf8.encode('AUTHENTICATE "' + _password + '"\r\n'));
+    return socket;
+  }
+
+  hello() {
+    final rustFunction = _lib.lookup<NativeFunction<TorHelloRust>>('tor_hello');
+    final dartFunction = rustFunction.asFunction<TorHelloDart>();
+    dartFunction();
+  }
+}
