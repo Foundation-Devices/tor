@@ -1,2 +1,4 @@
 /scripts/*/build/*
 /scripts/*/cache/*
+
+android/src/main/jniLibs/*
