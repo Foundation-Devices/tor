@@ -4,21 +4,25 @@ SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# Tor
+# flutter_libtor
 
 [Foundation-Devices/tor](https://github.com/Foundation-Devices/tor) as a multi-platform Flutter FFI plugin for starting and stopping the Tor daemon. Based on [libtor-sys](https://github.com/MagicalBitcoin/libtor-sys).
 
 ## Getting started
 
-install rust
-https://www.rust-lang.org/tools/install
+### [Install rust](https://www.rust-lang.org/tools/install)
 
-install cargo ndk
+### Install cargo ndk
+```sh
 cargo install cargo-ndk
+```
 
-for android:
+### Add platform-specific targets and run build scripts 
 
-add targets to rust
+#### Android
+
+Add targets to rust and install dependencies (see https://github.com/EpicCash/epic/blob/master/doc/build.md#requirements) 
+```sh
 rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android
 
 sudo apt-get install libc6-dev-i386
@@ -26,21 +30,26 @@ sudo apt-get install libc6-dev-i386
 https://github.com/EpicCash/epic/blob/master/doc/build.md#requirements
 sudo apt install build-essential cmake git libgit2-dev clang libncurses5-dev libncursesw5-dev zlib1g-dev pkg-config llvm
 sudo apt-get install build-essential debhelper cmake libclang-dev libncurses5-dev clang libncursesw5-dev cargo rustc opencl-headers libssl-dev pkg-config ocl-icd-opencl-dev
+```
 
+Run the NDK setup and build scripts
+```sh
 cd scripts/android
 ./install_ndk.sh
 ./build_all.sh
+```
 
-for ios:
+#### iOS
 
-add targets to rust
+```sh
 rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
 
 cargo install cargo-lipo
 cargo install cbindgen
 
 cd scripts/ios
-./build_all
+./build_all.sh
+```
 
 ## Flutter FFI plugin template
 
@@ -129,3 +138,4 @@ For example, see `sumAsync` in `lib/flutter_libtor.dart`.
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
