@@ -1,0 +1,4 @@
+post_install do |installer|
+  system("cargo +1.64.0 build --target=aarch64-apple-ios --manifest-path ../src/tor-ffi/Cargo.toml")
+  system("cargo +1.64.0 build --target=aarch64-apple-ios --release --manifest-path ../src/tor-ffi/Cargo.toml")
+end

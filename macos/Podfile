@@ -1,0 +1,3 @@
+post_install do |installer|
+  system("cargo build --manifest-path ../src/tor-ffi/Cargo.toml")
+end
