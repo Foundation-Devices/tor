@@ -1,3 +1,5 @@
+.idea
+
 /scripts/*/build/*
 /scripts/*/cache/*
 
