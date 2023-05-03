@@ -28,6 +28,8 @@ DynamicLibrary load(name) {
   } else if (Platform.isIOS || Platform.isMacOS) {
     // iOS and MacOS are statically linked, so it is the same as the current process
     return DynamicLibrary.process();
+  } else if (Platform.isWindows) {
+    return DynamicLibrary.open('$name.dll');
   } else {
     throw NotSupportedPlatform('${Platform.operatingSystem} is not supported!');
   }
