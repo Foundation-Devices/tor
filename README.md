@@ -41,6 +41,10 @@ cd scripts/android
 ./build_all.sh
 ```
 
+## Development
+
+To generate bindings for `tor-ffi`, `cargo build` in `src/tor-ffi`  to produce headers according to `build.rs`
+
 ## Flutter FFI plugin template
 
 This project is a starting point for a Flutter
