@@ -17,5 +17,5 @@ export CC=$TOOLCHAIN/bin/$TARGET$API-clang
 export AS=$CC
 export CXX=$TOOLCHAIN/bin/$TARGET$API-clang++
 export LD=$TOOLCHAIN/bin/ld
-export RANLIB=$TOOLCHAIN/bin/x86_64-linux-android-ranlib
+export RANLIB=$TOOLCHAIN/bin/x86_64-linux-android-ranlib # TODO change based on arch
 export STRIP=$TOOLCHAIN/bin/llvm-strip
