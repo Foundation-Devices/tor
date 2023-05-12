@@ -1,15 +1,15 @@
 # Run with `flutter pub run ffigen --config ffigen.yaml`.
 name: TorBindings
 description: |
-  Bindings for `src/tor.h`.
+  Bindings for `src/tor-ffi/target/tor-ffi.hpp`.
 
   Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
 output: 'lib/tor_bindings_generated.dart'
 headers:
   entry-points:
-    - 'src/tor.h'
+    - 'src/tor-ffi/target/tor-ffi.hpp'
   include-directives:
-    - 'src/tor.h'
+    - 'src/tor-ffi/target/tor-ffi.hpp'
 preamble: |
   // ignore_for_file: always_specify_types
   // ignore_for_file: camel_case_types

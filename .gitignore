@@ -1,5 +1,10 @@
 /local.properties
 .idea
+.dart_tool
+
+src/tor-ffi/target/debug
+src/tor-ffi/target/.rustc_info.json
+src/tor-ffi/target/CACHEDIR.TAG
 
 /scripts/*/build/*
 /scripts/*/cache/*
