@@ -43,7 +43,7 @@ cd scripts/android
 
 ## Development
 
-To generate bindings for `tor-ffi`, `cargo build` in `src/tor-ffi`  to produce headers according to `build.rs`
+To generate Dart bindings for C, `cargo build` in `native/tor-ffi` to produce headers according to `build.rs`
 
 ## Flutter FFI plugin template
 
