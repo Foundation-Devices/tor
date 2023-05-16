@@ -7,9 +7,9 @@ description: |
 output: 'lib/tor_bindings_generated.dart'
 headers:
   entry-points:
-    - 'native/tor-ffi/target/tor-ffi.hpp'
+    - 'native/tor-ffi/target/tor-ffi.h'
   include-directives:
-    - 'native/tor-ffi/target/tor-ffi.hpp'
+    - 'native/tor-ffi/target/tor-ffi.h'
 preamble: |
   // ignore_for_file: always_specify_types
   // ignore_for_file: camel_case_types
