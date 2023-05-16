@@ -51,7 +51,7 @@ ffigen:
       - tor_.*
   headers:
     entry-points:
-      - 'native/tor-ffi/target/tor-ffi.hpp'
+      - 'native/tor-ffi/target/tor-ffi.h'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
