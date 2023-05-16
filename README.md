@@ -43,7 +43,7 @@ cd scripts/android
 
 ## Development
 
-To generate `tor-ffi.h` C bindings for Rust, `cbindgen --config cbindgen.toml --crate tor-ffi --output tor-ffi.h` or `cargo build` in `native/tor-ffi` to produce headers according to `build.rs`
+To generate `tor-ffi.h` C bindings for Rust, `cbindgen --config cbindgen.toml --crate tor-ffi --output target/tor-ffi.h` or `cargo build` in `native/tor-ffi` to produce headers according to `build.rs`
 To generate `tor_bindings_generated.dart` Dart bindings for C, `flutter pub run ffigen --config ffigen.yaml`
 
 ## Flutter FFI plugin template
