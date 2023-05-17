@@ -24,8 +24,10 @@ if [ "$IS_ARM" = true ]  ; then
     cargo build --target aarch64-unknown-linux-gnu --release --lib
 
     mkdir -p target/x86_64-unknown-linux-gnu/release
-    cp target/aarch64-unknown-linux-gnu/release/libepic_cash_wallet.so target/x86_64-unknown-linux-gnu/release/
+    cp target/aarch64-unknown-linux-gnu/release/libtor_ffi.so target/x86_64-unknown-linux-gnu/release/
+    cp target/aarch64-unknown-linux-gnu/release/libtor_ffi.so ../../../../../linux/bin/aarch64-unknown-linux-gnu/release/
 else
     echo "Building x86_64 version"
     cargo build --target x86_64-unknown-linux-gnu --release --lib
+    cp target/x86_64-unknown-linux-gnu/release/libtor_ffi.so ../../../../../linux/bin/x86_64-unknown-linux-gnu/release/
 fi
