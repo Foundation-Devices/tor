@@ -15,7 +15,7 @@ mkdir -p build
 #OS="LINUX"
 #sed -i "/\/\*${OS}_VERSION/c\\/\*${OS}_VERSION\*\/ const ${OS}_VERSION = \"$COMMIT\";" $VERSIONS_FILE
 
-rm -rf build/rust
+rm -rf build/native
 cp -rf ../../native build
 cd build/native/tor-ffi
 
@@ -25,9 +25,11 @@ if [ "$IS_ARM" = true ]  ; then
 
     mkdir -p target/x86_64-unknown-linux-gnu/release
     cp target/aarch64-unknown-linux-gnu/release/libtor_ffi.so target/x86_64-unknown-linux-gnu/release/
+    mkdir -p ../../../../../linux/bin/aarch64-unknown-linux-gnu/release/
     cp target/aarch64-unknown-linux-gnu/release/libtor_ffi.so ../../../../../linux/bin/aarch64-unknown-linux-gnu/release/
 else
     echo "Building x86_64 version"
     cargo build --target x86_64-unknown-linux-gnu --release --lib
+    mkdir -p ../../../../../linux/bin/x86_64-unknown-linux-gnu/release/
     cp target/x86_64-unknown-linux-gnu/release/libtor_ffi.so ../../../../../linux/bin/x86_64-unknown-linux-gnu/release/
 fi
