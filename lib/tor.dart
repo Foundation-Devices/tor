@@ -279,9 +279,9 @@ class Tor {
     print('Tor: connected to control port!');
 
     // TODO: check if we have actually authenticated
-    // socket.listen((List<int> event) {
-    //   print("Tor control: " + utf8.decode(event));
-    // });
+    socket.listen((List<int> event) {
+      print("Tor control: " + utf8.decode(event));
+    });
 
     // Authenticate
     socket.add(utf8.encode('AUTHENTICATE "' + _password + '"\r\n'));
