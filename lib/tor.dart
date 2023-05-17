@@ -24,7 +24,7 @@ DynamicLibrary load(name) {
   if (Platform.isAndroid) {
     return DynamicLibrary.open('lib$name.so');
   } else if (Platform.isLinux) {
-    return DynamicLibrary.open('target/debug/lib$name.so');
+    return DynamicLibrary.open('lib$name.so');
   } else if (Platform.isIOS || Platform.isMacOS) {
     // iOS and MacOS are statically linked, so it is the same as the current process
     return DynamicLibrary.process();
