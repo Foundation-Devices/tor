@@ -16,6 +16,7 @@ mkdir -p build
 #sed -i "/\/\*${OS}_VERSION/c\\/\*${OS}_VERSION\*\/ const ${OS}_VERSION = \"$COMMIT\";" $VERSIONS_FILE
 
 cd ../../native/tor-ffi
+# normal to see `cannot remove ... No such file or directory` on first build
 rm -rf target
 
 if [ "$IS_ARM" = true ]  ; then
@@ -26,5 +27,6 @@ if [ "$IS_ARM" = true ]  ; then
 else
     echo "Building x86_64 version"
     cargo build --target x86_64-unknown-linux-gnu --release --lib
+
     cp target/x86_64-unknown-linux-gnu/release/libtor_ffi.so ../../scripts/linux/build
 fi
