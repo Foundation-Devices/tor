@@ -1,9 +1,12 @@
-import 'dart:async';
 // example app deps, not necessarily needed for tor usage
 import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_socks_proxy/socks_proxy.dart'; // just for example; can use any socks5 proxy package, pick your favorite.
+import 'package:socks5_proxy/socks_client.dart'; // just for example; can use any socks5 proxy package, pick your favorite.
+// import needed for tor usage:
+import 'package:tor/models/tor_config.dart';
 import 'package:tor/tor.dart';
 
 void main() {
@@ -21,28 +24,22 @@ class _MyAppState extends State<MyApp> {
   late int sumResult;
   late Future<int> sumAsyncResult;
 
+  final tor = Tor();
   final portController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   void initState() {
+    this.getPort();
+    this.getPassword();
     super.initState();
-
-    // Create the Tor class
-    dynamic tor = Tor();
-
-    // Start the Tor daemon
-    tor.start();
-
-    // TODO async example
-    // sumAsyncResult = Future.delayed(Duration.zero, () {
-    //   return 0;
-    // }); // tor.sumAsync(3, 4);
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     portController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -53,53 +50,99 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Native Packages'),
+          title: const Text('Tor example'),
         ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
+                // TODO add password input and start button to start Tor daemon with password input
                 const Text(
-                  'Enter the port of your Tor daemon/SOCKS5 proxy and press connect'
+                  'Enter the port and password of your Tor daemon/SOCKS5 proxy and press connect'
                   'See the console logs for your port or ~/Documents/tor/tor.log',
                   style: textStyle,
                   textAlign: TextAlign.center,
                 ),
                 spacerSmall,
-                TextField(
-                  controller: portController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'SOCKS5 proxy port',
+                Row(children: [
+                  TextButton(
+                      onPressed: () async {
+                        getPort();
+                      },
+                      child: Text("generate unused port")),
+                  spacerSmall,
+                  Expanded(
+                    child: TextField(
+                        controller: portController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'SOCKS5 proxy port',
+                        )),
                   ),
-                ),
+                ]),
+                Row(children: [
+                  TextButton(
+                      onPressed: () async {
+                        getPassword();
+                      },
+                      child: Text("generate password")),
+                  spacerSmall,
+                  Expanded(
+                    child: TextField(
+                        controller: passwordController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'password',
+                        )),
+                  ),
+                ]),
                 spacerSmall,
                 TextButton(
                     onPressed: () async {
-                      // proxy -> "SOCKS5/SOCKS4/PROXY username:password@host:port;" or "DIRECT"
-                      final http = createProxyHttpClient()
-                        ..findProxy =
-                            (url) => "SOCKS5 127.0.0.1:${portController.text}";
-                      http
-                          .getUrl(Uri.parse(
-                              'https://raw.githubusercontent.com/tayoji-io/socks_proxy/master/README.md'))
-                          .then((value) {
-                            return value.close();
-                          })
-                          .then((value) {
-                            return value.transform(utf8.decoder);
-                          })
-                          .then((value) {
-                            return value.fold(
-                                '',
-                                (dynamic previous, element) =>
-                                    previous + element);
-                          })
-                          .then((value) => print(value))
-                          .catchError((e) => print(e));
+                      final Directory appDocDir =
+                          await getApplicationDocumentsDirectory();
+                      int newControlPort = await this.tor.getRandomUnusedPort(
+                          excluded: [int.parse(portController.text)]);
+
+                      TorConfig torConfig = new TorConfig(
+                          dataDirectory: appDocDir.path + '/tor',
+                          logFile: appDocDir.path + '/tor/tor.log',
+                          socksPort: int.parse(portController.text),
+                          controlPort: newControlPort,
+                          password: passwordController.text);
+
+                      // Start the Tor daemon
+                      await this.tor.start(torConfig);
+                      print('done awaiting');
                     },
-                    child: Text("connect")),
+                    child: Text("start tor")),
+                spacerSmall,
+                TextButton(
+                    onPressed: () async {
+                      // socks5_proxy package example; use socks5 connection of your choice
+                      // Create HttpClient object
+                      final client = HttpClient();
+
+                      // Assign connection factory
+                      SocksTCPClient.assignToHttpClient(client, [
+                        ProxySettings(InternetAddress.loopbackIPv4,
+                            int.parse(portController.text),
+                            password: passwordController.text),
+                      ]);
+
+                      // GET request
+                      final request = await client
+                          .getUrl(Uri.parse('https://icanhazip.com/'));
+                      final response = await request.close();
+                      // Print response
+                      var responseString = await utf8.decodeStream(response);
+                      print(
+                          "icanhazip?\n$responseString"); // should print a tor exit node IP
+                      // Close client
+                      client.close();
+                    },
+                    child: Text("icanhazip?")),
                 // TODO make test interactive (button, status indicator)
                 // spacerSmall,
                 // Text(
@@ -127,5 +170,13 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  getPort() async {
+    portController.text = "${await this.tor.getRandomUnusedPort()}";
+  }
+
+  getPassword() async {
+    passwordController.text = "${await this.tor.generatePassword()}";
   }
 }

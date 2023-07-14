@@ -6,13 +6,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
-import 'package:ffi/ffi.dart';
-
 import 'dart:math';
 
-import 'package:path_provider/path_provider.dart';
-import 'package:crypto/crypto.dart';
 import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
+import 'package:ffi/ffi.dart';
+
+import 'models/tor_config.dart';
 
 typedef TorStartRust = Bool Function(Pointer<Utf8>);
 typedef TorStartDart = bool Function(Pointer<Utf8>);
@@ -75,76 +75,28 @@ class Tor {
     print("Instance of Tor created!");
   }
 
-  Future<int> _getRandomUnusedPort({List<int> excluded = const []}) async {
-    var random = Random.secure();
-    int potentialPort = 0;
-
-    retry:
-    while (potentialPort <= 0 || excluded.contains(potentialPort)) {
-      potentialPort = random.nextInt(65535);
-      try {
-        var socket = await ServerSocket.bind("0.0.0.0", potentialPort);
-        socket.close();
-        return potentialPort;
-      } catch (_) {
-        continue retry;
-      }
-    }
-
-    return -1;
-  }
-
-  enable() async {
+  enable(TorConfig torConfig) async {
     enabled = true;
     events.add(port);
 
-    start();
+    start(torConfig);
   }
 
-  start() async {
+  start(TorConfig torConfig) async {
+    // TODO need to refactor configuration file creation out of start() method
     if (_connectionChecker != null) _connectionChecker!.cancel();
     final rustFunction = _lib.lookup<NativeFunction<TorStartRust>>('tor_start');
     final dartFunction = rustFunction.asFunction<TorStartDart>();
 
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-
-    int newPort = await _getRandomUnusedPort();
-    int newControlPort = await _getRandomUnusedPort(excluded: [port]);
-
-    const allowedChars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-
-    var random = Random.secure();
-    String newPassword = String.fromCharCodes(Iterable.generate(32,
-        (_) => allowedChars.codeUnitAt(random.nextInt(allowedChars.length))));
-
-    new Directory(appDocDir.path + '/tor').create().then((Directory directory) {
-      new File(directory.path + "/torrc").create().then((file) {
-        String torrc = 'DataDirectory ' +
-            directory.path +
-            '\n' +
-            'Log notice file ' +
-            directory.path +
-            '/tor.log' +
-            '\n' +
-            'SocksPort ' +
-            newPort.toString() +
-            '\n' +
-            'ControlPort ' +
-            newControlPort.toString() +
-            '\n' +
-            'HashedControlPassword ' +
-            generatePasswordHash(newPassword) +
-            '\n' +
-            'ClientRejectInternalAddresses 1';
-
-        file.writeAsStringSync(torrc);
+    new Directory(torConfig.dataDirectory).create().then((Directory directory) {
+      new File(torConfig.logFile).create().then((file) {
+        file.writeAsStringSync(torConfig.toString());
         if (dartFunction(file.path.toNativeUtf8())) {
           started = true;
 
-          port = newPort;
-          _controlPort = newControlPort;
-          _password = newPassword;
+          port = torConfig!.socksPort;
+          // _controlPort = torConfig!.controlPort;
+          // _password = torConfig!.password;
 
           _connectionChecker = Timer.periodic(Duration(seconds: 5), (timer) {
             _checkIsCircuitEstablished();
@@ -152,6 +104,7 @@ class Tor {
         }
       });
     });
+    // TODO handle/catch errors and return torConfig
   }
 
   static String generatePasswordHash(String password) {
@@ -228,11 +181,11 @@ class Tor {
     }
   }
 
-  restart() {
+  restart(TorConfig torConfig) {
     if (enabled && started && circuitEstablished) {
       _shutdown().then((_) {
         events.add(port);
-        start();
+        start(torConfig);
       });
     }
   }
@@ -292,5 +245,34 @@ class Tor {
     final rustFunction = _lib.lookup<NativeFunction<TorHelloRust>>('tor_hello');
     final dartFunction = rustFunction.asFunction<TorHelloDart>();
     dartFunction();
+  }
+
+  Future<int> getRandomUnusedPort({List<int> excluded = const []}) async {
+    var random = Random.secure();
+    int potentialPort = 0;
+
+    retry:
+    while (potentialPort <= 0 || excluded.contains(potentialPort)) {
+      potentialPort = random.nextInt(65535);
+      try {
+        var socket = await ServerSocket.bind("0.0.0.0", potentialPort);
+        socket.close();
+        return potentialPort;
+      } catch (_) {
+        continue retry;
+      }
+    }
+
+    return -1;
+  }
+
+  // WARNING probably not safe, just for demo purposes
+  String generatePassword([int len = 32]) {
+    const allowedChars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+    var random = Random.secure();
+    return String.fromCharCodes(Iterable.generate(len,
+        (_) => allowedChars.codeUnitAt(random.nextInt(allowedChars.length))));
   }
 }
