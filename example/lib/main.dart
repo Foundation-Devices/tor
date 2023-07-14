@@ -1,11 +1,11 @@
 // example app deps, not necessarily needed for tor usage
 import 'dart:convert';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:socks5_proxy/socks_client.dart'; // just for example; can use any socks5 proxy package, pick your favorite.
-// import needed for tor usage:
+// imports needed for tor usage:
 import 'package:tor/models/tor_config.dart';
 import 'package:tor/tor.dart';
 
@@ -138,32 +138,11 @@ class _MyAppState extends State<MyApp> {
                       // Print response
                       var responseString = await utf8.decodeStream(response);
                       print(
-                          "icanhazip?\n$responseString"); // should print a tor exit node IP
+                          "icanhazip?\n$responseString"); // should print a tor exit node IP different from what you get from visiting/curling icanhazip.com directly
                       // Close client
                       client.close();
                     },
                     child: Text("icanhazip?")),
-                // TODO make test interactive (button, status indicator)
-                // spacerSmall,
-                // Text(
-                //   'sum(1, 2) = $sumResult',
-                //   style: textStyle,
-                //   textAlign: TextAlign.center,
-                // ),
-                // TODO async example
-                // spacerSmall,
-                // FutureBuilder<int>(
-                //   future: sumAsyncResult,
-                //   builder: (BuildContext context, AsyncSnapshot<int> value) {
-                //     final displayValue =
-                //         (value.hasData) ? value.data : 'loading';
-                //     return Text(
-                //       'await sumAsync(3, 4) = $displayValue',
-                //       style: textStyle,
-                //       textAlign: TextAlign.center,
-                //     );
-                //   },
-                // ),
               ],
             ),
           ),
