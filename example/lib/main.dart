@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   final tor = Tor();
   final portController = TextEditingController();
   final passwordController = TextEditingController();
+  final hostController = TextEditingController(text: 'https://icanhazip.com/');
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
     // Clean up the controller when the widget is disposed.
     portController.dispose();
     passwordController.dispose();
+    hostController.dispose();
     super.dispose();
   }
 
@@ -118,31 +120,44 @@ class _MyAppState extends State<MyApp> {
                     },
                     child: Text("start tor")),
                 spacerSmall,
-                TextButton(
-                    onPressed: () async {
-                      // socks5_proxy package example; use socks5 connection of your choice
-                      // Create HttpClient object
-                      final client = HttpClient();
+                Row(children: [
+                  Expanded(
+                    child: TextField(
+                        controller: hostController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'host to request',
+                        )),
+                  ),
+                  spacerSmall,
+                  TextButton(
+                      onPressed: () async {
+                        // socks5_proxy package example; use socks5 connection of your choice
+                        // Create HttpClient object
+                        final client = HttpClient();
 
-                      // Assign connection factory
-                      SocksTCPClient.assignToHttpClient(client, [
-                        ProxySettings(InternetAddress.loopbackIPv4,
-                            int.parse(portController.text),
-                            password: passwordController.text),
-                      ]);
+                        // Assign connection factory
+                        SocksTCPClient.assignToHttpClient(client, [
+                          ProxySettings(InternetAddress.loopbackIPv4,
+                              int.parse(portController.text),
+                              password: passwordController.text),
+                        ]);
 
-                      // GET request
-                      final request = await client
-                          .getUrl(Uri.parse('https://icanhazip.com/'));
-                      final response = await request.close();
-                      // Print response
-                      var responseString = await utf8.decodeStream(response);
-                      print(
-                          "icanhazip?\n$responseString"); // should print a tor exit node IP different from what you get from visiting/curling icanhazip.com directly
-                      // Close client
-                      client.close();
-                    },
-                    child: Text("icanhazip?")),
+                        // GET request
+                        final request =
+                            await client.getUrl(Uri.parse(hostController.text));
+                        final response = await request.close();
+                        // Print response
+                        var responseString = await utf8.decodeStream(response);
+                        print(
+                            responseString); // if host input left to default icanhazip.com, a Tor exit node IP should be printed to the console
+
+                        // Close client
+                        client.close();
+                      },
+                      child: Text("make proxied request")),
+                ]),
+                // ),
               ],
             ),
           ),
