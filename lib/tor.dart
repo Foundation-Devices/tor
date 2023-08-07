@@ -182,7 +182,7 @@ class Tor {
     }
   }
 
-  restart(TorConfig torConfig) {
+  restart(TorConfig torConfig) async {
     if (enabled && started && circuitEstablished) {
       _shutdown().then((_) {
         events.add(port);
