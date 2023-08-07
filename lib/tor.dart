@@ -76,7 +76,7 @@ class Tor {
     print("Instance of Tor created!");
   }
 
-  enable(TorConfig torConfig) async {
+  Future<void> enable(TorConfig torConfig) async {
     enabled = true;
     events.add(port);
 
@@ -137,15 +137,15 @@ class Tor {
     return hashed;
   }
 
-  disable() {
+  Future<void> disable() async {
     enabled = false;
     started = false;
 
     port = -1;
-    _shutdown();
+    await _shutdown();
   }
 
-  Future _shutdown() async {
+  Future<void> _shutdown() async {
     if (!_shutdownInProgress) {
       _shutdownInProgress = true;
       print("Tor: shutting down! Control port is " + _controlPort.toString());
@@ -182,12 +182,11 @@ class Tor {
     }
   }
 
-  restart(TorConfig torConfig) async {
+  Future<void> restart(TorConfig torConfig) async {
     if (enabled && started && circuitEstablished) {
-      _shutdown().then((_) {
-        events.add(port);
-        start(torConfig);
-      });
+      await _shutdown();
+      events.add(port);
+      await start(torConfig);
     }
   }
 
