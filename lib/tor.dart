@@ -55,7 +55,6 @@ class Tor {
   final StreamController events = StreamController.broadcast();
 
   int port = -1;
-  int get port => _port;
   int _controlPort = -1;
 
   String _password = "secret";
@@ -76,24 +75,20 @@ class Tor {
     print("Instance of Tor created!");
   }
 
-  Future<void> enable(TorConfig torConfig) async {
-    enabled = true;
-    events.add(port);
-
-    start(torConfig);
-  }
-
   Future<void> start({required Directory torDir}) async {
     // TODO need to refactor configuration file creation out of start() method
     if (_connectionChecker != null) {
       throw Exception("Tor connection has already been started");
     }
 
+    enabled = true;
+    events.add(port);
+
     final rustFunction = _lib.lookup<NativeFunction<TorStartRust>>('tor_start');
     final dartFunction = rustFunction.asFunction<TorStartDart>();
 
-    final _port = getRandomUnusedPort();
-    final _controlPort = getRandomUnusedPort();
+    final _port = await getRandomUnusedPort();
+    final _controlPort = await getRandomUnusedPort();
     final password = generatePassword();
 
     final torConfig = TorConfig(
@@ -198,14 +193,6 @@ class Tor {
     }
   }
 
-  Future<void> restart(TorConfig torConfig) async {
-    if (enabled && started && circuitEstablished) {
-      await _shutdown();
-      events.add(port);
-      await start(torConfig);
-    }
-  }
-
   _checkIsCircuitEstablished() async {
     if (_controlPort > 0 && enabled && started) {
       print("Tor: connecting to control port " + _controlPort.toString());
@@ -270,7 +257,7 @@ class Tor {
     while (true) {
       potentialPort = random.nextInt(65535);
       if (!excluded.contains(potentialPort)) {
-        ServerSocket socket;
+        ServerSocket? socket;
         try {
           socket = await ServerSocket.bind("0.0.0.0", potentialPort);
 
@@ -280,7 +267,7 @@ class Tor {
           // do nothing (continue looping)
         } finally {
           // close socket no matter what
-          socket.close();
+          socket?.close();
         }
       }
     }
