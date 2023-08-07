@@ -264,19 +264,24 @@ class Tor {
   }
 
   Future<int> getRandomUnusedPort({List<int> excluded = const []}) async {
-    var random = Random.secure();
-    int potentialPort = 0;
+    final Random random = Random.secure();
+    int? potentialPort;
 
-    while (potentialPort <= 0 || excluded.contains(potentialPort)) {
+    while (true) {
       potentialPort = random.nextInt(65535);
-      ServerSocket socket;
-      try {
-        socket = await ServerSocket.bind("0.0.0.0", potentialPort);
-        return potentialPort;
-      } catch (_) {
-        continue retry;
-      } finally {
-        socket.close();
+      if (!excluded.contains(potentialPort)) {
+        ServerSocket socket;
+        try {
+          socket = await ServerSocket.bind("0.0.0.0", potentialPort);
+
+          // found unused port and return it
+          return potentialPort;
+        } catch (_) {
+          // do nothing (continue looping)
+        } finally {
+          // close socket no matter what
+          socket.close();
+        }
       }
     }
 
