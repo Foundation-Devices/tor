@@ -83,11 +83,26 @@ class Tor {
     start(torConfig);
   }
 
-  start(TorConfig torConfig) async {
+  Future<void> start({required Directory torDir}) async {
     // TODO need to refactor configuration file creation out of start() method
-    if (_connectionChecker != null) _connectionChecker!.cancel();
+    if (_connectionChecker != null) {
+      throw Exception("Tor connection has already been started");
+    }
+
     final rustFunction = _lib.lookup<NativeFunction<TorStartRust>>('tor_start');
     final dartFunction = rustFunction.asFunction<TorStartDart>();
+
+    final _port = getRandomUnusedPort();
+    final _controlPort = getRandomUnusedPort();
+    final password = generatePassword();
+
+    final torConfig = TorConfig(
+      dataDirectory: torDir.path,
+      logFile: "tor_logs.txt",
+      socksPort: _port,
+      controlPort: _controlPort,
+      password: password,
+    );
 
     new Directory(torConfig.dataDirectory).create().then((Directory directory) {
       new File(torConfig.logFile).create().then((file) {
@@ -105,6 +120,7 @@ class Tor {
         }
       });
     });
+
     // TODO handle/catch errors and return torConfig
   }
 
@@ -251,15 +267,16 @@ class Tor {
     var random = Random.secure();
     int potentialPort = 0;
 
-    retry:
     while (potentialPort <= 0 || excluded.contains(potentialPort)) {
       potentialPort = random.nextInt(65535);
+      ServerSocket socket;
       try {
-        var socket = await ServerSocket.bind("0.0.0.0", potentialPort);
-        socket.close();
+        socket = await ServerSocket.bind("0.0.0.0", potentialPort);
         return potentialPort;
       } catch (_) {
         continue retry;
+      } finally {
+        socket.close();
       }
     }
 
