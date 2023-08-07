@@ -55,6 +55,7 @@ class Tor {
   final StreamController events = StreamController.broadcast();
 
   int port = -1;
+  int get port => _port;
   int _controlPort = -1;
 
   String _password = "secret";
