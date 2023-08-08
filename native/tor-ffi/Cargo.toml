@@ -5,7 +5,7 @@
 [package]
 name = "tor-ffi"
 version = "0.1.1"
-authors = ["Igor Cota <igor@foundationdevices.com>","Josh Babb <sneurlax@gmail.com>"]
+authors = ["Igor Cota <igor@foundationdevices.com>"]
 edition = "2018"
 
 [lib]

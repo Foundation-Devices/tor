@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project-level configuration.
-set(PROJECT_NAME "tor")
+set(PROJECT_NAME "flutter_libtor")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed.
-set(PLUGIN_NAME "tor_plugin")
+set(PLUGIN_NAME "flutter_libtor_plugin")
 
 # Define the plugin library target. Its name must not be changed (see comment
 # on PLUGIN_NAME above).
 #
 # Any new source files that you add to the plugin should be added here.
 add_library(${PLUGIN_NAME} SHARED
-  "tor_plugin.cc"
+  "flutter_libtor_plugin.cc"
 )
 
 # Apply a standard set of build settings that are configured in the
