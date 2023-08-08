@@ -2,14 +2,14 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: tor
+name: flutter_libtor
 description: A Flutter plugin for handling a Tor daemon
-version: 0.0.1
+version: 0.0.2
 homepage:
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
-  flutter: ">=1.20.0"
+  sdk: ">=3.0.2 <4.0.0"
+  flutter: ^3.10.0
 
 dependencies:
   convert: ^3.0.1
@@ -17,15 +17,18 @@ dependencies:
   ffi: ^2.0.1
   flutter:
     sdk: flutter
+  plugin_platform_interface: ^2.0.2
   path_provider: ^2.0.2
 
 dev_dependencies:
-  ffigen: ^6.0.0
+  ffi: ^2.0.1
+  ffigen: ^6.1.2
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.0
 
 ffigen:
-  output: 'lib/generated_bindings.dart'
+  output: 'lib/flutter_libtor_generated_bindings.dart'
   llvm-path:
     - '/usr/lib/llvm-14/lib/libclang.so.1'
   globals:
@@ -45,30 +48,40 @@ ffigen:
       - _.*
   functions:
     include:
-      - tor_.*
+      - flutter_libtor_.*
   headers:
     entry-points:
-      - 'native/tor-ffi/target/tor-ffi.hpp'
+      - 'native/tor-ffi/target/tor-ffi.h'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
+# The following section is specific to Flutter packages.
 flutter:
   # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
+  # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
+  # which should be registered in the plugin registry. This is required for
+  # using method channels.
+  # The Android 'package' specifies package in which the registered class is.
+  # This is required for using method channels on Android.
+  # The 'ffiPlugin' specifies that native code should be built and bundled.
+  # This is required for using `dart:ffi`.
+  # All these are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
+  #
+  # Please refer to README.md for a detailed explanation.
   plugin:
     platforms:
-    # This plugin project was generated without specifying any
-    # platforms with the `--platform` argument. If you see the `some_platform` map below, remove it and
-    # then add platforms following the instruction here:
-    # https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms
-    # -------------------
-      some_platform:
-        pluginClass: somePluginClass
-    # -------------------
+      android:
+        ffiPlugin: true
+      ios:
+        ffiPlugin: true
+      linux:
+        ffiPlugin: true
+      macos:
+        ffiPlugin: true
+      windows:
+        ffiPlugin: true
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

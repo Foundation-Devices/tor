@@ -1,0 +1,16 @@
+/local.properties
+.idea
+.dart_tool
+
+native/tor-ffi/target/
+native/tor-ffi/target/debug
+native/tor-ffi/target/.rustc_info.json
+native/tor-ffi/target/CACHEDIR.TAG
+
+/scripts/*/build/*
+/scripts/*/cache/*
+libtor_ffi.so
+
+android/src/main/jniLibs/*
+
+linux/bin/x86_64-unknown-linux-gnu/release/libtor_ffi.so
