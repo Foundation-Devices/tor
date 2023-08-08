@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_libtor/flutter_libtor.dart';
+// imports needed for tor usage:
+import 'package:flutter_libtor/models/tor_config.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:socks5_proxy/socks_client.dart'; // just for example; can use any socks5 proxy package, pick your favorite.
-// imports needed for tor usage:
-import 'package:tor/models/tor_config.dart';
-import 'package:tor/tor.dart';
 
 void main() {
   runApp(const MyApp());
