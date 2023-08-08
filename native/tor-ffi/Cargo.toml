@@ -9,7 +9,7 @@ authors = ["Igor Cota <igor@foundationdevices.com>","Josh Babb <sneurlax@gmail.c
 edition = "2018"
 
 [lib]
-name = "flutter_libtor"
+name = "tor_ffi"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
