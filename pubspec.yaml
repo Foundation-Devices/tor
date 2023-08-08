@@ -8,8 +8,8 @@ version: 0.0.2
 homepage: https://github.com/Foundation-Devices/tor
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
-  flutter: ">=2.11.0"
+  sdk: ">=3.0.2 <4.0.0"
+  flutter: ^3.10.0
 
 dependencies:
   convert: ^3.0.1
@@ -28,7 +28,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 ffigen:
-  output: 'lib/generated_bindings.dart'
+  output: 'lib/tor_generated_bindings.dart'
   llvm-path:
     - '/usr/lib/llvm-14/lib/libclang.so.1'
   globals:
@@ -51,7 +51,7 @@ ffigen:
       - flutter_libtor_.*
   headers:
     entry-points:
-      - 'native/tor-ffi/target/tor-ffi.hpp'
+      - 'native/tor-ffi/target/tor-ffi.h'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

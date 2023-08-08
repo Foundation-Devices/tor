@@ -1,6 +1,6 @@
-# flutter_libtor_example
+# tor_example
 
-Demonstrates how to use the flutter_libtor plugin.
+Demonstrates how to use the tor plugin.
 
 ## Getting Started
 

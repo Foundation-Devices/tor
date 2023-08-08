@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_libtor_example">
+    package="com.example.tor_example">
    <application
-        android:label="flutter_libtor_example"
+        android:label="tor_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

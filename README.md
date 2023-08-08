@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# flutter_libtor
+# tor
 
 [Foundation-Devices/tor](https://github.com/Foundation-Devices/tor) as a multi-platform Flutter FFI plugin for starting and stopping the Tor daemon. Based on [libtor-sys](https://github.com/MagicalBitcoin/libtor-sys).
 
@@ -17,19 +17,22 @@ SPDX-License-Identifier: GPL-3.0-or-later
 cargo install cargo-ndk
 ```
 
-### Add platform-specific targets and run build scripts 
+### Install dependencies
+```sh
+sudo apt install git build-essential cmake llvm clang pkg-config cargo rustc libssl-dev libc6-dev-i386
+```
+
+### Run build scripts
+
+#### Linux
+
+Run build script
+```sh
+cd scripts/linux
+./build_all.sh
+```
 
 #### Android
-
-Add targets to rust and install dependencies (see https://github.com/EpicCash/epic/blob/master/doc/build.md#requirements) 
-```sh
-rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android
-
-sudo apt-get install libc6-dev-i386
-
-sudo apt install build-essential cmake git libgit2-dev clang libncurses5-dev libncursesw5-dev zlib1g-dev pkg-config llvm
-sudo apt-get install build-essential debhelper cmake libclang-dev libncurses5-dev clang libncursesw5-dev cargo rustc opencl-headers libssl-dev pkg-config ocl-icd-opencl-dev
-```
 
 Run the NDK setup and build scripts
 ```sh
@@ -38,19 +41,18 @@ cd scripts/android
 ./build_all.sh
 ```
 
-#### iOS
+## Development
 
-```sh
-rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+To generate `tor-ffi.h` C bindings for Rust, `cbindgen --config cbindgen.toml --crate tor-ffi --output target/tor-ffi.h` or `cargo build` in `native/tor-ffi` to produce headers according to `build.rs`
+To generate `tor_bindings_generated.dart` Dart bindings for C, `flutter pub run ffigen --config ffigen.yaml`
 
-cargo install cargo-lipo
-cargo install cbindgen
+## Example app
 
-cd scripts/ios
-./build_all.sh
-```
+`flutter run` in `example` to run the example app
 
-## Flutter FFI plugin template
+See `example/lib/main.dart` for usage.  Must run the build script for your platform first.
+
+# Flutter FFI plugin template
 
 This project is a starting point for a Flutter
 [FFI plugin](https://docs.flutter.dev/development/platform-integration/c-interop),
