@@ -18,19 +18,49 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  bool tor_start(
-    ffi.Pointer<ffi.Char> conf_path,
+  ffi.Pointer<ffi.Char> tor_last_error_message() {
+    return _tor_last_error_message();
+  }
+
+  late final _tor_last_error_messagePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'tor_last_error_message');
+  late final _tor_last_error_message =
+      _tor_last_error_messagePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Int> tor_start(
+    int socks_port,
+    ffi.Pointer<ffi.Char> state_dir,
+    ffi.Pointer<ffi.Char> cache_dir,
   ) {
     return _tor_start(
-      conf_path,
+      socks_port,
+      state_dir,
+      cache_dir,
     );
   }
 
-  late final _tor_startPtr =
-      _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Char>)>>(
-          'tor_start');
-  late final _tor_start =
-      _tor_startPtr.asFunction<bool Function(ffi.Pointer<ffi.Char>)>();
+  late final _tor_startPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Int> Function(ffi.Uint16, ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('tor_start');
+  late final _tor_start = _tor_startPtr.asFunction<
+      ffi.Pointer<ffi.Int> Function(
+          int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  bool tor_bootstrap(
+    ffi.Pointer<ffi.Int> client,
+  ) {
+    return _tor_bootstrap(
+      client,
+    );
+  }
+
+  late final _tor_bootstrapPtr =
+      _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Int>)>>(
+          'tor_bootstrap');
+  late final _tor_bootstrap =
+      _tor_bootstrapPtr.asFunction<bool Function(ffi.Pointer<ffi.Int>)>();
 
   void tor_hello() {
     return _tor_hello();
