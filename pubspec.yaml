@@ -8,8 +8,8 @@ version: 0.0.2
 homepage:
 
 environment:
-  sdk: ">=3.0.2 <4.0.0"
-  flutter: ^3.10.0
+  sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   convert: ^3.0.1
