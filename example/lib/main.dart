@@ -115,7 +115,8 @@ class _MyAppState extends State<MyApp> {
                           password: passwordController.text);
 
                       // Start the Tor daemon
-                      await this.tor.start(torConfig);
+                      await tor.start(
+                          torDir: Directory(torConfig.dataDirectory));
                       print('done awaiting');
                     },
                     child: Text("start tor")),
