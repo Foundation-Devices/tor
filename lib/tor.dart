@@ -7,8 +7,10 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
+
 import 'package:ffi/ffi.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'generated_bindings.dart';
 
 /// Load the library.
@@ -155,7 +157,7 @@ class Tor {
   ///
   /// Returns:
   ///   The Tor instance.
-  Tor factory Tor() {
+  factory Tor() {
     return _instance;
   }
 
@@ -324,7 +326,7 @@ class Tor {
     // TODO: arti seems to recover by itself and there is no client restart fn
     // TODO: but follow up with them if restart is truly unnecessary
     // if (enabled && started && circuitEstablished) {}
-    throw unimplementedError('Tor.restart(): Restart is not implemented yet');
+    throw UnimplementedError('Tor.restart(): Restart is not implemented yet');
   }
 
   /// Check if Tor is ready to make requests.
@@ -341,22 +343,30 @@ class Tor {
   /// - `CouldntBootstrapDirectory` if Tor couldn't bootstrap a working directory.
   /// - `Exception` if Tor couldn't start.
   Future<bool> isReady() async {
-    return await Future.doWhile(
-        () => Future.delayed(Duration(seconds: 1)).then((_) {
-              // We are waiting and making absolutely no request unless:
-              // Tor is disabled.
-              if (!this.enabled) {
-                return false;
-              }
+    // If Tor is disabled, return false.
+    bool isReady = false;
 
-              // ...or Tor circuit is established.
-              if (this.bootstrapped) {
-                return false;
-              }
+    // Wait until Tor is ready to make requests, or until Tor is disabled.
+    await Future.doWhile(() => Future.delayed(Duration(seconds: 1)).then((_) {
+          // We are waiting and making absolutely no request unless:
+          // Tor is disabled.
+          if (!this.enabled) {
+            isReady = false;
+          }
 
-              // This way we avoid making clearnet req's while Tor is initialising.
-              return true;
-            }));
+          // ...or Tor circuit is established.
+          if (this.bootstrapped) {
+            isReady = false;
+          }
+
+          // This way we avoid making clearnet req's while Tor is initialising.
+          isReady = true;
+
+          return isReady;
+        }));
+
+    // Return whether Tor is ready to make requests.
+    return isReady;
   }
 
   /// Throw a Rust exception.
