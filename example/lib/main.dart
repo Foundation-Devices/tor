@@ -31,8 +31,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    this.getPort();
-    this.getPassword();
+    getPort();
+    getPassword();
     super.initState();
   }
 
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
                       onPressed: () async {
                         getPort();
                       },
-                      child: Text("generate unused port")),
+                      child: const Text("generate unused port")),
                   spacerSmall,
                   Expanded(
                     child: TextField(
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                       onPressed: () async {
                         getPassword();
                       },
-                      child: Text("generate password")),
+                      child: const Text("generate password")),
                   spacerSmall,
                   Expanded(
                     child: TextField(
@@ -104,12 +104,12 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () async {
                       final Directory appDocDir =
                           await getApplicationDocumentsDirectory();
-                      int newControlPort = await this.tor.getRandomUnusedPort(
+                      int newControlPort = await tor.getRandomUnusedPort(
                           excluded: [int.parse(portController.text)]);
 
-                      TorConfig torConfig = new TorConfig(
-                          dataDirectory: appDocDir.path + '/tor',
-                          logFile: appDocDir.path + '/tor/tor.log',
+                      TorConfig torConfig = TorConfig(
+                          dataDirectory: '${appDocDir.path}/tor',
+                          logFile: '${appDocDir.path}/tor/tor.log',
                           socksPort: int.parse(portController.text),
                           controlPort: newControlPort,
                           password: passwordController.text);
@@ -119,7 +119,7 @@ class _MyAppState extends State<MyApp> {
                           torDir: Directory(torConfig.dataDirectory));
                       print('done awaiting');
                     },
-                    child: Text("start tor")),
+                    child: const Text("start tor")),
                 spacerSmall,
                 Row(children: [
                   Expanded(
@@ -156,7 +156,7 @@ class _MyAppState extends State<MyApp> {
                         // Close client
                         client.close();
                       },
-                      child: Text("make proxied request")),
+                      child: const Text("make proxied request")),
                 ]),
                 // ),
               ],
@@ -168,10 +168,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   getPort() async {
-    portController.text = "${await this.tor.getRandomUnusedPort()}";
+    portController.text = "${await tor.getRandomUnusedPort()}";
   }
 
   getPassword() async {
-    passwordController.text = "${await this.tor.generatePassword()}";
+    passwordController.text = await tor.generatePassword();
   }
 }
