@@ -1,5 +1,6 @@
 // Just an example that's runnable with `cargo run`, demo not meant for actual use
-
+fn main () {}
+/*
 use tor_sys::*;
 
 use std::ffi::{CStr, CString};
@@ -62,3 +63,4 @@ pub unsafe extern "C" fn tor_start(conf_path: *const c_char) -> bool {
     }
     false
 }
+*/
