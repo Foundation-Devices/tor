@@ -25,6 +25,9 @@ class _MyAppState extends State<MyApp> {
   // Instantiate a Tor object.
   final tor = Tor();
 
+  // Flag to track if tor has started.
+  bool torStarted = false;
+
   // Set the default text for the host input field.
   final hostController = TextEditingController(text: 'https://icanhazip.com/');
   // https://check.torproject.org is another good option.
@@ -41,6 +44,11 @@ class _MyAppState extends State<MyApp> {
 
     // Start the Tor daemon.
     await tor.start();
+
+    // Toggle started flag.
+    setState(() {
+      torStarted = true; // Update flag
+    });
 
     print('Done awaiting; tor should be running');
   }
@@ -76,7 +84,9 @@ class _MyAppState extends State<MyApp> {
                         )),
                   ),
                   spacerSmall,
-                  TextButton(
+                  AbsorbPointer(
+                    absorbing: !torStarted, // Disable if tor hasn't started
+                    child: TextButton(
                       onPressed: () async {
                         // `socks5_proxy` package example, use another socks5
                         // connection of your choice.
@@ -108,31 +118,35 @@ class _MyAppState extends State<MyApp> {
                         // Close client
                         client.close();
                       },
-                      child: const Text("Make proxied request")),
+                      child: const Text("Make proxied request"),
+                    ),
+                  ),
                 ]),
                 spacerSmall,
-                TextButton(
-                    onPressed: () async {
-                      // Instantiate a socks socket at localhost and on the port selected by the tor service.
-                      var socksSocket = await SOCKSSocket.create(
-                        proxyHost: InternetAddress.loopbackIPv4.address,
-                        proxyPort: tor.port,
-                      );
+                AbsorbPointer(
+                  absorbing: !torStarted, // Disable if tor hasn't started
+                  child: TextButton(
+                      onPressed: () async {
+                        // Instantiate a socks socket at localhost and on the port selected by the tor service.
+                        var socksSocket = await SOCKSSocket.create(
+                          proxyHost: InternetAddress.loopbackIPv4.address,
+                          proxyPort: tor.port,
+                        );
 
-                      // Connect to the socks instantiated above.
-                      await socksSocket.connect();
+                        // Connect to the socks instantiated above.
+                        await socksSocket.connect();
 
-                      // Connect to bitcoincash.stackwallet.com on port 50001 via socks socket.
-                      await socksSocket.connectTo(
-                          'bitcoincash.stackwallet.com', 50001);
+                        // Connect to bitcoincash.stackwallet.com on port 50001 via socks socket.
+                        await socksSocket.connectTo(
+                            'bitcoincash.stackwallet.com', 50001);
 
-                      // Send a server features command to the connected socket, see method for more specific usage example..
-                      await socksSocket.sendServerFeaturesCommand();
-                      await socksSocket.close();
-                    },
-                    child: const Text(
-                        "Connect to bitcoincash.stackwallet.com:50001")),
-                // ),
+                        // Send a server features command to the connected socket, see method for more specific usage example..
+                        await socksSocket.sendServerFeaturesCommand();
+                        await socksSocket.close();
+                      },
+                      child: const Text(
+                          "Connect to bitcoincash.stackwallet.com:50001")),
+                ),
               ],
             ),
           ),
