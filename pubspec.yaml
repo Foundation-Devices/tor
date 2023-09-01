@@ -14,14 +14,13 @@ environment:
 dependencies:
   convert: ^3.0.1
   crypto: ^3.0.1
-  ffi: ^2.0.1
+  ffi: ^2.1.0
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  path_provider: ^2.0.2
+  path_provider: ^2.1.1
 
 dev_dependencies:
-  ffi: ^2.0.1
   ffigen: ^6.1.2
   flutter_test:
     sdk: flutter
@@ -44,7 +43,7 @@ ffigen:
     exclude:
       - _.*
   macros:
-    exclude:
+    eaxclude:
       - _.*
   functions:
     include:

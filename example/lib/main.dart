@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
 // Imports needed for tor usage:
-import 'package:tor/tor.dart' as tor;
+import 'package:tor/tor.dart';
 import 'package:tor_example/socks_socket.dart'; // For socket connections.
 
 void main() {
@@ -31,8 +31,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    getPort();
-    getPassword();
     super.initState();
     unawaited(init());
   }
@@ -42,7 +40,7 @@ class _MyAppState extends State<MyApp> {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
 
     // Start the Tor daemon.
-    await tor.start(torDir: Directory('${appDocDir.path}/tor'));
+    await tor.start();
 
     print('Done awaiting; tor should be running');
   }
@@ -141,13 +139,5 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-  }
-
-  getPort() async {
-    portController.text = "${await tor.getRandomUnusedPort()}";
-  }
-
-  getPassword() async {
-    passwordController.text = await tor.generatePassword();
   }
 }
