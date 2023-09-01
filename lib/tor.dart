@@ -28,7 +28,7 @@ DynamicLibrary load(name) {
     return DynamicLibrary.open('lib$name.so');
   } else if (Platform.isLinux) {
     // Linux is dynamically linked, so we need to load the library.
-    return DynamicLibrary.open('target/debug/lib$name.so');
+    return DynamicLibrary.open('lib$name.so');
   } else if (Platform.isIOS || Platform.isMacOS) {
     // iOS and MacOS are statically linked, so it is the same as the current process.
     return DynamicLibrary.process();
