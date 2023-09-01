@@ -116,7 +116,7 @@ install(FILES "${FLUTTER_ICU_DATA_FILE}" DESTINATION "${INSTALL_BUNDLE_DATA_DIR}
 install(FILES "${FLUTTER_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
   COMPONENT Runtime)
 
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/linux/build/libtor_ffi.so" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../native/tor-ffi/target/x86_64-unknown-linux-gnu/release/libtor_ffi.so" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
   COMPONENT Runtime)
 
 if(PLUGIN_BUNDLED_LIBRARIES)
