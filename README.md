@@ -34,10 +34,15 @@ sudo apt install git build-essential cmake llvm clang pkg-config cargo rustc lib
    ```sh
    rm -rf target
    ```
-
-3. Build the project for Linux:
+   
+3. Add Rust targets for Linux:
   ```sh
-  cargo build --target aarch64-unknown-linux-gnu --release --lib
+  rustup target add x86_64-unknown-linux-gnu
+  ```
+
+4. Build the project for Linux:
+  ```sh
+  cargo build --target x86_64-unknown-linux-gnu --release --lib
   ```
 
 #### Android
