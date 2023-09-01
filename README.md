@@ -1,12 +1,11 @@
 <!--
-SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
+SPDX-FileCopyrightText: 2022-2023 Foundation Devices Inc.
 
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# tor
-
-[Foundation-Devices/tor](https://github.com/Foundation-Devices/tor) as a multi-platform Flutter FFI plugin for starting and stopping the Tor daemon. Based on [libtor-sys](https://github.com/MagicalBitcoin/libtor-sys).
+# Tor
+A multi-platform Flutter plugin for starting and stopping the Tor daemon.  Based on [arti](https://gitlab.torproject.org/tpo/core/arti).
 
 ## Getting started
 
@@ -22,23 +21,51 @@ cargo install cargo-ndk
 sudo apt install git build-essential cmake llvm clang pkg-config cargo rustc libssl-dev libc6-dev-i386
 ```
 
-### Run build scripts
+### Build plugin
 
 #### Linux
 
-Run build script
-```sh
-cd scripts/linux
-./build_all.sh
-```
+1. Navigate to the `native/tor-ffi` directory in your project:
+   ```sh
+   cd native/tor-ffi
+   ```
+
+2. Remove any previous build targets (it's normal to see an error message if it's your first build):
+   ```sh
+   rm -rf target
+   ```
+
+3. Build the project for Linux:
+  ```sh
+  cargo build --target aarch64-unknown-linux-gnu --release --lib
+  ```
 
 #### Android
 
-Run the NDK setup and build scripts
+1. Download and unzip Android NDK:
 ```sh
-cd scripts/android
-./install_ndk.sh
-./build_all.sh
+curl "https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_TAG}-linux-x86_64.zip" -o ${ANDROID_NDK_ZIP}
+unzip $ANDROID_NDK_ZIP
+```
+
+2. Navigate to the `native/tor-ffi` directory:
+```sh
+cd native/tor-ffi
+```
+
+3. Remove any previous build targets (it's normal to see an error message if it's your first build):
+   ```sh
+   rm -rf target
+   ```
+
+4. Add Rust targets for Android architectures:
+```sh
+rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+```
+
+5. Build the project for Android architectures:
+```sh
+cargo ndk -t x86_64 -t armeabi-v7a -t arm64-v8a -o ../../../../../android/src/main/jniLibs build
 ```
 
 ## Development
@@ -110,13 +137,13 @@ A plugin can have both FFI and method channels:
 The native build systems that are invoked by FFI (and method channel) plugins are:
 
 * For Android: Gradle, which invokes the Android NDK for native builds.
-  * See the documentation in android/build.gradle.
+    * See the documentation in android/build.gradle.
 * For iOS and MacOS: Xcode, via CocoaPods.
-  * See the documentation in ios/flutter_libtor.podspec.
-  * See the documentation in macos/flutter_libtor.podspec.
+    * See the documentation in ios/flutter_libtor.podspec.
+    * See the documentation in macos/flutter_libtor.podspec.
 * For Linux and Windows: CMake.
-  * See the documentation in linux/CMakeLists.txt.
-  * See the documentation in windows/CMakeLists.txt.
+    * See the documentation in linux/CMakeLists.txt.
+    * See the documentation in windows/CMakeLists.txt.
 
 ## Binding to native code
 
@@ -139,4 +166,3 @@ For example, see `sumAsync` in `lib/flutter_libtor.dart`.
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-
