@@ -1,4 +1,4 @@
-#include "include/flutter_libtor/flutter_libtor_plugin.h"
+#include "include/tor/flutter_libtor_plugin.h"
 
 #include <flutter_linux/flutter_linux.h>
 #include <gtk/gtk.h>
@@ -6,18 +6,18 @@
 
 #include <cstring>
 
-#define FLUTTER_LIBTOR_PLUGIN(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), flutter_libtor_plugin_get_type(), \
+#define oTOR_PLUGIN(obj) \
+  (G_TYPE_CHECK_INSTANCE_CAST((obj), tor_plugin_get_type(), \
                               FlutterLibTorPlugin))
 
 struct _FlutterLibTorPlugin {
   GObject parent_instance;
 };
 
-G_DEFINE_TYPE(FlutterLibTorPlugin, flutter_libtor_plugin, g_object_get_type())
+G_DEFINE_TYPE(FlutterLibTorPlugin, tor_plugin, g_object_get_type())
 
 // Called when a method call is received from Flutter.
-static void flutter_libtor_plugin_handle_method_call(
+static void tor_plugin_handle_method_call(
     FlutterLibTorPlugin* self,
     FlMethodCall* method_call) {
   g_autoptr(FlMethodResponse) response = nullptr;
@@ -37,25 +37,25 @@ static void flutter_libtor_plugin_handle_method_call(
   fl_method_call_respond(method_call, response, nullptr);
 }
 
-static void flutter_libtor_plugin_dispose(GObject* object) {
-  G_OBJECT_CLASS(flutter_libtor_plugin_parent_class)->dispose(object);
+static void tor_plugin_dispose(GObject* object) {
+  G_OBJECT_CLASS(tor_plugin_parent_class)->dispose(object);
 }
 
-static void flutter_libtor_plugin_class_init(FlutterLibTorPluginClass* klass) {
-  G_OBJECT_CLASS(klass)->dispose = flutter_libtor_plugin_dispose;
+static void tor_plugin_class_init(FlutterLibTorPluginClass* klass) {
+  G_OBJECT_CLASS(klass)->dispose = tor_plugin_dispose;
 }
 
-static void flutter_libtor_plugin_init(FlutterLibTorPlugin* self) {}
+static void tor_plugin_init(FlutterLibTorPlugin* self) {}
 
 static void method_call_cb(FlMethodChannel* channel, FlMethodCall* method_call,
                            gpointer user_data) {
-  FlutterLibTorPlugin* plugin = FLUTTER_LIBTOR_PLUGIN(user_data);
-  flutter_libtor_plugin_handle_method_call(plugin, method_call);
+  FlutterLibTorPlugin* plugin = TOR_PLUGIN(user_data);
+  tor_plugin_handle_method_call(plugin, method_call);
 }
 
-void flutter_libtor_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
-  FlutterLibTorPlugin* plugin = FLUTTER_LIBTOR_PLUGIN(
-      g_object_new(flutter_libtor_plugin_get_type(), nullptr));
+void tor_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
+  FlutterLibTorPlugin* plugin = TOR_PLUGIN(
+      g_object_new(tor_plugin_get_type(), nullptr));
 
   g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
   g_autoptr(FlMethodChannel) channel =

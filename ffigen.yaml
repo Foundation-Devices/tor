@@ -4,7 +4,7 @@ description: |
   Bindings for `native/tor-ffi/target/tor-ffi.h`.
 
   Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
-output: 'lib/flutter_libtor_bindings_generated.dart'
+output: 'lib/bindings_generated.dart'
 headers:
   entry-points:
     - 'native/tor-ffi/target/tor-ffi.h'

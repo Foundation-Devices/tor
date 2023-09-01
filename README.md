@@ -139,8 +139,8 @@ The native build systems that are invoked by FFI (and method channel) plugins ar
 * For Android: Gradle, which invokes the Android NDK for native builds.
     * See the documentation in android/build.gradle.
 * For iOS and MacOS: Xcode, via CocoaPods.
-    * See the documentation in ios/flutter_libtor.podspec.
-    * See the documentation in macos/flutter_libtor.podspec.
+    * See the documentation in ios/tor.podspec.
+    * See the documentation in macos/tor.podspec.
 * For Linux and Windows: CMake.
     * See the documentation in linux/CMakeLists.txt.
     * See the documentation in windows/CMakeLists.txt.
@@ -149,17 +149,8 @@ The native build systems that are invoked by FFI (and method channel) plugins ar
 
 To use the native code, bindings in Dart are needed.
 To avoid writing these by hand, they are generated from the header file
-(`src/flutter_libtor.h`) by `package:ffigen`.
+(`src/tor.h`) by `package:ffigen`.
 Regenerate the bindings by running `flutter pub run ffigen --config ffigen.yaml`.
-
-## Invoking native code
-
-Very short-running native functions can be directly invoked from any isolate.
-For example, see `sum` in `lib/flutter_libtor.dart`.
-
-Longer-running functions should be invoked on a helper isolate to avoid
-dropping frames in Flutter applications.
-For example, see `sumAsync` in `lib/flutter_libtor.dart`.
 
 ## Flutter help
 
