@@ -13,7 +13,13 @@ name = "tor_ffi"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-libtor-sys = { git = "https://github.com/icota/libtor-sys", rev = "9199df8beabf3d055c0858b3123fd0761c8f660c", features = ["vendored-openssl"] }
+lazy_static = "1.4"
+tokio = { version = "1", features = ["full"] }
+arti-client = { version = "0.10.0", features = ["static"] }
+arti = { version = "1.1.6", features = ["experimental-api", "static"] }
+tor-rtcompat = { version = "0.9.2", features = ["static"] }
+log = "0.4.20"
+#android_log-sys = "0.3.1"
 
 [build-dependencies]
-cbindgen = "0.24.3"
+cbindgen = "= 0.24.3"
