@@ -1,1 +1,2 @@
 native/tor-ffi/target/*
+/macos/libtor_ffi.dylib
