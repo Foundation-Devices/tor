@@ -8,7 +8,7 @@
 PRODUCT_NAME = tor_example
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.torExample
+PRODUCT_BUNDLE_IDENTIFIER = com.cypherstack.torExample
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.cypherstack. All rights reserved.

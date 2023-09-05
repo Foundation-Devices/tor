@@ -5,9 +5,9 @@
 Pod::Spec.new do |s|
   s.name             = 'tor'
   s.version          = '0.0.1'
-  s.summary          = 'A new Flutter FFI plugin project.'
+  s.summary          = 'A new Flutter project.'
   s.description      = <<-DESC
-A new Flutter FFI plugin project.
+A new Flutter project.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }

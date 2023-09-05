@@ -1,4 +1,4 @@
-package com.example.tor_example
+package com.cypherstack.tor_example
 
 import io.flutter.embedding.android.FlutterActivity
 
