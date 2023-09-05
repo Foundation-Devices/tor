@@ -27,12 +27,13 @@ rustup target add aarch64-apple-ios x86_64-apple-ios
 cargo lipo --release
 
 # Moving files to the ios project
-inc=../../../../ios/include
+#inc=../../../../ios/include
 libs=../../../../ios/libs
 
+# Clean old files
 rm -rf ${inc} ${libs}
-
-mkdir ${inc}
+#mkdir ${inc}
 mkdir ${libs}
 
+# Copy library
 cp target/aarch64-apple-ios/release/libtor_ffi.a ${libs}

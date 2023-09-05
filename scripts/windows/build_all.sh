@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Install dependency
 sudo apt install clang -y
 
+# Add arch target
 rustup target add x86_64-pc-windows-gnu
 
+# Git versioning
 mkdir build
 echo ''$(git log -1 --pretty=format:"%H")' '$(date) >> build/git_commit_version.txt
 VERSIONS_FILE=../../lib/git_versions.dart
@@ -14,8 +17,12 @@ fi
 COMMIT=$(git log -1 --pretty=format:"%H")
 OS="WINDOWS"
 sed -i "/\/\*${OS}_VERSION/c\\/\*${OS}_VERSION\*\/ const ${OS}_VERSION = \"$COMMIT\";" $VERSIONS_FILE
+
+# Prepare to build
 cp -r ../../rust build/rust
 cd build/rust
+
+# Build
 if [ "$IS_ARM" = true ]  ; then
     echo "Building arm version"
     cargo build --target aarch64-pc-windows-gnu --release --lib
@@ -27,4 +34,5 @@ else
     cargo build --target x86_64-pc-windows-gnu --release --lib
 fi
 
+# Copyt DLL
 cp target/x86_64-pc-windows-gnu/release/libtor.dll ../libtor.dll

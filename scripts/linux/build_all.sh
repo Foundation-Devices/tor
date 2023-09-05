@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## build versioning, TODO fix git_versions.dart & git_versions_example.dart
+## Git versioning, TODO fix git_versions.dart & git_versions_example.dart
 ## normal to see `cp: cannot stat` and `sed: can't read` until fixed
 #echo ''$(git log -1 --pretty=format:"%H")' '$(date) >> build/git_commit_version.txt
 #VERSIONS_FILE=../../lib/git_versions.dart
@@ -12,10 +12,12 @@
 #OS="LINUX"
 #sed -i "/\/\*${OS}_VERSION/c\\/\*${OS}_VERSION\*\/ const ${OS}_VERSION = \"$COMMIT\";" $VERSIONS_FILE
 
+# Prepare to build
 cd ../../native/tor-ffi
 # normal to see `cannot remove ... No such file or directory` on first build
 rm -rf target
 
+# Build
 if [ "$IS_ARM" = true ]  ; then
     echo "Building arm version"
     cargo build --target aarch64-unknown-linux-gnu --release --lib
