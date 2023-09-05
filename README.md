@@ -89,12 +89,6 @@ cargo lipo --release --targets aarch64-apple-darwin,x86_64-apple-darwin
 ```sh
 cp target/aarch64-apple-darwin/release/libtor_ffi.dylib ../../macos
 ```
-or 
-```shell
-cp target/aarch64-apple-darwin/release/libtor_ffi.dylib ../../macos
-```
-
-
 
 ## Development
 
