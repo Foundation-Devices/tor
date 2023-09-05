@@ -34,6 +34,7 @@ import 'dart:io';
 /// var socksSocket = await SOCKSSocket.create(
 ///  proxyHost: InternetAddress.loopbackIPv4.address,
 ///  proxyPort: tor.port,
+///  // sslEnabled: true, // For SSL connections.
 ///  );
 ///
 /// // Connect to the socks instantiated above.
@@ -65,8 +66,11 @@ class SOCKSSocket {
   final StreamController<List<int>> _responseController =
       StreamController.broadcast();
 
+  /// Is SSL enabled?
+  final bool sslEnabled;
+
   /// Private constructor.
-  SOCKSSocket._(this.proxyHost, this.proxyPort);
+  SOCKSSocket._(this.proxyHost, this.proxyPort, this.sslEnabled);
 
   /// Creates a SOCKS5 socket to the specified [proxyHost] and [proxyPort].
   ///
@@ -80,9 +84,11 @@ class SOCKSSocket {
   /// Returns:
   ///  A Future that resolves to a SOCKSSocket instance.
   static Future<SOCKSSocket> create(
-      {required String proxyHost, required int proxyPort}) async {
+      {required String proxyHost,
+      required int proxyPort,
+      bool sslEnabled = false}) async {
     // Create a SOCKS socket instance.
-    var instance = SOCKSSocket._(proxyHost, proxyPort);
+    var instance = SOCKSSocket._(proxyHost, proxyPort, sslEnabled);
 
     // Initialize the SOCKS socket.
     await instance._init();
@@ -92,7 +98,10 @@ class SOCKSSocket {
   }
 
   /// Constructor.
-  SOCKSSocket({required this.proxyHost, required this.proxyPort}) {
+  SOCKSSocket(
+      {required this.proxyHost,
+      required this.proxyPort,
+      required this.sslEnabled}) {
     _init();
   }
 
@@ -145,7 +154,8 @@ class SOCKSSocket {
 
     // Check if the connection was successful.
     if (response[1] != 0x00) {
-      throw Exception('socks_socket.connect(): Failed to connect to SOCKS5 proxy.');
+      throw Exception(
+          'socks_socket.connect(): Failed to connect to SOCKS5 proxy.');
     }
   }
 
@@ -175,10 +185,21 @@ class SOCKSSocket {
 
     // Wait for server response.
     var response = await _responseController.stream.first;
-    
+
     // Check if the connection was successful.
     if (response[1] != 0x00) {
-      throw Exception('socks_socket.connectTo(): Failed to connect to target through SOCKS5 proxy.');
+      throw Exception(
+          'socks_socket.connectTo(): Failed to connect to target through SOCKS5 proxy.');
+    }
+
+    // Upgrade to SSL if needed
+    if (sslEnabled) {
+      var secureSocket = await SecureSocket.secure(
+        _socksSocket,
+        host: domain,
+        // onBadCertificate: (_) => true, // Uncomment this to bypass certificate validation (NOT recommended for production).
+      );
+      _socksSocket = secureSocket;
     }
   }
 
