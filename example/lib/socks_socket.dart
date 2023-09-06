@@ -62,12 +62,22 @@ class SOCKSSocket {
   /// The underlying Socket that connects to the SOCKS5 proxy server.
   late final Socket _socksSocket;
 
+  /// Getter for the underlying Socket that connects to the SOCKS5 proxy server.
+  Socket get socket => sslEnabled ? _secureSocksSocket : _socksSocket;
+
   /// A wrapper around the _socksSocket that enables SSL connections.
   late final Socket _secureSocksSocket;
 
   /// A StreamController that listens to the _socksSocket and broadcasts.
   final StreamController<List<int>> _responseController =
       StreamController.broadcast();
+
+  /// Getter for the StreamController that listens to the _socksSocket and
+  /// broadcasts, or the _secureSocksSocket and broadcasts if SSL is enabled.
+  StreamController<List<int>> get responseController =>
+      sslEnabled ? _secureResponseController : _responseController;
+
+  StreamSubscription? _subscription;
 
   /// A StreamController that listens to the _secureSocksSocket and broadcasts.
   final StreamController<List<int>> _secureResponseController =
@@ -126,7 +136,7 @@ class SOCKSSocket {
     );
 
     // Listen to the socket.
-    _socksSocket.listen(
+    _subscription = _socksSocket.listen(
       (data) {
         // Add the data to the response controller.
         _responseController.add(data);
@@ -209,7 +219,7 @@ class SOCKSSocket {
       );
 
       // Listen to the secure socket.
-      _secureSocksSocket.listen(
+      _subscription = _secureSocksSocket.listen(
         (data) {
           // Add the data to the response controller.
           _secureResponseController.add(data);
@@ -248,7 +258,11 @@ class SOCKSSocket {
 
     // Write the data to the socket.
     List<int> data = utf8.encode(object.toString());
-    _socksSocket.add(data);
+    if (sslEnabled) {
+      _secureSocksSocket.add(data);
+    } else {
+      _socksSocket.add(data);
+    }
   }
 
   /// Sends the server.features command to the proxy server.
@@ -289,8 +303,47 @@ class SOCKSSocket {
   ///  A Future that resolves to void.
   Future<void> close() async {
     // Ensure all data is sent before closing.
+    //
+    // TODO test this.
+    if (sslEnabled) {
+      await _socksSocket.flush();
+      await _secureResponseController.close();
+    }
     await _socksSocket.flush();
     await _responseController.close();
     return await _socksSocket.close();
+  }
+
+  /// Listens to the socket.
+  ///
+  /// Parameters:
+  /// - [onData]: The callback to be called when data is received.
+  /// - [onError]: The callback to be called when an error occurs.
+  /// - [onDone]: The callback to be called when the socket is closed.
+  /// - [cancelOnError]: Whether or not to cancel the subscription on error.
+  ///
+  /// Returns:
+  ///   A StreamSubscription that listens to the socket.
+  StreamSubscription<List<int>> listen(
+    void Function(List<int> data)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return sslEnabled
+        // Listen to the secure socket if SSL is enabled.
+        ? _secureResponseController.stream.listen(
+            onData,
+            onError: onError,
+            onDone: onDone,
+            cancelOnError: cancelOnError,
+          )
+        // Listen to the plain socket if SSL is not enabled.
+        : _responseController.stream.listen(
+            onData,
+            onError: onError,
+            onDone: onDone,
+            cancelOnError: cancelOnError,
+          );
   }
 }
