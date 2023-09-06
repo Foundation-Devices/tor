@@ -35,7 +35,7 @@ class NotSupportedPlatform implements Exception {
 }
 
 class Tor {
-  static late String _libName = "tor_ffi_plugin";
+  static const String _libName = "tor_ffi_plugin";
   static late DynamicLibrary _lib;
 
   Pointer<Int> _clientPtr = nullptr;
