@@ -10,7 +10,7 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # Invoke the build for native code shared with the other target platforms.
 # This can be changed to accommodate different builds.
 include("../cargokit/cmake/cargokit.cmake")
-apply_cargokit(${PROJECT_NAME} ../native/tor-ffi tor_ffi "")
+apply_cargokit(${PROJECT_NAME} ../rust tor_ffi "")
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an

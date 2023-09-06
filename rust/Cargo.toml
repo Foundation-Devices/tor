@@ -3,13 +3,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 [package]
-name = "tor-ffi"
+name = "tor_ffi"
 version = "0.1.0"
 authors = ["Igor Cota <igor@foundationdevices.com>"]
 edition = "2018"
 
 [lib]
-name = "tor_ffi"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
