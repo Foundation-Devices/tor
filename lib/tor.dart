@@ -16,9 +16,11 @@ DynamicLibrary load(name) {
     return DynamicLibrary.open('lib$name.so');
   } else if (Platform.isLinux) {
     return DynamicLibrary.open('lib$name.so');
-  } else if (Platform.isIOS || Platform.isMacOS) {
+  } else if (Platform.isIOS) {
     // iOS and MacOS are statically linked, so it is the same as the current process
     return DynamicLibrary.process();
+  } else if (Platform.isMacOS) {
+    return DynamicLibrary.open('lib$name.dylib');
   } else {
     throw NotSupportedPlatform('${Platform.operatingSystem} is not supported!');
   }
