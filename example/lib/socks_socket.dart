@@ -4,7 +4,7 @@ import 'dart:io';
 
 /// A SOCKS5 socket.
 ///
-/// This class is a wrapper around a [Socket] that connects to a SOCKS5 proxy
+/// This class is a wrapper around a Socket that connects to a SOCKS5 proxy
 /// server and sends all data through the proxy.
 ///
 /// This class is used to connect to the Tor proxy server.
