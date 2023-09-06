@@ -142,6 +142,7 @@ class Tor {
     }
   }
 
+  // TODO: this doesn't actually shut tor down
   void disable() {
     _enabled = false;
   }
