@@ -1,9 +1,5 @@
-# SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
-name: tor
-description: A Flutter plugin for handling a Tor daemon
+name: tor_ffi_plugin
+description: A new Flutter FFI plugin project.
 version: 0.0.1
 homepage:
 
@@ -12,12 +8,10 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  convert: ^3.0.1
-  crypto: ^3.0.1
-  ffi: ^2.0.1
   flutter:
     sdk: flutter
   path_provider: ^2.1.1
+  ffi: ^2.0.1
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:

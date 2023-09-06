@@ -4,11 +4,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-// Imports needed for tor usage:
-import 'package:tor/tor.dart';
-import 'package:tor_example/socks_socket.dart'; // For socket connections.
 import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
+// Imports needed for tor usage:
+import 'package:tor_ffi_plugin/tor_ffi_plugin.dart';
+import 'package:tor_ffi_plugin_example/socks_socket.dart'; // For socket connections
 
 void main() {
   runApp(const MyApp());
@@ -39,9 +38,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> init() async {
-    // Get the app's documents directory.
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-
     // Start the Tor daemon.
     await tor.start();
 
