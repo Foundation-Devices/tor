@@ -62,9 +62,7 @@ class Tor {
   int _proxyPort = -1;
   static final Tor _instance = Tor._internal();
 
-  factory Tor() {
-    return _instance;
-  }
+  static Tor get instance => _instance;
 
   // TODO: is this function supposed to await anything?
   // in its current state it does not need to be a future as it only

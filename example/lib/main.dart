@@ -21,9 +21,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Instantiate a Tor object.
-  final tor = Tor();
-
   // Flag to track if tor has started.
   bool torStarted = false;
 
@@ -31,19 +28,13 @@ class _MyAppState extends State<MyApp> {
   final hostController = TextEditingController(text: 'https://icanhazip.com/');
   // https://check.torproject.org is another good option.
 
-  @override
-  void initState() {
-    super.initState();
-    unawaited(init());
-  }
-
-  Future<void> init() async {
+  Future<void> startTor() async {
     // Start the Tor daemon.
-    await tor.start();
+    await Tor.instance.start();
 
     // Toggle started flag.
     setState(() {
-      torStarted = true; // Update flag
+      torStarted = Tor.instance.started; // Update flag
     });
 
     print('Done awaiting; tor should be running');
@@ -92,7 +83,8 @@ class _MyAppState extends State<MyApp> {
 
                         // Assign connection factory.
                         SocksTCPClient.assignToHttpClient(client, [
-                          ProxySettings(InternetAddress.loopbackIPv4, tor.port,
+                          ProxySettings(
+                              InternetAddress.loopbackIPv4, Tor.instance.port,
                               password:
                                   null), // TODO Need to get from tor config file.
                         ]);
@@ -126,7 +118,7 @@ class _MyAppState extends State<MyApp> {
                         // Instantiate a socks socket at localhost and on the port selected by the tor service.
                         var socksSocket = await SOCKSSocket.create(
                           proxyHost: InternetAddress.loopbackIPv4.address,
-                          proxyPort: tor.port,
+                          proxyPort: Tor.instance.port,
                         );
 
                         // Connect to the socks instantiated above.
