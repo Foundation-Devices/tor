@@ -134,12 +134,11 @@ class _MyAppState extends State<MyApp> {
                         );
 
                         // Connect to the socks instantiated above.
+                        //
+                        // Note that this is a non-SSL example.
                         await socksSocket.connect();
 
                         // Connect to bitcoincash.stackwallet.com on port 50001 via socks socket.
-                        //
-                        // Note that this is a non-SSL example.
-                        // TODO implement SSL.
                         await socksSocket.connectTo(
                             'bitcoincash.stackwallet.com', 50001);
 
@@ -196,7 +195,6 @@ class _MyAppState extends State<MyApp> {
                         // Connect to bitcoin.stackwallet.com on port 50002 via socks socket.
                         //
                         // Note that this is an SSL example.
-                        // TODO implement SSL.
                         await socksSocket.connectTo(
                             'bitcoin.stackwallet.com', 50002);
 
@@ -206,7 +204,7 @@ class _MyAppState extends State<MyApp> {
                         // You should see a server response printed to the console.
                         //
                         // Example response:
-                        // `flutter: responseData: {
+                        // `flutter: secure responseData: {
                         // 	"id": "0",
                         // 	"jsonrpc": "2.0",
                         // 	"result": {
