@@ -66,6 +66,9 @@ class Tor {
     return _instance;
   }
 
+  // TODO: is this function supposed to await anything?
+  // in its current state it does not need to be a future as it only
+  // sets the `enabled` bool flag
   static Future<Tor> init({enabled = true}) async {
     var singleton = Tor._instance;
     singleton._enabled = enabled;
@@ -77,10 +80,10 @@ class Tor {
     print("Instance of Tor created!");
   }
 
-  enable() async {
+  Future<void> enable() async {
     _enabled = true;
     if (!started) {
-      start();
+      await start();
     }
   }
 
@@ -103,7 +106,7 @@ class Tor {
     return -1;
   }
 
-  start() async {
+  Future<void> start() async {
     events.add(port);
 
     final Directory appSupportDir = await getApplicationSupportDirectory();
@@ -133,35 +136,35 @@ class Tor {
     _proxyPort = newPort;
   }
 
-  bootstrap() async {
-    var lib = NativeLibrary(_lib);
-    _bootstrapped = await lib.tor_bootstrap(_clientPtr);
+  void bootstrap() {
+    final lib = NativeLibrary(_lib);
+    _bootstrapped = lib.tor_bootstrap(_clientPtr);
     if (!bootstrapped) {
       throwRustException(lib);
     }
   }
 
-  disable() {
+  void disable() {
     _enabled = false;
   }
 
-  restart() {
+  void restart() {
     // TODO: arti seems to recover by itself and there is no client restart fn
     // TODO: but follow up with them if restart is truly unnecessary
     // if (enabled && started && circuitEstablished) {}
   }
 
-  isReady() async {
+  Future<void> isReady() async {
     return await Future.doWhile(
-        () => Future.delayed(Duration(seconds: 1)).then((_) {
+        () => Future.delayed(const Duration(seconds: 1)).then((_) {
               // We are waiting and making absolutely no request unless:
               // Tor is disabled
-              if (!this.enabled) {
+              if (!enabled) {
                 return false;
               }
 
               // ...or Tor circuit is established
-              if (this.bootstrapped) {
+              if (bootstrapped) {
                 return false;
               }
 
@@ -184,7 +187,7 @@ class Tor {
     }
   }
 
-  hello() {
+  void hello() {
     NativeLibrary(_lib).tor_hello();
   }
 }
