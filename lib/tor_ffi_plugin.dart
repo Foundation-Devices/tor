@@ -13,15 +13,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tor_ffi_plugin/tor_ffi_plugin_bindings_generated.dart';
 
 DynamicLibrary load(name) {
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid || Platform.isLinux) {
     return DynamicLibrary.open('lib$name.so');
-  } else if (Platform.isLinux) {
-    return DynamicLibrary.open('lib$name.so');
-  } else if (Platform.isIOS) {
-    // iOS and MacOS are statically linked, so it is the same as the current process
-    return DynamicLibrary.process();
-  } else if (Platform.isMacOS) {
-    return DynamicLibrary.open('lib$name.dylib');
+  } else if (Platform.isIOS || Platform.isMacOS) {
+    return DynamicLibrary.open('$name.framework/$name');
+  } else if (Platform.isWindows) {
+    return DynamicLibrary.open('$name.dll');
   } else {
     throw NotSupportedPlatform('${Platform.operatingSystem} is not supported!');
   }
