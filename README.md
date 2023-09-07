@@ -73,6 +73,23 @@ rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-andro
 cargo ndk -t x86_64 -t armeabi-v7a -t arm64-v8a -o ../../../../../android/src/main/jniLibs build
 ```
 
+#### macOS
+
+1. Add arch targets:
+```sh
+rustup target add aarch64-apple-ios aarch64-apple-darwin x86_64-apple-ios x86_64-apple-darwin
+```
+
+2. Build macOS arm64 and x86_64 binaries:
+```sh
+cargo lipo --release --targets aarch64-apple-darwin,x86_64-apple-darwin
+```
+
+3. Copy binary file to the macos folder
+```sh
+cp target/aarch64-apple-darwin/release/libtor_ffi.dylib ../../macos
+```
+
 ## Development
 
 To generate `tor-ffi.h` C bindings for Rust, `cbindgen --config cbindgen.toml --crate tor-ffi --output target/tor-ffi.h` or `cargo build` in `native/tor-ffi` to produce headers according to `build.rs`
