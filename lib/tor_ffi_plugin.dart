@@ -40,18 +40,37 @@ class Tor {
 
   Pointer<Int> _clientPtr = nullptr;
 
-  bool get enabled => _enabled;
-  bool _enabled = true;
-
+  /// Flag to indicate that a Tor should be started.
   bool get started => _started;
+
+  /// Getter for the started flag.
   bool _started = false;
 
+  /// Flag to indicate that Tor has started.
+  bool _enabled = false;
+
+  /// Getter for the enabled flag.
+  bool get enabled => _enabled;
+
+  /// Flag to indicate that a Tor circuit is thought to have been established
+  /// (true means that Tor has bootstrapped).
   bool get bootstrapped => _bootstrapped;
+
+  /// Getter for the bootstrapped flag.
   bool _bootstrapped = false;
 
-  // This stream broadcast just the port for now (-1 if circuit not established)
+  /// A stream of Tor events.
+  ///
+  /// This stream broadcast just the port for now (-1 if circuit not established)
   final StreamController events = StreamController.broadcast();
 
+  /// Getter for the proxy port.
+  ///
+  /// Returns -1 if Tor is not enabled or if the circuit is not established.
+  ///
+  /// Returns the proxy port if Tor is enabled and the circuit is established.
+  ///
+  /// This is the port that should be used for all requests.
   int get port {
     if (!_enabled) {
       return -1;
@@ -59,25 +78,34 @@ class Tor {
     return _proxyPort;
   }
 
+  /// The proxy port.
   int _proxyPort = -1;
+
+  /// Singleton instance of the Tor class.
   static final Tor _instance = Tor._internal();
 
+  /// Getter for the singleton instance of the Tor class.
   static Tor get instance => _instance;
 
-  // TODO: is this function supposed to await anything?
-  // in its current state it does not need to be a future as it only
-  // sets the `enabled` bool flag
+  /// Initialize the Tor ffi lib instance if it hasn't already been set. Nothing
+  /// changes if _tor is already been set.
+  ///
+  /// Returns a Future that completes when the Tor service has started.
+  ///
+  /// Throws an exception if the Tor service fails to start.
   static Future<Tor> init({enabled = true}) async {
     var singleton = Tor._instance;
     singleton._enabled = enabled;
     return singleton;
   }
 
+  /// Private constructor for the Tor class.
   Tor._internal() {
     _lib = load(_libName);
     print("Instance of Tor created!");
   }
 
+  /// Start the Tor service.
   Future<void> enable() async {
     _enabled = true;
     if (!started) {
@@ -104,40 +132,77 @@ class Tor {
     return -1;
   }
 
+  /// Start the Tor service.
+  ///
+  /// This will start the Tor service and establish a Tor circuit.
+  ///
+  /// Throws an exception if the Tor service fails to start.
+  ///
+  /// Returns a Future that completes when the Tor service has started.
   Future<void> start() async {
+    // Send the port to the events stream.
     events.add(port);
 
+    // Set the state and cache directories.
     final Directory appSupportDir = await getApplicationSupportDirectory();
     final stateDir =
         await Directory('${appSupportDir.path}/tor_state').create();
     final cacheDir =
         await Directory('${appSupportDir.path}/tor_cache').create();
 
+    // Generate a random port.
     int newPort = await _getRandomUnusedPort();
+
+    // Start the Tor service in an isolate.
     int ptr = await Isolate.run(() async {
+      // Load the Tor library.
       var lib = NativeLibrary(load(_libName));
+
+      // Start the Tor service.
       final ptr = lib.tor_start(
           newPort,
           stateDir.path.toNativeUtf8() as Pointer<Char>,
           cacheDir.path.toNativeUtf8() as Pointer<Char>);
 
+      // Throw an exception if the Tor service fails to start.
       if (ptr == nullptr) {
         throwRustException(lib);
       }
 
+      // Return the pointer.
       return ptr.address;
     });
 
+    // Set the client pointer and started flag.
     _clientPtr = Pointer.fromAddress(ptr);
     _started = true;
+
+    // Bootstrap the Tor service.
     bootstrap();
+
+    // Set the proxy port and enabled flag.
     _proxyPort = newPort;
     _enabled = true;
   }
 
+  /// Bootstrap the Tor service.
+  ///
+  /// This will bootstrap the Tor service and establish a Tor circuit.  This
+  /// function should only be called after the Tor service has been started.
+  ///
+  /// This function will block until the Tor service has bootstrapped.
+  ///
+  /// Throws an exception if the Tor service fails to bootstrap.
+  ///
+  /// Returns void.
   void bootstrap() {
+    // Load the Tor library.
     final lib = NativeLibrary(_lib);
+
+    // Bootstrap the Tor service.
     _bootstrapped = lib.tor_bootstrap(_clientPtr);
+
+    // Throw an exception if the Tor service fails to bootstrap.
     if (!bootstrapped) {
       throwRustException(lib);
     }
