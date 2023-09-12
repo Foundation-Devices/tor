@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
+
+import 'package:path_provider/path_provider.dart';
 // Imports needed for tor usage:
+import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
 import 'package:tor_ffi_plugin/tor_ffi_plugin.dart';
 import 'package:tor_ffi_plugin_example/socks_socket.dart'; // For socket connections
 
@@ -158,57 +160,57 @@ class _MyAppState extends State<Home> {
               TextButton(
                   onPressed: torStarted
                       ? () async {
-                          // Instantiate a socks socket at localhost and on the port selected by the tor service.
-                          var socksSocket = await SOCKSSocket.create(
-                            proxyHost: InternetAddress.loopbackIPv4.address,
-                            proxyPort: Tor.instance.port,
-                          );
+                         // Instantiate a socks socket at localhost and on the port selected by the tor service.
+                        var socksSocket = await SOCKSSocket.create(
+                          proxyHost: InternetAddress.loopbackIPv4.address,
+                          proxyPort: tor.port,
+                          sslEnabled: true, // For SSL connections.
+                        );
 
-                          // Connect to the socks instantiated above.
-                          await socksSocket.connect();
+                        // Connect to the socks instantiated above.
+                        await socksSocket.connect();
 
-                          // Connect to bitcoincash.stackwallet.com on port 50001 via socks socket.
-                          //
-                          // Note that this is a non-SSL example.
-                          // TODO implement SSL.
-                          await socksSocket.connectTo(
-                              'bitcoincash.stackwallet.com', 50001);
+                        // Connect to bitcoin.stackwallet.com on port 50002 via socks socket.
+                        //
+                        // Note that this is an SSL example.
+                        await socksSocket.connectTo(
+                            'bitcoin.stackwallet.com', 50002);
 
-                          // Send a server features command to the connected socket, see method for more specific usage example..
-                          await socksSocket.sendServerFeaturesCommand();
+                        // Send a server features command to the connected socket, see method for more specific usage example..
+                        await socksSocket.sendServerFeaturesCommand();
 
-                          // You should see a server response printed to the console.
-                          //
-                          // Example response:
-                          // `flutter: responseData: {
-                          // 	"id": "0",
-                          // 	"jsonrpc": "2.0",
-                          // 	"result": {
-                          // 		"cashtokens": true,
-                          // 		"dsproof": true,
-                          // 		"genesis_hash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
-                          // 		"hash_function": "sha256",
-                          // 		"hosts": {
-                          // 			"bitcoincash.stackwallet.com": {
-                          // 				"ssl_port": 50002,
-                          // 				"tcp_port": 50001,
-                          // 				"ws_port": 50003,
-                          // 				"wss_port": 50004
-                          // 			}
-                          // 		},
-                          // 		"protocol_max": "1.5",
-                          // 		"protocol_min": "1.4",
-                          // 		"pruning": null,
-                          // 		"server_version": "Fulcrum 1.9.1"
-                          // 	}
-                          // }
+                        // You should see a server response printed to the console.
+                        //
+                        // Example response:
+                        // `flutter: secure responseData: {
+                        // 	"id": "0",
+                        // 	"jsonrpc": "2.0",
+                        // 	"result": {
+                        // 		"cashtokens": true,
+                        // 		"dsproof": true,
+                        // 		"genesis_hash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                        // 		"hash_function": "sha256",
+                        // 		"hosts": {
+                        // 			"bitcoin.stackwallet.com": {
+                        // 				"ssl_port": 50002,
+                        // 				"tcp_port": 50001,
+                        // 				"ws_port": 50003,
+                        // 				"wss_port": 50004
+                        // 			}
+                        // 		},
+                        // 		"protocol_max": "1.5",
+                        // 		"protocol_min": "1.4",
+                        // 		"pruning": null,
+                        // 		"server_version": "Fulcrum 1.9.1"
+                        // 	}
+                        // }
 
-                          // Close the socket.
-                          await socksSocket.close();
+                        // Close the socket.
+                        await socksSocket.close();
                         }
                       : null,
-                  child: const Text(
-                      "Connect to bitcoincash.stackwallet.com:50001 via socks socket")),
+                  child:  const Text(
+                          "Connect to bitcoin.stackwallet.com:50002 (SSL) via socks socket")),
             ],
           ),
         ),
