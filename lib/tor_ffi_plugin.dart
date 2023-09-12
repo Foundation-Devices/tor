@@ -144,9 +144,8 @@ class Tor {
   }
 
   // TODO: this doesn't actually shut tor down
-  Future<void> disable() {
+  void disable() {
     _enabled = false;
-    return Future.value();
   }
 
   void restart() {
