@@ -15,6 +15,8 @@ A new Flutter FFI plugin project.
 
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
+  s.dependency 'Flutter'
+  s.platform = :ios, '9.0'
 
   s.script_phase = {
     :name => 'Build Rust library',
