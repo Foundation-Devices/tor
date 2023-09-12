@@ -81,7 +81,7 @@ class Tor {
   Future<void> enable() async {
     _enabled = true;
     if (!started) {
-      await start();
+      return await start();
     }
   }
 
@@ -143,8 +143,9 @@ class Tor {
   }
 
   // TODO: this doesn't actually shut tor down
-  void disable() {
+  Future<void> disable() {
     _enabled = false;
+    return Future.value();
   }
 
   void restart() {
