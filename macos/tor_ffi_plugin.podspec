@@ -16,6 +16,9 @@ A new Flutter FFI plugin project.
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
 
+  s.platform = :osx, '10.11'
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+
   s.script_phase = {
     :name => 'Build Rust library',
     # First argument is relative path to the `rust` folder, second is name of rust library
@@ -28,8 +31,11 @@ A new Flutter FFI plugin project.
   }
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    # Flutter.framework does not contain a i386 slice.
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
+    # We use `-force_load` instead of `-l` since Xcode strips out unused symbols from static libraries.
     'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/libtor_ffi_plugin.a',
+    'DEAD_CODE_STRIPPING' => 'YES',
+    'STRIP_INSTALLED_PRODUCT[config=Release][sdk=*][arch=*]' => "YES",
+    'STRIP_STYLE[config=Release][sdk=*][arch=*]' => "non-global",
+    'DEPLOYMENT_POSTPROCESSING[config=Release][sdk=*][arch=*]' => "YES",
   }
 end
