@@ -4,8 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
-import 'package:path_provider/path_provider.dart';
 // Imports needed for tor usage:
 import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
 import 'package:tor_ffi_plugin/tor_ffi_plugin.dart';
@@ -105,65 +103,67 @@ class _MyAppState extends State<Home> {
                       },
                 child: const Text("Start tor"),
               ),
-              Row(children: [
-                // Host input field.
-                Expanded(
-                  child: TextField(
-                    controller: hostController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Host to request',
+              Row(
+                children: [
+                  // Host input field.
+                  Expanded(
+                    child: TextField(
+                      controller: hostController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Host to request',
+                      ),
                     ),
                   ),
-                ),
-                spacerSmall,
-                TextButton(
-                  onPressed: torStarted
-                      ? () async {
-                          // `socks5_proxy` package example, use another socks5
-                          // connection of your choice.
+                  spacerSmall,
+                  TextButton(
+                    onPressed: torStarted
+                        ? () async {
+                            // `socks5_proxy` package example, use another socks5
+                            // connection of your choice.
 
-                          // Create HttpClient object
-                          final client = HttpClient();
+                            // Create HttpClient object
+                            final client = HttpClient();
 
-                          // Assign connection factory.
-                          SocksTCPClient.assignToHttpClient(client, [
-                            ProxySettings(
-                                InternetAddress.loopbackIPv4, Tor.instance.port,
-                                password:
-                                    null), // TODO Need to get from tor config file.
-                          ]);
+                            // Assign connection factory.
+                            SocksTCPClient.assignToHttpClient(client, [
+                              ProxySettings(InternetAddress.loopbackIPv4,
+                                  Tor.instance.port,
+                                  password:
+                                      null), // TODO Need to get from tor config file.
+                            ]);
 
-                          // GET request.
-                          final request = await client
-                              .getUrl(Uri.parse(hostController.text));
-                          final response = await request.close();
+                            // GET request.
+                            final request = await client
+                                .getUrl(Uri.parse(hostController.text));
+                            final response = await request.close();
 
-                          // Print response.
-                          var responseString =
-                              await utf8.decodeStream(response);
-                          print(responseString);
-                          // If host input left to default icanhazip.com, a Tor
-                          // exit node IP should be printed to the console.
-                          //
-                          // https://check.torproject.org is also good for
-                          // doublechecking torability.
+                            // Print response.
+                            var responseString =
+                                await utf8.decodeStream(response);
+                            print(responseString);
+                            // If host input left to default icanhazip.com, a Tor
+                            // exit node IP should be printed to the console.
+                            //
+                            // https://check.torproject.org is also good for
+                            // doublechecking torability.
 
-                          // Close client
-                          client.close();
-                        }
-                      : null,
-                  child: const Text("Make proxied request"),
-                ),
-              ]),
+                            // Close client
+                            client.close();
+                          }
+                        : null,
+                    child: const Text("Make proxied request"),
+                  ),
+                ],
+              ),
               spacerSmall,
               TextButton(
-                  onPressed: torStarted
-                      ? () async {
-                         // Instantiate a socks socket at localhost and on the port selected by the tor service.
+                onPressed: torStarted
+                    ? () async {
+                        // Instantiate a socks socket at localhost and on the port selected by the tor service.
                         var socksSocket = await SOCKSSocket.create(
                           proxyHost: InternetAddress.loopbackIPv4.address,
-                          proxyPort: tor.port,
+                          proxyPort: Tor.instance.port,
                           sslEnabled: true, // For SSL connections.
                         );
 
@@ -207,10 +207,12 @@ class _MyAppState extends State<Home> {
 
                         // Close the socket.
                         await socksSocket.close();
-                        }
-                      : null,
-                  child:  const Text(
-                          "Connect to bitcoin.stackwallet.com:50002 (SSL) via socks socket")),
+                      }
+                    : null,
+                child: const Text(
+                  "Connect to bitcoin.stackwallet.com:50002 (SSL) via socks socket",
+                ),
+              ),
             ],
           ),
         ),
