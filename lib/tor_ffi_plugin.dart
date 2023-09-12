@@ -132,6 +132,7 @@ class Tor {
     _started = true;
     bootstrap();
     _proxyPort = newPort;
+    _enabled = true;
   }
 
   void bootstrap() {
