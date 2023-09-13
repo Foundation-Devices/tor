@@ -17,19 +17,6 @@ A new Flutter FFI plugin project.
   s.source_files     = 'Classes/**/*'
   s.platform = :osx, '10.13'
 
-  # use precompiled dylib for now
-#  s.vendored_libraries = 'libtor_ffi_plugin.dylib'
-#  s.pod_target_xcconfig = {
-#    'DEFINES_MODULE' => 'YES',
-#    'EXCLUDED_ARCHS[sdk=macosx*]' => 'x86_64',
-#    'DEAD_CODE_STRIPPING' => 'YES',
-#    'STRIP_INSTALLED_PRODUCT[config=Release][sdk=*][arch=*]' => "YES",
-#    'STRIP_STYLE[config=Release][sdk=*][arch=*]' => "non-global",
-#    'DEPLOYMENT_POSTPROCESSING[config=Release][sdk=*][arch=*]' => "YES",
-#  }
-
-# the following settings should be used when cargokit works for this rust code
-
   s.script_phase = {
     :name => 'Build Rust library',
     # First argument is relative path to the `rust` folder, second is name of rust library
