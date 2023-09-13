@@ -39,13 +39,11 @@ A new Flutter FFI plugin project.
 #    # Let XCode know that the static library referenced in -force_load below is
 #    # created by this build step.
 #    :output_files => ["${BUILT_PRODUCTS_DIR}/libtor_ffi_plugin.a"],
-#    :output_files => ["libtor_ffi_plugin.a"],
 #  }
 #  s.pod_target_xcconfig = {
 #    'DEFINES_MODULE' => 'YES',
 #    # We use `-force_load` instead of `-l` since Xcode strips out unused symbols from static libraries.
-#    'OTHER_LDFLAGS' => '-force_load $PODS_TARGET_SRCROOT/libtor_ffi_plugin.a',
-#    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}libtor_ffi_plugin.a',
+#    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/libtor_ffi_plugin.a',
 #    'DEAD_CODE_STRIPPING' => 'YES',
 #    'STRIP_INSTALLED_PRODUCT[config=Release][sdk=*][arch=*]' => "YES",
 #    'STRIP_STYLE[config=Release][sdk=*][arch=*]' => "non-global",
