@@ -3844,6 +3844,7 @@ dependencies = [
  "cbindgen",
  "lazy_static",
  "log",
+ "lzma-sys",
  "tokio",
  "tor-rtcompat",
 ]
