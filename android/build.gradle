@@ -1,6 +1,6 @@
 // The Android Gradle Plugin builds the native code with the Android NDK.
 
-group 'com.example.tor'
+group 'com.cypherstack.tor_ffi_plugin'
 version '1.0'
 
 buildscript {
@@ -25,28 +25,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.cypherstack.tor_ffi_plugin'
+    }
     // Bumping the plugin compileSdkVersion requires all clients of this plugin
     // to bump the version in their app.
-    compileSdkVersion 31
-
-    // Bumping the plugin ndkVersion requires all clients of this plugin to bump
-    // the version in their app and to download a newer version of the NDK.
-    ndkVersion "23.1.7779620"
-
-    // Invoke the shared CMake build with the Android Gradle Plugin.
-    externalNativeBuild {
-        cmake {
-            path "../src/CMakeLists.txt"
-
-            // The default CMake version for the Android Gradle Plugin is 3.10.2.
-            // https://developer.android.com/studio/projects/install-ndk#vanilla_cmake
-            //
-            // The Flutter tooling requires that developers have CMake 3.10 or later
-            // installed. You should not increase this version, as doing so will cause
-            // the plugin to fail to compile for some customers of the plugin.
-            // version "3.10.2"
-        }
-    }
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -56,4 +40,11 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+}
+
+apply from: "../cargokit/gradle/plugin.gradle"
+
+cargokit {
+    manifestDir = "../rust"
+    libname = "tor_ffi_plugin"
 }
