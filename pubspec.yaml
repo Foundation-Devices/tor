@@ -1,5 +1,5 @@
-name: tor_ffi_plugin
-description: A new Flutter FFI plugin project.
+name: tor
+description: A multi-platform Flutter plugin for managing a Tor proxy. Based on arti.
 version: 0.0.1
 homepage:
 

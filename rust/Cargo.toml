@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 [package]
-name = "tor_ffi_plugin"
+name = "tor"
 version = "0.1.0"
 authors = ["Igor Cota <igor@foundationdevices.com>"]
 edition = "2018"

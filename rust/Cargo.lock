@@ -3112,6 +3112,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "tor"
+version = "0.1.0"
+dependencies = [
+ "arti",
+ "arti-client",
+ "cbindgen",
+ "lazy_static",
+ "log",
+ "tokio",
+ "tor-rtcompat",
+]
+
+[[package]]
 name = "tor-async-utils"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3833,19 +3846,6 @@ checksum = "1988db62de5802416daa1497a6fa21c57084856cc8921ee347fbf5c28f67e8cf"
 dependencies = [
  "derive_more",
  "thiserror",
-]
-
-[[package]]
-name = "tor_ffi_plugin"
-version = "0.1.0"
-dependencies = [
- "arti",
- "arti-client",
- "cbindgen",
- "lazy_static",
- "log",
- "tokio",
- "tor-rtcompat",
 ]
 
 [[package]]
