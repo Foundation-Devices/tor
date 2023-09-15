@@ -23,3 +23,4 @@ lzma-sys = { version = "0.1.20", features = ["static"] }
 
 [build-dependencies]
 cbindgen = "= 0.24.3"
+glob = "0.3.1"
