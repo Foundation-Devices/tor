@@ -10,7 +10,7 @@ import 'dart:math';
 
 import 'package:ffi/ffi.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tor_ffi_plugin/tor_ffi_plugin_bindings_generated.dart';
+import 'package:tor/tor_bindings_generated.dart';
 
 DynamicLibrary load(name) {
   if (Platform.isAndroid || Platform.isLinux) {
@@ -35,7 +35,7 @@ class NotSupportedPlatform implements Exception {
 }
 
 class Tor {
-  static const String _libName = "tor_ffi_plugin";
+  static const String _libName = "tor";
   static late DynamicLibrary _lib;
 
   Pointer<Int> _clientPtr = nullptr;

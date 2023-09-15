@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.cypherstack" "\0"
-            VALUE "FileDescription", "tor_ffi_plugin_example" "\0"
+            VALUE "CompanyName", "com.foundationdevices" "\0"
+            VALUE "FileDescription", "tor_example" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tor_ffi_plugin_example" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.cypherstack. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tor_ffi_plugin_example.exe" "\0"
-            VALUE "ProductName", "tor_ffi_plugin_example" "\0"
+            VALUE "InternalName", "tor_example" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 com.foundationdevices. All rights reserved." "\0"
+            VALUE "OriginalFilename", "tor_example.exe" "\0"
+            VALUE "ProductName", "tor_example" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
