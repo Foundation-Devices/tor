@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 // Imports needed for tor usage:
 import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
 import 'package:tor_ffi_plugin/tor_ffi_plugin.dart';
@@ -33,7 +34,7 @@ class Home extends StatefulWidget {
 
 class _MyAppState extends State<Home> {
   // Flag to track if tor has started.
-  bool torStarted = false;
+  bool torIsRunning = false;
 
   // Set the default text for the host input field.
   final hostController = TextEditingController(text: 'https://icanhazip.com/');
@@ -41,11 +42,13 @@ class _MyAppState extends State<Home> {
 
   Future<void> startTor() async {
     // Start the Tor daemon.
-    await Tor.instance.start();
+    await Tor.instance.start(
+      torDataDirPath: (await getApplicationSupportDirectory()).path,
+    );
 
     // Toggle started flag.
     setState(() {
-      torStarted = Tor.instance.started; // Update flag
+      torIsRunning = Tor.instance.status == TorStatus.on; // Update flag
     });
 
     print('Done awaiting; tor should be running');
@@ -71,7 +74,7 @@ class _MyAppState extends State<Home> {
           child: Column(
             children: [
               TextButton(
-                onPressed: torStarted
+                onPressed: torIsRunning
                     ? null
                     : () async {
                         unawaited(
@@ -117,7 +120,7 @@ class _MyAppState extends State<Home> {
                   ),
                   spacerSmall,
                   TextButton(
-                    onPressed: torStarted
+                    onPressed: torIsRunning
                         ? () async {
                             // `socks5_proxy` package example, use another socks5
                             // connection of your choice.
@@ -158,7 +161,7 @@ class _MyAppState extends State<Home> {
               ),
               spacerSmall,
               TextButton(
-                onPressed: torStarted
+                onPressed: torIsRunning
                     ? () async {
                         // Instantiate a socks socket at localhost and on the port selected by the tor service.
                         var socksSocket = await SOCKSSocket.create(
