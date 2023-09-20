@@ -12,6 +12,8 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tor_ffi_plugin/tor_ffi_plugin_bindings_generated.dart';
 
+export 'socks_socket.dart' show SOCKSSocket;
+
 DynamicLibrary _load(name) {
   if (Platform.isAndroid || Platform.isLinux) {
     return DynamicLibrary.open('lib$name.so');
