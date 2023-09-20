@@ -18,7 +18,9 @@ arti-client = { version = "0.10.0", features = ["static"] }
 arti = { version = "1.1.6", features = ["experimental-api", "static"] }
 tor-rtcompat = { version = "0.9.2", features = ["static"] }
 log = "0.4.20"
+lzma-sys = { version = "0.1.20", features = ["static"] }
 #android_log-sys = "0.3.1"
 
 [build-dependencies]
 cbindgen = "= 0.24.3"
+glob = "0.3.1"

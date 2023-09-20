@@ -4,17 +4,15 @@ import 'dart:io';
 
 /// A SOCKS5 socket.
 ///
-/// This class is a wrapper around a Socket that connects to a SOCKS5 proxy
-/// server and sends all data through the proxy.
+/// This class is a wrapper around the Socket class that implements the
+/// SOCKS5 protocol.  It supports SSL and non-SSL connections.
 ///
-/// This class is used to connect to the Tor proxy server.
-///
-/// Attributes:
+/// Properties:
 ///  - [proxyHost]: The host of the SOCKS5 proxy server.
 ///  - [proxyPort]: The port of the SOCKS5 proxy server.
-///  - [_socksSocket]: The underlying [Socket] that connects to the SOCKS5 proxy
+///  - [_socksSocket]: The underlying Socket that connects to the SOCKS5 proxy
 ///  server.
-///  - [_responseController]: A [StreamController] that listens to the
+///  - [_responseController]: A StreamController that listens to the
 ///  [_socksSocket] and broadcasts the response.
 ///
 /// Methods:
@@ -72,16 +70,22 @@ class SOCKSSocket {
   final StreamController<List<int>> _responseController =
       StreamController.broadcast();
 
+  /// A StreamController that listens to the _secureSocksSocket and broadcasts.
+  final StreamController<List<int>> _secureResponseController =
+      StreamController.broadcast();
+
   /// Getter for the StreamController that listens to the _socksSocket and
   /// broadcasts, or the _secureSocksSocket and broadcasts if SSL is enabled.
   StreamController<List<int>> get responseController =>
       sslEnabled ? _secureResponseController : _responseController;
 
-  StreamSubscription? _subscription;
+  /// A StreamSubscription that listens to the _socksSocket or the
+  /// _secureSocksSocket if SSL is enabled.
+  StreamSubscription<List<int>>? _subscription;
 
-  /// A StreamController that listens to the _secureSocksSocket and broadcasts.
-  final StreamController<List<int>> _secureResponseController =
-      StreamController.broadcast();
+  /// Getter for the StreamSubscription that listens to the _socksSocket or the
+  /// _secureSocksSocket if SSL is enabled.
+  StreamSubscription<List<int>>? get subscription => _subscription;
 
   /// Is SSL enabled?
   final bool sslEnabled;
@@ -174,6 +178,8 @@ class SOCKSSocket {
       throw Exception(
           'socks_socket.connect(): Failed to connect to SOCKS5 proxy.');
     }
+
+    return;
   }
 
   /// Connects to the specified [domain] and [port] through the SOCKS socket.
@@ -265,11 +271,48 @@ class SOCKSSocket {
     }
   }
 
+  /// Closes the connection to the Tor proxy.
+  ///
+  /// Returns:
+  ///  A Future that resolves to void.
+  Future<void> close() async {
+    // Ensure all data is sent before closing.
+    //
+    // TODO test this.
+    if (sslEnabled) {
+      await _socksSocket.flush();
+      await _secureResponseController.close();
+    }
+    await _socksSocket.flush();
+    await _responseController.close();
+    return await _socksSocket.close();
+  }
+
+  StreamSubscription<List<int>> listen(
+    void Function(List<int> data)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return sslEnabled
+        ? _secureResponseController.stream.listen(
+            onData,
+            onError: onError,
+            onDone: onDone,
+            cancelOnError: cancelOnError,
+          )
+        : _responseController.stream.listen(
+            onData,
+            onError: onError,
+            onDone: onDone,
+            cancelOnError: cancelOnError,
+          );
+  }
+
   /// Sends the server.features command to the proxy server.
   ///
-  /// This method is used to send the server.features command to the proxy
-  /// server. This command is used to request the features of the proxy server.
-  /// It serves as a demonstration of how to send commands to the proxy server.
+  /// This demos how to send the server.features command.  Use as an example
+  /// for sending other commands.
   ///
   /// Returns:
   ///   A Future that resolves to void.
@@ -295,55 +338,5 @@ class SOCKSSocket {
     }
 
     return;
-  }
-
-  /// Closes the connection to the Tor proxy.
-  ///
-  /// Returns:
-  ///  A Future that resolves to void.
-  Future<void> close() async {
-    // Ensure all data is sent before closing.
-    //
-    // TODO test this.
-    if (sslEnabled) {
-      await _socksSocket.flush();
-      await _secureResponseController.close();
-    }
-    await _socksSocket.flush();
-    await _responseController.close();
-    return await _socksSocket.close();
-  }
-
-  /// Listens to the socket.
-  ///
-  /// Parameters:
-  /// - [onData]: The callback to be called when data is received.
-  /// - [onError]: The callback to be called when an error occurs.
-  /// - [onDone]: The callback to be called when the socket is closed.
-  /// - [cancelOnError]: Whether or not to cancel the subscription on error.
-  ///
-  /// Returns:
-  ///   A StreamSubscription that listens to the socket.
-  StreamSubscription<List<int>> listen(
-    void Function(List<int> data)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    return sslEnabled
-        // Listen to the secure socket if SSL is enabled.
-        ? _secureResponseController.stream.listen(
-            onData,
-            onError: onError,
-            onDone: onDone,
-            cancelOnError: cancelOnError,
-          )
-        // Listen to the plain socket if SSL is not enabled.
-        : _responseController.stream.listen(
-            onData,
-            onError: onError,
-            onDone: onDone,
-            cancelOnError: cancelOnError,
-          );
   }
 }
