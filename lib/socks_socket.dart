@@ -178,6 +178,8 @@ class SOCKSSocket {
       throw Exception(
           'socks_socket.connect(): Failed to connect to SOCKS5 proxy.');
     }
+
+    return;
   }
 
   /// Connects to the specified [domain] and [port] through the SOCKS socket.
