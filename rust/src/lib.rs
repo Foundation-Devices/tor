@@ -4,8 +4,8 @@
 
 //use android_log_sys::__android_log_write;
 use arti::socks;
-use arti_client::config::TorClientConfigBuilder;
-use arti_client::TorClient;
+use arti_client::config::CfgPath;
+use arti_client::{TorClient, TorClientConfig};
 use lazy_static::lazy_static;
 use std::ffi::{c_char, CStr, CString};
 use std::{io, ptr};
@@ -55,10 +55,14 @@ pub unsafe extern "C" fn tor_start(
 
     let runtime = unwrap_or_return!(TokioNativeTlsRuntime::create(), err_ret);
 
-    let cfg = unwrap_or_return!(
-        TorClientConfigBuilder::from_directories(state_dir, cache_dir).build(),
-        err_ret
-    );
+    let mut cfg_builder = TorClientConfig::builder();
+    cfg_builder
+        .storage()
+        .state_dir(CfgPath::new(state_dir.to_owned()))
+        .cache_dir(CfgPath::new(cache_dir.to_owned()));
+    cfg_builder.address_filter().allow_onion_addrs(true);
+
+    let cfg = unwrap_or_return!(cfg_builder.build(), err_ret);
 
     let client = unwrap_or_return!(
         runtime.block_on(async {
