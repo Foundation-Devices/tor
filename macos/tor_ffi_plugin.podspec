@@ -17,38 +17,23 @@ A new Flutter FFI plugin project.
   s.source_files     = 'Classes/**/*'
   s.platform = :osx, '10.13'
 
-  # use precompiled dylib for now
-  s.vendored_libraries = 'libtor.dylib'
+  s.script_phase = {
+    :name => 'Build Rust library',
+    # First argument is relative path to the `rust` folder, second is name of rust library
+    :script => 'sh "$PODS_TARGET_SRCROOT/../cargokit/build_pod.sh" ../rust tor_ffi_plugin',
+    :execution_position => :before_compile,
+    :input_files => ['${BUILT_PRODUCTS_DIR}/cargokit_phony'],
+    # Let XCode know that the static library referenced in -force_load below is
+    # created by this build step.
+    :output_files => ["${BUILT_PRODUCTS_DIR}/libtor_ffi_plugin.a"],
+  }
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=macosx*]' => 'x86_64',
+    # We use `-force_load` instead of `-l` since Xcode strips out unused symbols from static libraries.
+    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/libtor_ffi_plugin.a',
     'DEAD_CODE_STRIPPING' => 'YES',
     'STRIP_INSTALLED_PRODUCT[config=Release][sdk=*][arch=*]' => "YES",
     'STRIP_STYLE[config=Release][sdk=*][arch=*]' => "non-global",
     'DEPLOYMENT_POSTPROCESSING[config=Release][sdk=*][arch=*]' => "YES",
   }
-
-# the following settings should be used when cargokit works for this rust code
-
-#  s.script_phase = {
-#    :name => 'Build Rust library',
-#    # First argument is relative path to the `rust` folder, second is name of rust library
-#    :script => 'sh "$PODS_TARGET_SRCROOT/../cargokit/build_pod.sh" ../rust tor',
-#    :execution_position => :before_compile,
-#    :input_files => ['${BUILT_PRODUCTS_DIR}/cargokit_phony'],
-#    # Let XCode know that the static library referenced in -force_load below is
-#    # created by this build step.
-#    :output_files => ["${BUILT_PRODUCTS_DIR}/libtor.a"],
-#    :output_files => ["libtor.a"],
-#  }
-#  s.pod_target_xcconfig = {
-#    'DEFINES_MODULE' => 'YES',
-#    # We use `-force_load` instead of `-l` since Xcode strips out unused symbols from static libraries.
-#    'OTHER_LDFLAGS' => '-force_load $PODS_TARGET_SRCROOT/libtor.a',
-#    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}libtor.a',
-#    'DEAD_CODE_STRIPPING' => 'YES',
-#    'STRIP_INSTALLED_PRODUCT[config=Release][sdk=*][arch=*]' => "YES",
-#    'STRIP_STYLE[config=Release][sdk=*][arch=*]' => "non-global",
-#    'DEPLOYMENT_POSTPROCESSING[config=Release][sdk=*][arch=*]' => "YES",
-#  }
 end
