@@ -9,6 +9,7 @@ import 'dart:isolate';
 import 'dart:math';
 
 import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tor/tor_bindings_generated.dart';
 
@@ -40,13 +41,13 @@ class Tor {
 
   Pointer<Int> _clientPtr = nullptr;
 
-  /// Flag to indicate that a Tor should be started.
+  /// Flag to indicate that Tor proxy has started. Traffic is routed through it only if it is also [enabled].
   bool get started => _started;
 
   /// Getter for the started flag.
   bool _started = false;
 
-  /// Flag to indicate that Tor has started.
+  /// Flag to indicate that traffic should flow through the proxy.
   bool _enabled = false;
 
   /// Getter for the enabled flag.
@@ -61,7 +62,7 @@ class Tor {
 
   /// A stream of Tor events.
   ///
-  /// This stream broadcast just the port for now (-1 if circuit not established)
+  /// This stream broadcast just the port for now (-1 if circuit not established or proxy not enabled)
   final StreamController events = StreamController.broadcast();
 
   /// Getter for the proxy port.
@@ -102,15 +103,23 @@ class Tor {
   /// Private constructor for the Tor class.
   Tor._internal() {
     _lib = load(_libName);
-    print("Instance of Tor created!");
+
+    if (kDebugMode) {
+      print("Instance of Tor created!");
+    }
   }
 
   /// Start the Tor service.
   Future<void> enable() async {
     _enabled = true;
     if (!started) {
-      return await start();
+      await start();
     }
+    broadcastState();
+  }
+
+  void broadcastState() {
+    events.add(port);
   }
 
   Future<int> _getRandomUnusedPort({List<int> excluded = const []}) async {
@@ -140,8 +149,7 @@ class Tor {
   ///
   /// Returns a Future that completes when the Tor service has started.
   Future<void> start() async {
-    // Send the port to the events stream.
-    events.add(port);
+    broadcastState();
 
     // Set the state and cache directories.
     final Directory appSupportDir = await getApplicationSupportDirectory();
@@ -180,9 +188,9 @@ class Tor {
     // Bootstrap the Tor service.
     bootstrap();
 
-    // Set the proxy port and enabled flag.
+    // Set the proxy port.
     _proxyPort = newPort;
-    _enabled = true;
+    broadcastState();
   }
 
   /// Bootstrap the Tor service.
@@ -208,9 +216,10 @@ class Tor {
     }
   }
 
-  // TODO: this doesn't actually shut tor down
+  /// Prevent traffic flowing through the proxy
   void disable() {
     _enabled = false;
+    broadcastState();
   }
 
   void restart() {
