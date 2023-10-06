@@ -40,7 +40,9 @@ class _MyAppState extends State<Home> {
   // https://check.torproject.org is another good option.
 
   Future<void> startTor() async {
-    // Start the Tor daemon.
+    await Tor.init();
+
+    // Start the proxy
     await Tor.instance.start();
 
     // Toggle started flag.
