@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: tor
+Upstream-Contact: Igor Cota <igor@foundationdevices.com>
+Source: https://github.com/Foundation-Devices/tor
+
+Files: cargokit/*
+Copyright: 2022 Matej Knopp
+License: MIT
