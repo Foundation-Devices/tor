@@ -12,6 +12,7 @@ use std::{io, ptr};
 use tokio::runtime::{Builder, Runtime};
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
 use tor_rtcompat::BlockOn;
+use tor_config::Listen;
 
 mod error;
 
@@ -81,7 +82,7 @@ pub unsafe extern "C" fn tor_start(
     let handle = rt.spawn(socks::run_socks_proxy(
         runtime.clone(),
         client_clone,
-        socks_port,
+        Listen::new_localhost(socks_port),
     ));
 
     let handle_box = Box::new(handle);
