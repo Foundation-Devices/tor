@@ -61,7 +61,7 @@ pub unsafe extern "C" fn tor_start(
         Err(e) => println!("Couldn't get file limit: {}", e),
     }
 
-    match rlimit::increase_nofile_limit(128) {
+    match rlimit::increase_nofile_limit(16384) {
         Ok(n) => println!("Increased process file limit to {}", n),
         Err(e) => println!("Error while increasing file limit: {}", e),
     }
