@@ -55,16 +55,9 @@ pub unsafe extern "C" fn tor_start(
     let cache_dir = unwrap_or_return!(CStr::from_ptr(cache_dir).to_str(), err_ret);
 
     let runtime = unwrap_or_return!(TokioNativeTlsRuntime::create(), err_ret);
-    
-    match rlimit::getrlimit(rlimit::Resource::NOFILE) {
-        Ok(n) => println!("Increased process file limit to {:?}", n),
-        Err(e) => println!("Couldn't get file limit: {}", e),
-    }
 
-    match rlimit::increase_nofile_limit(16384) {
-        Ok(n) => println!("Increased process file limit to {}", n),
-        Err(e) => println!("Error while increasing file limit: {}", e),
-    }
+    unwrap_or_return!(rlimit::getrlimit(rlimit::Resource::NOFILE), err_ret);
+    unwrap_or_return!(rlimit::increase_nofile_limit(16384), err_ret);
 
     let mut cfg_builder = TorClientConfig::builder();
     cfg_builder
