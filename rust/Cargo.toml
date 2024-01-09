@@ -20,6 +20,7 @@ tor-rtcompat = { version = "0.9.6", features = ["static"] }
 tor-config = "0.9.7"
 log = "0.4.20"
 #android_log-sys = "0.3.1"
+rlimit = "0.10.1"
 
 [build-dependencies]
 cbindgen = "= 0.24.3"

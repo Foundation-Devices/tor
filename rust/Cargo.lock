@@ -3208,6 +3208,7 @@ dependencies = [
  "cbindgen",
  "lazy_static",
  "log",
+ "rlimit",
  "tokio",
  "tor-config",
  "tor-rtcompat",
