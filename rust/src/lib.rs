@@ -1,46 +1,29 @@
-// SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
+// SPDX-FileCopyrightText: 2023 Foundation Devices Inc.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//use android_log_sys::__android_log_write;
+use crate::error::update_last_error;
 use arti::socks;
 use arti_client::config::CfgPath;
 use arti_client::{TorClient, TorClientConfig};
 use lazy_static::lazy_static;
-use std::ffi::{c_char, CStr, CString};
+use std::ffi::{c_char, CStr};
 use std::{io, ptr};
 use tokio::runtime::{Builder, Runtime};
+use tor_config::Listen;
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
 use tor_rtcompat::BlockOn;
-use tor_config::Listen;
 
+pub use crate::error::tor_last_error_message;
+pub use crate::util::tor_get_nofile_limit;
+pub use crate::util::tor_set_nofile_limit;
+
+#[macro_use]
 mod error;
+mod util;
 
 lazy_static! {
     static ref RUNTIME: io::Result<Runtime> = Builder::new_multi_thread().enable_all().build();
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn tor_last_error_message() -> *const c_char {
-    let last_error = match error::take_last_error() {
-        Some(err) => err,
-        None => return CString::new("").unwrap().into_raw(),
-    };
-
-    let error_message = last_error.to_string();
-    CString::new(error_message).unwrap().into_raw()
-}
-
-macro_rules! unwrap_or_return {
-    ($a:expr,$b:expr) => {
-        match $a {
-            Ok(x) => x,
-            Err(e) => {
-                error::update_last_error(e);
-                return $b;
-            }
-        }
-    };
 }
 
 #[no_mangle]
@@ -55,9 +38,6 @@ pub unsafe extern "C" fn tor_start(
     let cache_dir = unwrap_or_return!(CStr::from_ptr(cache_dir).to_str(), err_ret);
 
     let runtime = unwrap_or_return!(TokioNativeTlsRuntime::create(), err_ret);
-
-    unwrap_or_return!(rlimit::getrlimit(rlimit::Resource::NOFILE), err_ret);
-    unwrap_or_return!(rlimit::increase_nofile_limit(16384), err_ret);
 
     let mut cfg_builder = TorClientConfig::builder();
     cfg_builder

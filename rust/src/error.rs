@@ -1,13 +1,38 @@
-// SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
+// SPDX-FileCopyrightText: 2023 Foundation Devices Inc.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use log::{error, warn};
 use std::cell::RefCell;
 use std::error::Error;
+use std::ffi::{c_char, CString};
+//pub(crate) use crate::unwrap_or_return;
 
 thread_local! {
     static LAST_ERROR: RefCell<Option<Box<dyn Error>>> = RefCell::new(None);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn tor_last_error_message() -> *const c_char {
+    let last_error = match crate::error::take_last_error() {
+        Some(err) => err,
+        None => return CString::new("").unwrap().into_raw(),
+    };
+
+    let error_message = last_error.to_string();
+    CString::new(error_message).unwrap().into_raw()
+}
+
+macro_rules! unwrap_or_return {
+    ($a:expr,$b:expr) => {
+        match $a {
+            Ok(x) => x,
+            Err(e) => {
+                update_last_error(e);
+                return $b;
+            }
+        }
+    };
 }
 
 /// Update the most recent error, clearing whatever may have been there before.

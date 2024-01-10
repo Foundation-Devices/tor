@@ -68,11 +68,11 @@ class SOCKSSocket {
 
   /// A StreamController that listens to the _socksSocket and broadcasts.
   final StreamController<List<int>> _responseController =
-  StreamController.broadcast();
+      StreamController.broadcast();
 
   /// A StreamController that listens to the _secureSocksSocket and broadcasts.
   final StreamController<List<int>> _secureResponseController =
-  StreamController.broadcast();
+      StreamController.broadcast();
 
   /// Getter for the StreamController that listens to the _socksSocket and
   /// broadcasts, or the _secureSocksSocket and broadcasts if SSL is enabled.
@@ -106,8 +106,8 @@ class SOCKSSocket {
   ///  A Future that resolves to a SOCKSSocket instance.
   static Future<SOCKSSocket> create(
       {required String proxyHost,
-        required int proxyPort,
-        bool sslEnabled = false}) async {
+      required int proxyPort,
+      bool sslEnabled = false}) async {
     // Create a SOCKS socket instance.
     var instance = SOCKSSocket._(proxyHost, proxyPort, sslEnabled);
 
@@ -121,8 +121,8 @@ class SOCKSSocket {
   /// Constructor.
   SOCKSSocket(
       {required this.proxyHost,
-        required this.proxyPort,
-        required this.sslEnabled}) {
+      required this.proxyPort,
+      required this.sslEnabled}) {
     _init();
   }
 
@@ -141,7 +141,7 @@ class SOCKSSocket {
 
     // Listen to the socket.
     _subscription = _socksSocket.listen(
-          (data) {
+      (data) {
         // Add the data to the response controller.
         _responseController.add(data);
       },
@@ -226,7 +226,7 @@ class SOCKSSocket {
 
       // Listen to the secure socket.
       _subscription = _secureSocksSocket.listen(
-            (data) {
+        (data) {
           // Add the data to the response controller.
           _secureResponseController.add(data);
         },
@@ -289,24 +289,24 @@ class SOCKSSocket {
   }
 
   StreamSubscription<List<int>> listen(
-      void Function(List<int> data)? onData, {
-        Function? onError,
-        void Function()? onDone,
-        bool? cancelOnError,
-      }) {
+    void Function(List<int> data)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     return sslEnabled
         ? _secureResponseController.stream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    )
+            onData,
+            onError: onError,
+            onDone: onDone,
+            cancelOnError: cancelOnError,
+          )
         : _responseController.stream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
+            onData,
+            onError: onError,
+            onDone: onDone,
+            cancelOnError: cancelOnError,
+          );
   }
 
   /// Sends the server.features command to the proxy server.
