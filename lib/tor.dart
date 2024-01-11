@@ -39,7 +39,7 @@ class Tor {
   static const String _libName = "tor";
   static late DynamicLibrary _lib;
 
-  Pointer<Int> _clientPtr = nullptr;
+  Pointer<Void> _clientPtr = nullptr;
 
   /// Flag to indicate that Tor proxy has started. Traffic is routed through it only if it is also [enabled].
   bool get started => _started;
