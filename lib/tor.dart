@@ -11,7 +11,7 @@ import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tor/tor_bindings_generated.dart';
+import 'package:tor/generated_bindings.dart';
 
 DynamicLibrary load(name) {
   if (Platform.isAndroid || Platform.isLinux) {
