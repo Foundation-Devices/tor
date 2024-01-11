@@ -7,7 +7,7 @@ use arti::socks;
 use arti_client::config::CfgPath;
 use arti_client::{TorClient, TorClientConfig};
 use lazy_static::lazy_static;
-use std::ffi::{c_char, CStr};
+use std::ffi::{c_char, c_void, CStr};
 use std::{io, ptr};
 use tokio::runtime::{Builder, Runtime};
 use tor_config::Listen;
@@ -31,7 +31,7 @@ pub unsafe extern "C" fn tor_start(
     socks_port: u16,
     state_dir: *const c_char,
     cache_dir: *const c_char,
-) -> *mut TorClient<TokioNativeTlsRuntime> {
+) -> *mut c_void {
     let err_ret = ptr::null_mut();
 
     let state_dir = unwrap_or_return!(CStr::from_ptr(state_dir).to_str(), err_ret);
@@ -72,14 +72,14 @@ pub unsafe extern "C" fn tor_start(
     Box::leak(handle_box);
 
     let client_box = Box::new(client);
-    Box::into_raw(client_box)
+    Box::into_raw(client_box) as *mut c_void
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn tor_bootstrap(client: *mut TorClient<TokioNativeTlsRuntime>) -> bool {
+pub unsafe extern "C" fn tor_bootstrap(client: *mut c_void) -> bool {
     let client = {
         assert!(!client.is_null());
-        &mut *client
+        Box::from_raw(client as *mut TorClient<TokioNativeTlsRuntime>)
     };
 
     unwrap_or_return!(client.runtime().block_on(client.bootstrap()), false);

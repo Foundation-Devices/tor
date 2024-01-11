@@ -3,11 +3,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-TorClient<TokioNativeTlsRuntime> *tor_start(uint16_t socks_port,
-                                            const char *state_dir,
-                                            const char *cache_dir);
+void *tor_start(uint16_t socks_port, const char *state_dir, const char *cache_dir);
 
-bool tor_bootstrap(TorClient<TokioNativeTlsRuntime> *client);
+bool tor_bootstrap(void *client);
 
 void tor_hello(void);
 
