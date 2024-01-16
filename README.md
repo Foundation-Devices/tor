@@ -31,11 +31,10 @@ git subtree pull --prefix cargokit https://github.com/irondash/cargokit.git main
 
 ## Development
 
-To generate `tor-ffi.h` C bindings for Rust, `cbindgen --config cbindgen.toml --crate tor-ffi --output target/tor-ffi.h` or `cargo build` in `native/tor-ffi` to produce headers according to `build.rs`
-To generate `tor_bindings_generated.dart` Dart bindings for C, `flutter pub run ffigen --config ffigen.yaml`
+To (re)generate Dart bindings run `just generate`
 
 ## Example app
 
 `flutter run` in `example` to run the example app
 
-See `example/lib/main.dart` for usage.  Must run the build script for your platform first.
+See `example/lib/main.dart` for usage.
