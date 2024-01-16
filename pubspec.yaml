@@ -20,6 +20,35 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
 
+ffigen:
+  output: 'lib/generated_bindings.dart'
+  llvm-path:
+    - '/usr/lib/llvm-14/lib/libclang.so.1'
+  functions:
+    include:
+      - tor_.*
+  structs:
+    exclude:
+      - .*
+  unions:
+    exclude:
+      - .*
+  enums:
+    exclude:
+      - _.*
+  unnamed-enums:
+    exclude:
+      - _.*
+  macros:
+    exclude:
+      - _.*
+  globals:
+    exclude:
+      - _.*
+  headers:
+    entry-points:
+      - 'rust/target/tor.h'
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

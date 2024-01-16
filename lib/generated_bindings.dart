@@ -18,17 +18,7 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  ffi.Pointer<ffi.Char> tor_last_error_message() {
-    return _tor_last_error_message();
-  }
-
-  late final _tor_last_error_messagePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'tor_last_error_message');
-  late final _tor_last_error_message =
-      _tor_last_error_messagePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Int> tor_start(
+  ffi.Pointer<ffi.Void> tor_start(
     int socks_port,
     ffi.Pointer<ffi.Char> state_dir,
     ffi.Pointer<ffi.Char> cache_dir,
@@ -42,14 +32,14 @@ class NativeLibrary {
 
   late final _tor_startPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Int> Function(ffi.Uint16, ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Void> Function(ffi.Uint16, ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>)>>('tor_start');
   late final _tor_start = _tor_startPtr.asFunction<
-      ffi.Pointer<ffi.Int> Function(
+      ffi.Pointer<ffi.Void> Function(
           int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
   bool tor_bootstrap(
-    ffi.Pointer<ffi.Int> client,
+    ffi.Pointer<ffi.Void> client,
   ) {
     return _tor_bootstrap(
       client,
@@ -57,10 +47,10 @@ class NativeLibrary {
   }
 
   late final _tor_bootstrapPtr =
-      _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Int>)>>(
+      _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Void>)>>(
           'tor_bootstrap');
   late final _tor_bootstrap =
-      _tor_bootstrapPtr.asFunction<bool Function(ffi.Pointer<ffi.Int>)>();
+      _tor_bootstrapPtr.asFunction<bool Function(ffi.Pointer<ffi.Void>)>();
 
   void tor_hello() {
     return _tor_hello();
@@ -69,7 +59,45 @@ class NativeLibrary {
   late final _tor_helloPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('tor_hello');
   late final _tor_hello = _tor_helloPtr.asFunction<void Function()>();
+
+  ffi.Pointer<ffi.Char> tor_last_error_message() {
+    return _tor_last_error_message();
+  }
+
+  late final _tor_last_error_messagePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'tor_last_error_message');
+  late final _tor_last_error_message =
+      _tor_last_error_messagePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  int tor_get_nofile_limit() {
+    return _tor_get_nofile_limit();
+  }
+
+  late final _tor_get_nofile_limitPtr =
+      _lookup<ffi.NativeFunction<ffi.Uint64 Function()>>(
+          'tor_get_nofile_limit');
+  late final _tor_get_nofile_limit =
+      _tor_get_nofile_limitPtr.asFunction<int Function()>();
+
+  int tor_set_nofile_limit(
+    int limit,
+  ) {
+    return _tor_set_nofile_limit(
+      limit,
+    );
+  }
+
+  late final _tor_set_nofile_limitPtr =
+      _lookup<ffi.NativeFunction<ffi.Uint64 Function(ffi.Uint64)>>(
+          'tor_set_nofile_limit');
+  late final _tor_set_nofile_limit =
+      _tor_set_nofile_limitPtr.asFunction<int Function(int)>();
 }
+
+const int true1 = 1;
+
+const int false1 = 0;
 
 const int INT8_MIN = -128;
 
@@ -172,72 +200,6 @@ const int WCHAR_MAX = 2147483647;
 const int WINT_MIN = 0;
 
 const int WINT_MAX = 4294967295;
-
-const int INT8_WIDTH = 8;
-
-const int UINT8_WIDTH = 8;
-
-const int INT16_WIDTH = 16;
-
-const int UINT16_WIDTH = 16;
-
-const int INT32_WIDTH = 32;
-
-const int UINT32_WIDTH = 32;
-
-const int INT64_WIDTH = 64;
-
-const int UINT64_WIDTH = 64;
-
-const int INT_LEAST8_WIDTH = 8;
-
-const int UINT_LEAST8_WIDTH = 8;
-
-const int INT_LEAST16_WIDTH = 16;
-
-const int UINT_LEAST16_WIDTH = 16;
-
-const int INT_LEAST32_WIDTH = 32;
-
-const int UINT_LEAST32_WIDTH = 32;
-
-const int INT_LEAST64_WIDTH = 64;
-
-const int UINT_LEAST64_WIDTH = 64;
-
-const int INT_FAST8_WIDTH = 8;
-
-const int UINT_FAST8_WIDTH = 8;
-
-const int INT_FAST16_WIDTH = 64;
-
-const int UINT_FAST16_WIDTH = 64;
-
-const int INT_FAST32_WIDTH = 64;
-
-const int UINT_FAST32_WIDTH = 64;
-
-const int INT_FAST64_WIDTH = 64;
-
-const int UINT_FAST64_WIDTH = 64;
-
-const int INTPTR_WIDTH = 64;
-
-const int UINTPTR_WIDTH = 64;
-
-const int INTMAX_WIDTH = 64;
-
-const int UINTMAX_WIDTH = 64;
-
-const int PTRDIFF_WIDTH = 64;
-
-const int SIG_ATOMIC_WIDTH = 32;
-
-const int SIZE_WIDTH = 64;
-
-const int WCHAR_WIDTH = 32;
-
-const int WINT_WIDTH = 32;
 
 const int NULL = 0;
 

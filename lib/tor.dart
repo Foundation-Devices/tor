@@ -11,7 +11,7 @@ import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tor/tor_bindings_generated.dart';
+import 'package:tor/generated_bindings.dart';
 
 DynamicLibrary load(name) {
   if (Platform.isAndroid || Platform.isLinux) {
@@ -36,10 +36,10 @@ class NotSupportedPlatform implements Exception {
 }
 
 class Tor {
-  static const String _libName = "tor";
+  static const String libName = "tor";
   static late DynamicLibrary _lib;
 
-  Pointer<Int> _clientPtr = nullptr;
+  Pointer<Void> _clientPtr = nullptr;
 
   /// Flag to indicate that Tor proxy has started. Traffic is routed through it only if it is also [enabled].
   bool get started => _started;
@@ -102,7 +102,7 @@ class Tor {
 
   /// Private constructor for the Tor class.
   Tor._internal() {
-    _lib = load(_libName);
+    _lib = load(libName);
 
     if (kDebugMode) {
       print("Instance of Tor created!");
@@ -164,7 +164,7 @@ class Tor {
     // Start the Tor service in an isolate.
     int ptr = await Isolate.run(() async {
       // Load the Tor library.
-      var lib = NativeLibrary(load(_libName));
+      var lib = NativeLibrary(load(libName));
 
       // Start the Tor service.
       final ptr = lib.tor_start(
