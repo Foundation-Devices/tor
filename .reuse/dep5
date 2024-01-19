@@ -14,3 +14,7 @@ License: GPL-3.0-or-later
 Files: rust/target/*
 Copyright: 2024 Foundation Devices Inc.
 License: GPL-3.0-or-later
+
+Files: CHANGELOG.md
+Copyright: 2024 Foundation Devices Inc.
+License: GPL-3.0-or-later
