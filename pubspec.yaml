@@ -3,6 +3,13 @@ description: A multi-platform Flutter plugin for managing a Tor proxy. Based on 
 version: 0.0.1
 homepage: https://github.com/Foundation-Devices/tor
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  windows: # Not tested but it should work
+
 environment:
   sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.3.0"
