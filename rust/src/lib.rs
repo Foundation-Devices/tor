@@ -15,7 +15,9 @@ use tor_rtcompat::tokio::TokioNativeTlsRuntime;
 use tor_rtcompat::BlockOn;
 
 pub use crate::error::tor_last_error_message;
+#[cfg(not(target_os = "windows"))]
 pub use crate::util::tor_get_nofile_limit;
+#[cfg(not(target_os = "windows"))]
 pub use crate::util::tor_set_nofile_limit;
 
 #[macro_use]
