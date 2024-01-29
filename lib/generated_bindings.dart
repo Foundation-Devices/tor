@@ -18,7 +18,14 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  ffi.Pointer<ffi.Void> tor_start(
+  late final ffi.Pointer<ffi.Pointer<ffi.Char>> _suboptarg =
+      _lookup<ffi.Pointer<ffi.Char>>('suboptarg');
+
+  ffi.Pointer<ffi.Char> get suboptarg => _suboptarg.value;
+
+  set suboptarg(ffi.Pointer<ffi.Char> value) => _suboptarg.value = value;
+
+  Tor tor_start(
     int socks_port,
     ffi.Pointer<ffi.Char> state_dir,
     ffi.Pointer<ffi.Char> cache_dir,
@@ -32,25 +39,54 @@ class NativeLibrary {
 
   late final _tor_startPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Void> Function(ffi.Uint16, ffi.Pointer<ffi.Char>,
+          Tor Function(ffi.Uint16, ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>)>>('tor_start');
   late final _tor_start = _tor_startPtr.asFunction<
-      ffi.Pointer<ffi.Void> Function(
-          int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+      Tor Function(int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
-  bool tor_bootstrap(
+  bool tor_client_bootstrap(
     ffi.Pointer<ffi.Void> client,
   ) {
-    return _tor_bootstrap(
+    return _tor_client_bootstrap(
       client,
     );
   }
 
-  late final _tor_bootstrapPtr =
+  late final _tor_client_bootstrapPtr =
       _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Void>)>>(
-          'tor_bootstrap');
-  late final _tor_bootstrap =
-      _tor_bootstrapPtr.asFunction<bool Function(ffi.Pointer<ffi.Void>)>();
+          'tor_client_bootstrap');
+  late final _tor_client_bootstrap = _tor_client_bootstrapPtr
+      .asFunction<bool Function(ffi.Pointer<ffi.Void>)>();
+
+  bool tor_proxy_stop(
+    ffi.Pointer<ffi.Void> proxy,
+  ) {
+    return _tor_proxy_stop(
+      proxy,
+    );
+  }
+
+  late final _tor_proxy_stopPtr =
+      _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Void>)>>(
+          'tor_proxy_stop');
+  late final _tor_proxy_stop =
+      _tor_proxy_stopPtr.asFunction<bool Function(ffi.Pointer<ffi.Void>)>();
+
+  Tor tor_proxy_restart(
+    Tor tor,
+    int port,
+  ) {
+    return _tor_proxy_restart(
+      tor,
+      port,
+    );
+  }
+
+  late final _tor_proxy_restartPtr =
+      _lookup<ffi.NativeFunction<Tor Function(Tor, ffi.Uint16)>>(
+          'tor_proxy_restart');
+  late final _tor_proxy_restart =
+      _tor_proxy_restartPtr.asFunction<Tor Function(Tor, int)>();
 
   void tor_hello() {
     return _tor_hello();
@@ -95,17 +131,23 @@ class NativeLibrary {
       _tor_set_nofile_limitPtr.asFunction<int Function(int)>();
 }
 
+abstract class idtype_t {
+  static const int P_ALL = 0;
+  static const int P_PID = 1;
+  static const int P_PGID = 2;
+}
+
+class Tor extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> client;
+
+  external ffi.Pointer<ffi.Void> proxy;
+}
+
 const int true1 = 1;
 
 const int false1 = 0;
 
-const int INT8_MIN = -128;
-
-const int INT16_MIN = -32768;
-
-const int INT32_MIN = -2147483648;
-
-const int INT64_MIN = -9223372036854775808;
+const int USER_ADDR_NULL = 0;
 
 const int INT8_MAX = 127;
 
@@ -114,6 +156,14 @@ const int INT16_MAX = 32767;
 const int INT32_MAX = 2147483647;
 
 const int INT64_MAX = 9223372036854775807;
+
+const int INT8_MIN = -128;
+
+const int INT16_MIN = -32768;
+
+const int INT32_MIN = -2147483648;
+
+const int INT64_MIN = -9223372036854775808;
 
 const int UINT8_MAX = 255;
 
@@ -149,77 +199,575 @@ const int UINT_LEAST64_MAX = -1;
 
 const int INT_FAST8_MIN = -128;
 
-const int INT_FAST16_MIN = -9223372036854775808;
+const int INT_FAST16_MIN = -32768;
 
-const int INT_FAST32_MIN = -9223372036854775808;
+const int INT_FAST32_MIN = -2147483648;
 
 const int INT_FAST64_MIN = -9223372036854775808;
 
 const int INT_FAST8_MAX = 127;
 
-const int INT_FAST16_MAX = 9223372036854775807;
+const int INT_FAST16_MAX = 32767;
 
-const int INT_FAST32_MAX = 9223372036854775807;
+const int INT_FAST32_MAX = 2147483647;
 
 const int INT_FAST64_MAX = 9223372036854775807;
 
 const int UINT_FAST8_MAX = 255;
 
-const int UINT_FAST16_MAX = -1;
+const int UINT_FAST16_MAX = 65535;
 
-const int UINT_FAST32_MAX = -1;
+const int UINT_FAST32_MAX = 4294967295;
 
 const int UINT_FAST64_MAX = -1;
 
-const int INTPTR_MIN = -9223372036854775808;
-
 const int INTPTR_MAX = 9223372036854775807;
 
-const int UINTPTR_MAX = -1;
+const int INTPTR_MIN = -9223372036854775808;
 
-const int INTMAX_MIN = -9223372036854775808;
+const int UINTPTR_MAX = -1;
 
 const int INTMAX_MAX = 9223372036854775807;
 
 const int UINTMAX_MAX = -1;
 
+const int INTMAX_MIN = -9223372036854775808;
+
 const int PTRDIFF_MIN = -9223372036854775808;
 
 const int PTRDIFF_MAX = 9223372036854775807;
+
+const int SIZE_MAX = -1;
+
+const int RSIZE_MAX = 9223372036854775807;
+
+const int WCHAR_MAX = 2147483647;
+
+const int WCHAR_MIN = -2147483648;
+
+const int WINT_MIN = -2147483648;
+
+const int WINT_MAX = 2147483647;
 
 const int SIG_ATOMIC_MIN = -2147483648;
 
 const int SIG_ATOMIC_MAX = 2147483647;
 
-const int SIZE_MAX = -1;
+const int MAC_OS_X_VERSION_10_0 = 1000;
 
-const int WCHAR_MIN = -2147483648;
+const int MAC_OS_X_VERSION_10_1 = 1010;
 
-const int WCHAR_MAX = 2147483647;
+const int MAC_OS_X_VERSION_10_2 = 1020;
 
-const int WINT_MIN = 0;
+const int MAC_OS_X_VERSION_10_3 = 1030;
 
-const int WINT_MAX = 4294967295;
+const int MAC_OS_X_VERSION_10_4 = 1040;
 
-const int NULL = 0;
+const int MAC_OS_X_VERSION_10_5 = 1050;
+
+const int MAC_OS_X_VERSION_10_6 = 1060;
+
+const int MAC_OS_X_VERSION_10_7 = 1070;
+
+const int MAC_OS_X_VERSION_10_8 = 1080;
+
+const int MAC_OS_X_VERSION_10_9 = 1090;
+
+const int MAC_OS_X_VERSION_10_10 = 101000;
+
+const int MAC_OS_X_VERSION_10_10_2 = 101002;
+
+const int MAC_OS_X_VERSION_10_10_3 = 101003;
+
+const int MAC_OS_X_VERSION_10_11 = 101100;
+
+const int MAC_OS_X_VERSION_10_11_2 = 101102;
+
+const int MAC_OS_X_VERSION_10_11_3 = 101103;
+
+const int MAC_OS_X_VERSION_10_11_4 = 101104;
+
+const int MAC_OS_X_VERSION_10_12 = 101200;
+
+const int MAC_OS_X_VERSION_10_12_1 = 101201;
+
+const int MAC_OS_X_VERSION_10_12_2 = 101202;
+
+const int MAC_OS_X_VERSION_10_12_4 = 101204;
+
+const int MAC_OS_X_VERSION_10_13 = 101300;
+
+const int MAC_OS_X_VERSION_10_13_1 = 101301;
+
+const int MAC_OS_X_VERSION_10_13_2 = 101302;
+
+const int MAC_OS_X_VERSION_10_13_4 = 101304;
+
+const int MAC_OS_X_VERSION_10_14 = 101400;
+
+const int MAC_OS_X_VERSION_10_14_1 = 101401;
+
+const int MAC_OS_X_VERSION_10_14_4 = 101404;
+
+const int MAC_OS_X_VERSION_10_14_5 = 101405;
+
+const int MAC_OS_X_VERSION_10_14_6 = 101406;
+
+const int MAC_OS_X_VERSION_10_15 = 101500;
+
+const int MAC_OS_X_VERSION_10_15_1 = 101501;
+
+const int MAC_OS_X_VERSION_10_15_4 = 101504;
+
+const int MAC_OS_X_VERSION_10_16 = 101600;
+
+const int MAC_OS_VERSION_11_0 = 110000;
+
+const int MAC_OS_VERSION_11_1 = 110100;
+
+const int MAC_OS_VERSION_11_3 = 110300;
+
+const int MAC_OS_VERSION_11_4 = 110400;
+
+const int MAC_OS_VERSION_11_5 = 110500;
+
+const int MAC_OS_VERSION_11_6 = 110600;
+
+const int MAC_OS_VERSION_12_0 = 120000;
+
+const int MAC_OS_VERSION_12_1 = 120100;
+
+const int MAC_OS_VERSION_12_2 = 120200;
+
+const int MAC_OS_VERSION_12_3 = 120300;
+
+const int MAC_OS_VERSION_12_4 = 120400;
+
+const int MAC_OS_VERSION_12_5 = 120500;
+
+const int MAC_OS_VERSION_12_6 = 120600;
+
+const int MAC_OS_VERSION_12_7 = 120700;
+
+const int MAC_OS_VERSION_13_0 = 130000;
+
+const int MAC_OS_VERSION_13_1 = 130100;
+
+const int MAC_OS_VERSION_13_2 = 130200;
+
+const int MAC_OS_VERSION_13_3 = 130300;
+
+const int MAC_OS_VERSION_13_4 = 130400;
+
+const int MAC_OS_VERSION_13_5 = 130500;
+
+const int MAC_OS_VERSION_13_6 = 130600;
+
+const int MAC_OS_VERSION_14_0 = 140000;
+
+const int MAC_OS_VERSION_14_1 = 140100;
+
+const int MAC_OS_VERSION_14_2 = 140200;
+
+const int NSIG = 32;
+
+const int SIGHUP = 1;
+
+const int SIGINT = 2;
+
+const int SIGQUIT = 3;
+
+const int SIGILL = 4;
+
+const int SIGTRAP = 5;
+
+const int SIGABRT = 6;
+
+const int SIGIOT = 6;
+
+const int SIGEMT = 7;
+
+const int SIGFPE = 8;
+
+const int SIGKILL = 9;
+
+const int SIGBUS = 10;
+
+const int SIGSEGV = 11;
+
+const int SIGSYS = 12;
+
+const int SIGPIPE = 13;
+
+const int SIGALRM = 14;
+
+const int SIGTERM = 15;
+
+const int SIGURG = 16;
+
+const int SIGSTOP = 17;
+
+const int SIGTSTP = 18;
+
+const int SIGCONT = 19;
+
+const int SIGCHLD = 20;
+
+const int SIGTTIN = 21;
+
+const int SIGTTOU = 22;
+
+const int SIGIO = 23;
+
+const int SIGXCPU = 24;
+
+const int SIGXFSZ = 25;
+
+const int SIGVTALRM = 26;
+
+const int SIGPROF = 27;
+
+const int SIGWINCH = 28;
+
+const int SIGINFO = 29;
+
+const int SIGUSR1 = 30;
+
+const int SIGUSR2 = 31;
+
+const int SIGEV_NONE = 0;
+
+const int SIGEV_SIGNAL = 1;
+
+const int SIGEV_THREAD = 3;
+
+const int ILL_NOOP = 0;
+
+const int ILL_ILLOPC = 1;
+
+const int ILL_ILLTRP = 2;
+
+const int ILL_PRVOPC = 3;
+
+const int ILL_ILLOPN = 4;
+
+const int ILL_ILLADR = 5;
+
+const int ILL_PRVREG = 6;
+
+const int ILL_COPROC = 7;
+
+const int ILL_BADSTK = 8;
+
+const int FPE_NOOP = 0;
+
+const int FPE_FLTDIV = 1;
+
+const int FPE_FLTOVF = 2;
+
+const int FPE_FLTUND = 3;
+
+const int FPE_FLTRES = 4;
+
+const int FPE_FLTINV = 5;
+
+const int FPE_FLTSUB = 6;
+
+const int FPE_INTDIV = 7;
+
+const int FPE_INTOVF = 8;
+
+const int SEGV_NOOP = 0;
+
+const int SEGV_MAPERR = 1;
+
+const int SEGV_ACCERR = 2;
+
+const int BUS_NOOP = 0;
+
+const int BUS_ADRALN = 1;
+
+const int BUS_ADRERR = 2;
+
+const int BUS_OBJERR = 3;
+
+const int TRAP_BRKPT = 1;
+
+const int TRAP_TRACE = 2;
+
+const int CLD_NOOP = 0;
+
+const int CLD_EXITED = 1;
+
+const int CLD_KILLED = 2;
+
+const int CLD_DUMPED = 3;
+
+const int CLD_TRAPPED = 4;
+
+const int CLD_STOPPED = 5;
+
+const int CLD_CONTINUED = 6;
+
+const int POLL_IN = 1;
+
+const int POLL_OUT = 2;
+
+const int POLL_MSG = 3;
+
+const int POLL_ERR = 4;
+
+const int POLL_PRI = 5;
+
+const int POLL_HUP = 6;
+
+const int SA_ONSTACK = 1;
+
+const int SA_RESTART = 2;
+
+const int SA_RESETHAND = 4;
+
+const int SA_NOCLDSTOP = 8;
+
+const int SA_NODEFER = 16;
+
+const int SA_NOCLDWAIT = 32;
+
+const int SA_SIGINFO = 64;
+
+const int SA_USERTRAMP = 256;
+
+const int SA_64REGSET = 512;
+
+const int SA_USERSPACE_MASK = 127;
+
+const int SIG_BLOCK = 1;
+
+const int SIG_UNBLOCK = 2;
+
+const int SIG_SETMASK = 3;
+
+const int SI_USER = 65537;
+
+const int SI_QUEUE = 65538;
+
+const int SI_TIMER = 65539;
+
+const int SI_ASYNCIO = 65540;
+
+const int SI_MESGQ = 65541;
+
+const int SS_ONSTACK = 1;
+
+const int SS_DISABLE = 4;
+
+const int MINSIGSTKSZ = 32768;
+
+const int SIGSTKSZ = 131072;
+
+const int SV_ONSTACK = 1;
+
+const int SV_INTERRUPT = 2;
+
+const int SV_RESETHAND = 4;
+
+const int SV_NODEFER = 16;
+
+const int SV_NOCLDSTOP = 8;
+
+const int SV_SIGINFO = 64;
+
+const int PRIO_PROCESS = 0;
+
+const int PRIO_PGRP = 1;
+
+const int PRIO_USER = 2;
+
+const int PRIO_DARWIN_THREAD = 3;
+
+const int PRIO_DARWIN_PROCESS = 4;
+
+const int PRIO_MIN = -20;
+
+const int PRIO_MAX = 20;
+
+const int PRIO_DARWIN_BG = 4096;
+
+const int PRIO_DARWIN_NONUI = 4097;
+
+const int RUSAGE_SELF = 0;
+
+const int RUSAGE_CHILDREN = -1;
+
+const int RUSAGE_INFO_V0 = 0;
+
+const int RUSAGE_INFO_V1 = 1;
+
+const int RUSAGE_INFO_V2 = 2;
+
+const int RUSAGE_INFO_V3 = 3;
+
+const int RUSAGE_INFO_V4 = 4;
+
+const int RUSAGE_INFO_V5 = 5;
+
+const int RUSAGE_INFO_V6 = 6;
+
+const int RUSAGE_INFO_CURRENT = 6;
+
+const int RU_PROC_RUNS_RESLIDE = 1;
+
+const int RLIM_INFINITY = 9223372036854775807;
+
+const int RLIM_SAVED_MAX = 9223372036854775807;
+
+const int RLIM_SAVED_CUR = 9223372036854775807;
+
+const int RLIMIT_CPU = 0;
+
+const int RLIMIT_FSIZE = 1;
+
+const int RLIMIT_DATA = 2;
+
+const int RLIMIT_STACK = 3;
+
+const int RLIMIT_CORE = 4;
+
+const int RLIMIT_AS = 5;
+
+const int RLIMIT_RSS = 5;
+
+const int RLIMIT_MEMLOCK = 6;
+
+const int RLIMIT_NPROC = 7;
+
+const int RLIMIT_NOFILE = 8;
+
+const int RLIM_NLIMITS = 9;
+
+const int RLIMIT_WAKEUPS_MONITOR = 1;
+
+const int RLIMIT_CPU_USAGE_MONITOR = 2;
+
+const int RLIMIT_THREAD_CPULIMITS = 3;
+
+const int RLIMIT_FOOTPRINT_INTERVAL = 4;
+
+const int WAKEMON_ENABLE = 1;
+
+const int WAKEMON_DISABLE = 2;
+
+const int WAKEMON_GET_PARAMS = 4;
+
+const int WAKEMON_SET_DEFAULTS = 8;
+
+const int WAKEMON_MAKE_FATAL = 16;
+
+const int CPUMON_MAKE_FATAL = 4096;
+
+const int FOOTPRINT_INTERVAL_RESET = 1;
+
+const int IOPOL_TYPE_DISK = 0;
+
+const int IOPOL_TYPE_VFS_ATIME_UPDATES = 2;
+
+const int IOPOL_TYPE_VFS_MATERIALIZE_DATALESS_FILES = 3;
+
+const int IOPOL_TYPE_VFS_STATFS_NO_DATA_VOLUME = 4;
+
+const int IOPOL_TYPE_VFS_TRIGGER_RESOLVE = 5;
+
+const int IOPOL_TYPE_VFS_IGNORE_CONTENT_PROTECTION = 6;
+
+const int IOPOL_TYPE_VFS_IGNORE_PERMISSIONS = 7;
+
+const int IOPOL_TYPE_VFS_SKIP_MTIME_UPDATE = 8;
+
+const int IOPOL_TYPE_VFS_ALLOW_LOW_SPACE_WRITES = 9;
+
+const int IOPOL_TYPE_VFS_DISALLOW_RW_FOR_O_EVTONLY = 10;
+
+const int IOPOL_SCOPE_PROCESS = 0;
+
+const int IOPOL_SCOPE_THREAD = 1;
+
+const int IOPOL_SCOPE_DARWIN_BG = 2;
+
+const int IOPOL_DEFAULT = 0;
+
+const int IOPOL_IMPORTANT = 1;
+
+const int IOPOL_PASSIVE = 2;
+
+const int IOPOL_THROTTLE = 3;
+
+const int IOPOL_UTILITY = 4;
+
+const int IOPOL_STANDARD = 5;
+
+const int IOPOL_APPLICATION = 5;
+
+const int IOPOL_NORMAL = 1;
+
+const int IOPOL_ATIME_UPDATES_DEFAULT = 0;
+
+const int IOPOL_ATIME_UPDATES_OFF = 1;
+
+const int IOPOL_MATERIALIZE_DATALESS_FILES_DEFAULT = 0;
+
+const int IOPOL_MATERIALIZE_DATALESS_FILES_OFF = 1;
+
+const int IOPOL_MATERIALIZE_DATALESS_FILES_ON = 2;
+
+const int IOPOL_VFS_STATFS_NO_DATA_VOLUME_DEFAULT = 0;
+
+const int IOPOL_VFS_STATFS_FORCE_NO_DATA_VOLUME = 1;
+
+const int IOPOL_VFS_TRIGGER_RESOLVE_DEFAULT = 0;
+
+const int IOPOL_VFS_TRIGGER_RESOLVE_OFF = 1;
+
+const int IOPOL_VFS_CONTENT_PROTECTION_DEFAULT = 0;
+
+const int IOPOL_VFS_CONTENT_PROTECTION_IGNORE = 1;
+
+const int IOPOL_VFS_IGNORE_PERMISSIONS_OFF = 0;
+
+const int IOPOL_VFS_IGNORE_PERMISSIONS_ON = 1;
+
+const int IOPOL_VFS_SKIP_MTIME_UPDATE_OFF = 0;
+
+const int IOPOL_VFS_SKIP_MTIME_UPDATE_ON = 1;
+
+const int IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_OFF = 0;
+
+const int IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_ON = 1;
+
+const int IOPOL_VFS_DISALLOW_RW_FOR_O_EVTONLY_DEFAULT = 0;
+
+const int IOPOL_VFS_DISALLOW_RW_FOR_O_EVTONLY_ON = 1;
+
+const int IOPOL_VFS_NOCACHE_WRITE_FS_BLKSIZE_DEFAULT = 0;
+
+const int IOPOL_VFS_NOCACHE_WRITE_FS_BLKSIZE_ON = 1;
 
 const int WNOHANG = 1;
 
 const int WUNTRACED = 2;
 
-const int WSTOPPED = 2;
+const int WCOREFLAG = 128;
 
 const int WEXITED = 4;
 
-const int WCONTINUED = 8;
+const int WSTOPPED = 8;
 
-const int WNOWAIT = 16777216;
+const int WCONTINUED = 16;
 
-const int RAND_MAX = 2147483647;
+const int WNOWAIT = 32;
 
-const int EXIT_FAILURE = 1;
+const int WAIT_ANY = -1;
 
-const int EXIT_SUCCESS = 0;
+const int WAIT_MYPGRP = 0;
 
 const int LITTLE_ENDIAN = 1234;
 
@@ -229,6 +777,10 @@ const int PDP_ENDIAN = 3412;
 
 const int BYTE_ORDER = 1234;
 
-const int FD_SETSIZE = 1024;
+const int NULL = 0;
 
-const int NFDBITS = 64;
+const int EXIT_FAILURE = 1;
+
+const int EXIT_SUCCESS = 0;
+
+const int RAND_MAX = 2147483647;

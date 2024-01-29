@@ -1,6 +1,6 @@
 name: tor
 description: A multi-platform Flutter plugin for managing a Tor proxy. Based on arti.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/Foundation-Devices/tor
 
 platforms:
@@ -8,7 +8,7 @@ platforms:
   ios:
   linux:
   macos:
-  windows: # Not tested but it should work
+  windows:
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
