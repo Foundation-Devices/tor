@@ -12,7 +12,9 @@ struct Tor tor_start(uint16_t socks_port, const char *state_dir, const char *cac
 
 bool tor_client_bootstrap(void *client);
 
-bool tor_proxy_stop(void *proxy);
+void tor_client_set_dormant(void *client, bool soft_mode);
+
+void tor_proxy_stop(void *proxy);
 
 void tor_hello(void);
 

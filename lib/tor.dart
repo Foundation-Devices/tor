@@ -35,6 +35,8 @@ class NotSupportedPlatform implements Exception {
   NotSupportedPlatform(String s);
 }
 
+class ClientNotActive implements Exception {}
+
 class Tor {
   static const String libName = "tor";
   static late DynamicLibrary _lib;
@@ -228,6 +230,15 @@ class Tor {
     final lib = rust.NativeLibrary(_lib);
     lib.tor_proxy_stop(_proxyPtr);
     _proxyPtr = nullptr;
+  }
+
+  setClientDormant(bool dormant) async {
+    if (_clientPtr == nullptr || !started || !bootstrapped) {
+      throw ClientNotActive();
+    }
+
+    final lib = rust.NativeLibrary(_lib);
+    lib.tor_client_set_dormant(_clientPtr, dormant);
   }
 
   Future<void> isReady() async {

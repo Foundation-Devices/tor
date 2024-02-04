@@ -52,7 +52,24 @@ class NativeLibrary {
   late final _tor_client_bootstrap = _tor_client_bootstrapPtr
       .asFunction<bool Function(ffi.Pointer<ffi.Void>)>();
 
-  bool tor_proxy_stop(
+  void tor_client_set_dormant(
+    ffi.Pointer<ffi.Void> client,
+    bool soft_mode,
+  ) {
+    return _tor_client_set_dormant(
+      client,
+      soft_mode,
+    );
+  }
+
+  late final _tor_client_set_dormantPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>, ffi.Bool)>>(
+      'tor_client_set_dormant');
+  late final _tor_client_set_dormant = _tor_client_set_dormantPtr
+      .asFunction<void Function(ffi.Pointer<ffi.Void>, bool)>();
+
+  void tor_proxy_stop(
     ffi.Pointer<ffi.Void> proxy,
   ) {
     return _tor_proxy_stop(
@@ -61,10 +78,10 @@ class NativeLibrary {
   }
 
   late final _tor_proxy_stopPtr =
-      _lookup<ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Void>)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
           'tor_proxy_stop');
   late final _tor_proxy_stop =
-      _tor_proxy_stopPtr.asFunction<bool Function(ffi.Pointer<ffi.Void>)>();
+      _tor_proxy_stopPtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void tor_hello() {
     return _tor_hello();

@@ -5,7 +5,7 @@
 use crate::error::update_last_error;
 use arti::socks;
 use arti_client::config::CfgPath;
-use arti_client::{TorClient, TorClientConfig};
+use arti_client::{DormantMode, TorClient, TorClientConfig};
 use lazy_static::lazy_static;
 use std::ffi::{c_char, c_void, CStr};
 use std::{io, ptr};
@@ -91,14 +91,29 @@ pub unsafe extern "C" fn tor_client_bootstrap(client: *mut c_void) -> bool {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn tor_proxy_stop(proxy: *mut c_void) -> bool {
+pub unsafe extern "C" fn tor_client_set_dormant(client: *mut c_void, soft_mode: bool) {
+    let client = {
+        assert!(!client.is_null());
+        Box::from_raw(client as *mut TorClient<TokioNativeTlsRuntime>)
+    };
+
+    let dormant_mode = if soft_mode {
+        DormantMode::Soft
+    } else {
+        DormantMode::Normal
+    };
+    client.set_dormant(dormant_mode);
+    Box::leak(client);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn tor_proxy_stop(proxy: *mut c_void) {
     let proxy = {
         assert!(!proxy.is_null());
         Box::from_raw(proxy as *mut JoinHandle<anyhow::Result<()>>)
     };
 
     proxy.abort();
-    true
 }
 
 fn start_proxy(
