@@ -14,8 +14,6 @@ bool tor_client_bootstrap(void *client);
 
 bool tor_proxy_stop(void *proxy);
 
-struct Tor tor_proxy_restart(struct Tor tor, uint16_t port);
-
 void tor_hello(void);
 
 const char *tor_last_error_message(void);

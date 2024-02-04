@@ -42,7 +42,7 @@ class Tor {
   Pointer<Void> _clientPtr = nullptr;
   Pointer<Void> _proxyPtr = nullptr;
 
-  /// Flag to indicate that Tor proxy has started. Traffic is routed through it only if it is also [enabled].
+  /// Flag to indicate that Tor client and proxy have started. Traffic is routed through the proxy only if it is also [enabled].
   bool get started => _started;
 
   /// Getter for the started flag.
@@ -223,18 +223,11 @@ class Tor {
     broadcastState();
   }
 
-  /// Restart the proxy on a new port
-  void restart() async {
-    // Load the Tor library.
+  /// Stops the proxy
+  stop() async {
     final lib = rust.NativeLibrary(_lib);
-    final Pointer<rust.Tor> tor = calloc<rust.Tor>();
-
-    tor.ref.proxy = _proxyPtr;
-    tor.ref.client = _clientPtr;
-
-    final newPort = await _getRandomUnusedPort();
-    _proxyPtr = lib.tor_proxy_restart(tor.ref, newPort).proxy;
-    _proxyPort = newPort;
+    lib.tor_proxy_stop(_proxyPtr);
+    _proxyPtr = nullptr;
   }
 
   Future<void> isReady() async {

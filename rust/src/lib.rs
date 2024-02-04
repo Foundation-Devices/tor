@@ -70,8 +70,6 @@ pub unsafe extern "C" fn tor_start(
         err_ret
     );
 
-    //let client_clone = client.clone();
-
     let proxy_handle_box = Box::new(start_proxy(socks_port, client.clone()));
     let client_box = Box::new(client.clone());
 
@@ -101,23 +99,6 @@ pub unsafe extern "C" fn tor_proxy_stop(proxy: *mut c_void) -> bool {
 
     proxy.abort();
     true
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn tor_proxy_restart(tor: Tor, port: u16) -> Tor {
-    tor_proxy_stop(tor.proxy);
-
-    let client_box = {
-        assert!(!tor.client.is_null());
-        Box::from_raw(tor.client as *mut TorClient<TokioNativeTlsRuntime>)
-    };
-
-    let proxy_box = Box::new(start_proxy(port, *client_box.clone()));
-
-    Tor {
-        client: Box::into_raw(client_box) as *mut c_void,
-        proxy: Box::into_raw(proxy_box) as *mut c_void,
-    }
 }
 
 fn start_proxy(
