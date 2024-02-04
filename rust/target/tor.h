@@ -3,9 +3,18 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void *tor_start(uint16_t socks_port, const char *state_dir, const char *cache_dir);
+typedef struct Tor {
+  void *client;
+  void *proxy;
+} Tor;
 
-bool tor_bootstrap(void *client);
+struct Tor tor_start(uint16_t socks_port, const char *state_dir, const char *cache_dir);
+
+bool tor_client_bootstrap(void *client);
+
+void tor_client_set_dormant(void *client, bool soft_mode);
+
+void tor_proxy_stop(void *proxy);
 
 void tor_hello(void);
 

@@ -4,7 +4,7 @@
 
 [package]
 name = "tor"
-version = "0.1.0"
+version = "0.0.3"
 authors = ["Igor Cota <igor@foundationdevices.com>"]
 edition = "2021"
 
@@ -21,6 +21,7 @@ tor-config = "0.10.0"
 log = "0.4.20"
 #android_log-sys = "0.3.1"
 rlimit = "0.10.1"
+anyhow = "1.0.79"
 
 [build-dependencies]
 cbindgen = "= 0.24.3"

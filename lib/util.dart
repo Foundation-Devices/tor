@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import 'package:tor/generated_bindings.dart';
+import 'package:tor/generated_bindings.dart' as rust;
 import 'package:tor/tor.dart';
 
 int getNofileLimit() {
-  return NativeLibrary(load(Tor.libName)).tor_get_nofile_limit();
+  return rust.NativeLibrary(load(Tor.libName)).tor_get_nofile_limit();
 }
 
 int setNofileLimit(int limit) {
-  return NativeLibrary(load(Tor.libName)).tor_set_nofile_limit(limit);
+  return rust.NativeLibrary(load(Tor.libName)).tor_set_nofile_limit(limit);
 }

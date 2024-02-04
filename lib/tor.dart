@@ -11,7 +11,7 @@ import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tor/generated_bindings.dart';
+import 'package:tor/generated_bindings.dart' as rust;
 
 DynamicLibrary load(name) {
   if (Platform.isAndroid || Platform.isLinux) {
@@ -35,13 +35,16 @@ class NotSupportedPlatform implements Exception {
   NotSupportedPlatform(String s);
 }
 
+class ClientNotActive implements Exception {}
+
 class Tor {
   static const String libName = "tor";
   static late DynamicLibrary _lib;
 
   Pointer<Void> _clientPtr = nullptr;
+  Pointer<Void> _proxyPtr = nullptr;
 
-  /// Flag to indicate that Tor proxy has started. Traffic is routed through it only if it is also [enabled].
+  /// Flag to indicate that Tor client and proxy have started. Traffic is routed through the proxy only if it is also [enabled].
   bool get started => _started;
 
   /// Getter for the started flag.
@@ -162,27 +165,27 @@ class Tor {
     int newPort = await _getRandomUnusedPort();
 
     // Start the Tor service in an isolate.
-    int ptr = await Isolate.run(() async {
+    final tor = await Isolate.run(() async {
       // Load the Tor library.
-      var lib = NativeLibrary(load(libName));
+      var lib = rust.NativeLibrary(load(libName));
 
       // Start the Tor service.
-      final ptr = lib.tor_start(
+      final tor = lib.tor_start(
           newPort,
           stateDir.path.toNativeUtf8() as Pointer<Char>,
           cacheDir.path.toNativeUtf8() as Pointer<Char>);
 
       // Throw an exception if the Tor service fails to start.
-      if (ptr == nullptr) {
+      if (tor.client == nullptr) {
         throwRustException(lib);
       }
 
-      // Return the pointer.
-      return ptr.address;
+      return tor;
     });
 
     // Set the client pointer and started flag.
-    _clientPtr = Pointer.fromAddress(ptr);
+    _clientPtr = Pointer.fromAddress(tor.client.address);
+    _proxyPtr = Pointer.fromAddress(tor.proxy.address);
     _started = true;
 
     // Bootstrap the Tor service.
@@ -205,10 +208,10 @@ class Tor {
   /// Returns void.
   void bootstrap() {
     // Load the Tor library.
-    final lib = NativeLibrary(_lib);
+    final lib = rust.NativeLibrary(_lib);
 
     // Bootstrap the Tor service.
-    _bootstrapped = lib.tor_bootstrap(_clientPtr);
+    _bootstrapped = lib.tor_client_bootstrap(_clientPtr);
 
     // Throw an exception if the Tor service fails to bootstrap.
     if (!bootstrapped) {
@@ -222,10 +225,20 @@ class Tor {
     broadcastState();
   }
 
-  void restart() {
-    // TODO: arti seems to recover by itself and there is no client restart fn
-    // TODO: but follow up with them if restart is truly unnecessary
-    // if (enabled && started && circuitEstablished) {}
+  /// Stops the proxy
+  stop() async {
+    final lib = rust.NativeLibrary(_lib);
+    lib.tor_proxy_stop(_proxyPtr);
+    _proxyPtr = nullptr;
+  }
+
+  setClientDormant(bool dormant) async {
+    if (_clientPtr == nullptr || !started || !bootstrapped) {
+      throw ClientNotActive();
+    }
+
+    final lib = rust.NativeLibrary(_lib);
+    lib.tor_client_set_dormant(_clientPtr, dormant);
   }
 
   Future<void> isReady() async {
@@ -247,7 +260,7 @@ class Tor {
             }));
   }
 
-  static throwRustException(NativeLibrary lib) {
+  static throwRustException(rust.NativeLibrary lib) {
     String rustError = lib.tor_last_error_message().cast<Utf8>().toDartString();
 
     throw _getRustException(rustError);
@@ -262,6 +275,6 @@ class Tor {
   }
 
   void hello() {
-    NativeLibrary(_lib).tor_hello();
+    rust.NativeLibrary(_lib).tor_hello();
   }
 }

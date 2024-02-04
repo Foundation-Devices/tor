@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 generate:
+    cargo build --manifest-path rust/Cargo.toml && \
     dart run ffigen
 
 format:
