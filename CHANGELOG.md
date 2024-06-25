@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Bumped arti to version 1.2.4
+
 ## 0.0.3
 
 * Added functions to stop and restart the proxy.
