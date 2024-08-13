@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Added rust-toolchain file
+
 ## 0.0.4
 
 * Bumped arti to version 1.2.4

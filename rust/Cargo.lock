@@ -3246,7 +3246,7 @@ dependencies = [
 
 [[package]]
 name = "tor"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "anyhow",
  "arti",
