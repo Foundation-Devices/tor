@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Pinned 'time' to a specific version
+
 ## 0.0.5
 
 * Added rust-toolchain file
