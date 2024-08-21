@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 #include "win32_window.h"
 
 #include <dwmapi.h>

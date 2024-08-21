@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+
+SPDX-License-Identifier: MIT
+-->
+
 # Cargokit Architecture
 
 Note: This is mostly relevant for plugins authors that want to see a bit under the hood rather then just following a tutorial.

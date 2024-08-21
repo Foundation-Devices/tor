@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+#
+# SPDX-License-Identifier: MIT
+
 name: tor_example
 description: Demonstrates how to use the tor plugin.
 # The following line prevents the package from being accidentally published to

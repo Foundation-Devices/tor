@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 // The Android Gradle Plugin builds the native code with the Android NDK.
 
 group 'com.foundationdevices.tor'

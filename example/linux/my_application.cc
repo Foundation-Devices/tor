@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 #include "my_application.h"
 
 #include <flutter_linux/flutter_linux.h>

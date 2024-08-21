@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+#
+# SPDX-License-Identifier: MIT
+
 function Resolve-Symlinks {
     [CmdletBinding()]
     [OutputType([string])]

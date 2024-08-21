@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+#
+# SPDX-License-Identifier: MIT
+
 name: tor
 description: A multi-platform Flutter plugin for managing a Tor proxy. Based on arti.
 version: 0.0.6
