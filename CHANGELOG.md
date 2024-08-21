@@ -4,6 +4,10 @@ SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
 SPDX-License-Identifier: MIT
 -->
 
+## 0.0.7
+
+* Relicensed to MIT
+
 ## 0.0.6
 
 * Pinned 'time' to a specific version
