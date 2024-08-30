@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2023 Foundation Devices Inc.
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
 //
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 
 use log::{error, warn};
 use std::cell::RefCell;

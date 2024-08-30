@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 import java.nio.file.Paths
 import org.apache.tools.ant.taskdefs.condition.Os
 

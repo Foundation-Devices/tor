@@ -1,3 +1,13 @@
+/*
+ * SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by Runner.rc

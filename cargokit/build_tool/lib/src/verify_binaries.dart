@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 import 'dart:io';
 
 import 'package:ed25519_edwards/ed25519_edwards.dart';

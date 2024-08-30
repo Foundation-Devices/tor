@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2022 Foundation Devices Inc.
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: MIT
 
 generate:
     cargo build --manifest-path rust/Cargo.toml && \

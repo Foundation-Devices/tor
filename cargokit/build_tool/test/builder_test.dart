@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+//
+// SPDX-License-Identifier: MIT
+
 import 'package:build_tool/src/builder.dart';
 import 'package:test/test.dart';
 
