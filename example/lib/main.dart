@@ -156,8 +156,8 @@ class _MyAppState extends State<Home> {
                             ]);
 
                             // GET request.
-                            final request = await client
-                                .getUrl(Uri.parse(hostController.text));
+                            final url = Uri.parse(hostController.text);
+                            final request = await client.getUrl(url);
                             final response = await request.close();
 
                             // Print response.

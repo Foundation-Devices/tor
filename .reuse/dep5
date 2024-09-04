@@ -11,6 +11,18 @@ Files: lib/generated*
 Copyright: 2024 Foundation Devices Inc.
 License: MIT
 
+Files: example/linux/flutter/generated*
+Copyright: 2024 Foundation Devices Inc.
+License: MIT
+
+Files:  example/macos/Flutter/Generated*
+Copyright: 2024 Foundation Devices Inc.
+License: MIT
+
+Files: example/windows/flutter/generated*
+Copyright: 2024 Foundation Devices Inc.
+License: MIT
+
 Files: rust/target/*
 Copyright: 2024 Foundation Devices Inc.
 License: MIT

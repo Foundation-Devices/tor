@@ -4,6 +4,10 @@ SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
 SPDX-License-Identifier: MIT
 -->
 
+## 0.0.8
+
+* Bumped arti to version 1.2.7
+
 ## 0.0.7
 
 * Relicensed to MIT
