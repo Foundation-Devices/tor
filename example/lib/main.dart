@@ -67,6 +67,10 @@ class _MyAppState extends State<Home> {
   // For more options, see https://bitnodes.io/nodes/addresses/?q=onion and
   // https://sethforprivacy.com/about/
 
+  final moneroOnionController = TextEditingController(
+      text:
+          'ucdouiihzwvb5edg3ezeufcs4yp26gq4x64n6b4kuffb7s7jxynnk7qd.onion:18081/json_rpc');
+
   Future<void> startTor() async {
     await Tor.init();
 
@@ -343,6 +347,114 @@ class _MyAppState extends State<Home> {
                         : null,
                     child: const Text(
                       "Test Bitcoin onion node connection",
+                    ),
+                  ),
+                ],
+              ),
+              spacerSmall,
+              Row(
+                children: [
+                  // Monero onion input field.
+                  Expanded(
+                    child: TextField(
+                      controller: moneroOnionController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Monero onion address to test',
+                      ),
+                    ),
+                  ),
+                  spacerSmall,
+                  TextButton(
+                    onPressed: torStarted
+                        ? () async {
+                            // Validate the onion address.
+                            if (!moneroOnionController.text
+                                .contains(".onion")) {
+                              print("Invalid onion address");
+                              return;
+                            } else if (!moneroOnionController.text
+                                .contains(":")) {
+                              print("Invalid onion address (needs port)");
+                              return;
+                            }
+
+                            final String host =
+                                moneroOnionController.text.split(":").first;
+                            final int port = int.parse(moneroOnionController
+                                .text
+                                .split(":")
+                                .last
+                                .split("/")
+                                .first);
+                            final String path = moneroOnionController.text
+                                .split(":")
+                                .last
+                                .split("/")
+                                .last; // Extract the path
+
+                            var socksSocket = await SOCKSSocket.create(
+                              proxyHost: InternetAddress.loopbackIPv4.address,
+                              proxyPort: Tor.instance.port,
+                              sslEnabled: false,
+                            );
+
+                            await socksSocket.connect();
+                            await socksSocket.connectTo(host, port);
+
+                            final body = jsonEncode({
+                              "jsonrpc": "2.0",
+                              "id": "0",
+                              "method": "get_info",
+                            });
+
+                            final request = 'POST /$path HTTP/1.1\r\n'
+                                'Host: $host\r\n'
+                                'Content-Type: application/json\r\n'
+                                'Content-Length: ${body.length}\r\n'
+                                '\r\n'
+                                '$body';
+
+                            socksSocket.write(request);
+                            print("Request sent: $request");
+
+                            await for (var response
+                                in socksSocket.inputStream) {
+                              final result = utf8.decode(response);
+                              print("Response received: $result");
+                              break;
+                            }
+
+                            // You should see a server response printed to the console.
+                            //
+                            // Example response:
+                            // Host: ucdouiihzwvb5edg3ezeufcs4yp26gq4x64n6b4kuffb7s7jxynnk7qd.onion
+                            // Content-Type: application/json
+                            // Content-Length: 46
+                            //
+                            // {"jsonrpc":"2.0","id":"0","method":"get_info"}
+                            // flutter: Response received: HTTP/1.1 200 Ok
+                            // Server: Epee-based
+                            // Content-Length: 1434
+                            // Content-Type: application/json
+                            // Last-Modified: Thu, 03 Oct 2024 23:08:19 GMT
+                            // Accept-Ranges: bytes
+                            //
+                            // {
+                            // "id": "0",
+                            // "jsonrpc": "2.0",
+                            // "result": {
+                            // "adjusted_time": 1727996959,
+                            // ...
+
+                            await socksSocket.close();
+                          }
+
+                        // A mutex should be added to this example to prevent
+                        // multiple connections from being made at once.  TODO
+                        : null,
+                    child: const Text(
+                      "Test Monero onion node connection",
                     ),
                   ),
                 ],
