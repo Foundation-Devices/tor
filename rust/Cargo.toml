@@ -14,10 +14,13 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 lazy_static = "1.4"
 tokio = { version = "1", features = ["full"] }
-arti-client = { version = "0.22.0", features = ["static", "onion-service-client"] }
+arti-client = { version = "0.22.0", features = ["static", "onion-service-client", "experimental-api"] }
 arti = { version = "1.2.7", features = ["experimental-api", "static"] }
-tor-rtcompat = { version = "0.22.0", features = ["static"] }
+tor-rtcompat = { version = "0.22.0", features = ["static", "native-tls", "tokio"] }
 tor-config = "0.22.0"
+tor-circmgr = { version = "0.22.0", features = ["experimental-api"] }
+tor-dirmgr = "0.22.0"
+tor-hsservice = "0.22.0"
 log = "0.4.20"
 #android_log-sys = "0.3.1"
 rlimit = "0.10.1"
