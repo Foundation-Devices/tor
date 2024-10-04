@@ -3,16 +3,17 @@
 //
 // SPDX-License-Identifier: MIT
 
-// Example app deps, not necessarily needed for tor usage.
+// Flutter dependencies not necessarily needed for tor usage:
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-// Imports needed for tor usage:
-import 'package:socks5_proxy/socks_client.dart'; // Just for example; can use any socks5 proxy package, pick your favorite.
-import 'package:tor/tor.dart';
-import 'package:tor/socks_socket.dart'; // For socket connections
+// Example application dependencies you can replace with any that works for you:
+import 'package:socks5_proxy/socks_client.dart';
+import 'package:tor/socks_socket.dart';
+// The only real import needed for basic usage:
+import 'package:tor/tor.dart'; // This would go at the top, but dart autoformatter doesn't like it there.
 
 void main() {
   runApp(const MyApp());
@@ -44,6 +45,8 @@ class _MyAppState extends State<Home> {
   final hostController = TextEditingController(text: 'https://icanhazip.com/');
   // https://check.torproject.org is another good option.
 
+  String? exitNodeAddress;
+
   Future<void> startTor() async {
     await Tor.init();
 
@@ -56,6 +59,24 @@ class _MyAppState extends State<Home> {
     });
 
     print('Done awaiting; tor should be running');
+
+    // Fetch the exit node address.
+    try {
+      String? address = await Tor.instance.getExitNode();
+      // getExitNode above should return like: [1.2.3.4:5 ed25519:Q6+... $7...]
+      setState(() {
+        if (address != null && address!.contains(":")) {
+          // Strip just the IP out of the above.
+          address = address?.split(":")[0].substring(1);
+        }
+        exitNodeAddress = address;
+      });
+    } catch (e) {
+      print('Error getting exit node address: $e');
+      setState(() {
+        exitNodeAddress = 'Error retrieving exit node address';
+      });
+    }
   }
 
   @override
@@ -123,6 +144,14 @@ class _MyAppState extends State<Home> {
                           },
                     child: const Text("Stop"),
                   ),
+                  // Display the exit node address.
+                  if (exitNodeAddress != null) ...[
+                    spacerSmall,
+                    Text(
+                      'Exit Node: $exitNodeAddress',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ],
               ),
               Row(
