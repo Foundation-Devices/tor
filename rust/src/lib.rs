@@ -8,13 +8,16 @@ use arti::socks;
 use arti_client::config::CfgPath;
 use arti_client::{DormantMode, TorClient, TorClientConfig};
 use lazy_static::lazy_static;
-use std::ffi::{c_char, c_void, CStr};
+use std::ffi::{c_char, c_void, CStr, CString};
 use std::{io, ptr};
 use tokio::runtime::{Builder, Runtime};
 use tokio::task::JoinHandle;
 use tor_config::Listen;
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
 use tor_rtcompat::BlockOn;
+use tor_dirmgr::Timeliness;
+use tor_circmgr::isolation::StreamIsolation;
+use tor_circmgr::DirInfo;
 
 pub use crate::error::tor_last_error_message;
 #[cfg(not(target_os = "windows"))]
@@ -128,6 +131,62 @@ fn start_proxy(
         client.clone(),
         Listen::new_localhost(port),
     ))
+}
+
+/// Get the exit node's identity (e.g., nickname or ID) for the given client.
+#[no_mangle]
+pub unsafe extern "C" fn tor_get_exit_node(client: *mut c_void) -> *mut c_char {
+    let client = {
+        assert!(!client.is_null());
+        &*(client as *mut TorClient<TokioNativeTlsRuntime>)
+    };
+
+    let runtime = client.runtime().clone();
+
+    let result = runtime.block_on(async {
+        if let Ok(netdir) = client.dirmgr().netdir(Timeliness::Timely) {
+            let circmgr = client.circmgr();
+
+            let ports = &[];
+            let isolation = StreamIsolation::no_isolation();
+
+            // Get or launch an exit circuit.
+            match circmgr.get_or_launch_exit(DirInfo::Directory(&netdir), ports, isolation).await {
+                Ok(circuit) => {
+                    let path = circuit.path_ref();
+                    if let Some(exit_hop) = path.hops().last() {
+                        let exit_info = format!("{}", exit_hop);
+                        Ok(exit_info)
+                    } else {
+                        Err("No exit hop in circuit".to_string())
+                    }
+                }
+                Err(e) => Err(format!("Failed to get circuit: {:?}", e)),
+            }
+        } else {
+            Err("No NetDir available".to_string())
+        }
+    });
+
+    match result {
+        Ok(exit_info) => {
+            CString::new(exit_info).unwrap().into_raw()
+        }
+        Err(err) => {
+            update_last_error(std::io::Error::new(std::io::ErrorKind::Other, err));
+            std::ptr::null_mut()
+        }
+    }
+}
+
+/// Free a C string allocated by this library.
+///
+/// Used to free memory allocated by functions like `tor_get_exit_node`.
+#[no_mangle]
+pub unsafe extern "C" fn tor_free_string(s: *mut c_char) {
+    if !s.is_null() {
+        drop(CString::from_raw(s));
+    }
 }
 
 // Due to its simple signature this dummy function is the one added (unused) to iOS swift codebase to force Xcode to link the lib

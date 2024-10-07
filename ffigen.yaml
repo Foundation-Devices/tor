@@ -8,7 +8,7 @@ description: |
   Bindings for `tor.h`.
 
   Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
-output: 'lib/tor_bindings_generated.dart'
+output: 'lib/generated_bindings.dart'
 headers:
   entry-points:
     - 'rust/target/tor.h'

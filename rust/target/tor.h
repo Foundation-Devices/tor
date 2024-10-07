@@ -16,6 +16,18 @@ void tor_client_set_dormant(void *client, bool soft_mode);
 
 void tor_proxy_stop(void *proxy);
 
+/**
+ * Get the exit node's identity (e.g., nickname or ID) for the given client.
+ */
+char *tor_get_exit_node(void *client);
+
+/**
+ * Free a C string allocated by this library.
+ *
+ * Used to free memory allocated by functions like `tor_get_exit_node`.
+ */
+void tor_free_string(char *s);
+
 void tor_hello(void);
 
 const char *tor_last_error_message(void);

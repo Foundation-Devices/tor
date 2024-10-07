@@ -32,7 +32,8 @@ git subtree pull --prefix cargokit https://github.com/irondash/cargokit.git main
 
 ## Development
 
-To (re)generate Dart bindings run `just generate`
+To (re)generate C bindings for Rust, `cargo build` the crate in `/rust`. For
+Dart bindings, run `dart run ffigen --config ffigen.yaml`
 
 ## Example app
 

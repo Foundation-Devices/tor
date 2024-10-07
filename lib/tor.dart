@@ -261,6 +261,27 @@ class Tor {
             }));
   }
 
+  /// Gets the current exit node.
+  Future<String?> getExitNode() async {
+    if (_clientPtr == nullptr || !started || !bootstrapped) {
+      throw ClientNotActive();
+    }
+
+    final lib = rust.NativeLibrary(_lib);
+    Pointer<Char> addressPtr = lib.tor_get_exit_node(_clientPtr);
+
+    if (addressPtr == nullptr) {
+      String rustError =
+          lib.tor_last_error_message().cast<Utf8>().toDartString();
+      throw Exception("Failed to get exit node: $rustError");
+    }
+
+    String address = addressPtr.cast<Utf8>().toDartString();
+    lib.tor_free_string(addressPtr);
+
+    return address;
+  }
+
   static throwRustException(rust.NativeLibrary lib) {
     String rustError = lib.tor_last_error_message().cast<Utf8>().toDartString();
 
