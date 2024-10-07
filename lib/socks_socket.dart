@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+// SPDX-FileCopyrightText: 2024 Cypher Stack LLC
 //
 // SPDX-License-Identifier: MIT
 
@@ -10,8 +10,7 @@ import 'package:flutter/foundation.dart';
 
 /// A SOCKS5 socket.
 ///
-/// This class is a wrapper around the Socket class that implements the
-/// SOCKS5 protocol.  It supports SSL and non-SSL connections.
+/// A Dart 3 Socket wrapper that implements the SOCKS5 protocol.  Now with SSL!
 ///
 /// Properties:
 ///  - [proxyHost]: The host of the SOCKS5 proxy server.
@@ -99,6 +98,26 @@ class SOCKSSocket {
   /// Private constructor.
   SOCKSSocket._(this.proxyHost, this.proxyPort, this.sslEnabled);
 
+  /// Provides a stream of data as List<int>.
+  Stream<List<int>> get inputStream => sslEnabled
+      ? _secureResponseController.stream
+      : _responseController.stream;
+
+  /// Provides a StreamSink compatible with List<int> for sending data.
+  StreamSink<List<int>> get outputStream {
+    // Create a simple StreamSink wrapper for _socksSocket and
+    // _secureSocksSocket that accepts List<int> and forwards it to write method.
+    var sink = StreamController<List<int>>();
+    sink.stream.listen((data) {
+      if (sslEnabled) {
+        _secureSocksSocket.add(data);
+      } else {
+        _socksSocket.add(data);
+      }
+    });
+    return sink.sink;
+  }
+
   /// Creates a SOCKS5 socket to the specified [proxyHost] and [proxyPort].
   ///
   /// This method is a factory constructor that returns a Future that resolves
@@ -163,7 +182,7 @@ class SOCKSSocket {
       },
       onDone: () {
         // Close the response controller when the socket is closed.
-        _responseController.close();
+        // _responseController.close();
       },
     );
   }
@@ -221,7 +240,7 @@ class SOCKSSocket {
           'socks_socket.connectTo(): Failed to connect to target through SOCKS5 proxy.');
     }
 
-    // Upgrade to SSL if needed
+    // Upgrade to SSL if needed.
     if (sslEnabled) {
       // Upgrade to SSL.
       _secureSocksSocket = await SecureSocket.secure(
@@ -283,15 +302,19 @@ class SOCKSSocket {
   ///  A Future that resolves to void.
   Future<void> close() async {
     // Ensure all data is sent before closing.
-    //
-    // TODO test this.
-    if (sslEnabled) {
+    try {
+      if (sslEnabled) {
+        await _secureSocksSocket.flush();
+      }
       await _socksSocket.flush();
-      await _secureResponseController.close();
+    } finally {
+      await _subscription?.cancel();
+      await _socksSocket.close();
+      _responseController.close();
+      if (sslEnabled) {
+        _secureResponseController.close();
+      }
     }
-    await _socksSocket.flush();
-    await _responseController.close();
-    return await _socksSocket.close();
   }
 
   StreamSubscription<List<int>> listen(
