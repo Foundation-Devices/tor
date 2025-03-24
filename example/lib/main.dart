@@ -41,6 +41,8 @@ class _MyAppState extends State<Home> {
   // Flag to track if tor has started.
   bool torStarted = false;
 
+  String? exitNodeAddress;
+
   // Set the default text for the host input field.
   final hostController = TextEditingController(text: 'https://icanhazip.com/');
   // https://check.torproject.org is another good option.
@@ -83,6 +85,24 @@ class _MyAppState extends State<Home> {
     });
 
     print('Done awaiting; tor should be running');
+
+    // Fetch the exit node address.
+    try {
+      String? address = await Tor.instance.getExitNode();
+      // getExitNode above should return like: [1.2.3.4:5 ed25519:Q6+... $7...]
+      setState(() {
+        if (address != null && address!.contains(":")) {
+          // Strip just the IP out of the above.
+          address = address?.split(":")[0].substring(1);
+        }
+        exitNodeAddress = address;
+      });
+    } catch (e) {
+      print('Error getting exit node address: $e');
+      setState(() {
+        exitNodeAddress = 'Error retrieving exit node address';
+      });
+    }
   }
 
   @override
@@ -150,6 +170,14 @@ class _MyAppState extends State<Home> {
                           },
                     child: const Text("Stop"),
                   ),
+                  // Display the exit node address.
+                  if (exitNodeAddress != null) ...[
+                    spacerSmall,
+                    Text(
+                      'Exit Node: $exitNodeAddress',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ],
               ),
               Row(
