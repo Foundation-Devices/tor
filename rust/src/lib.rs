@@ -127,7 +127,7 @@ fn start_proxy(
         client.runtime().clone(),
         client.clone(),
         Listen::new_localhost(port),
-            None,
+        None,
     ))
 }
 
