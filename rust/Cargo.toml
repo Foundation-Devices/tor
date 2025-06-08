@@ -4,8 +4,8 @@
 
 [package]
 name = "tor"
-version = "0.0.8"
-authors = ["Igor Cota <igor@foundationdevices.com>"]
+version = "0.0.9"
+authors = ["Igor Cota <igor@foundation.xyz>"]
 edition = "2021"
 
 [lib]
