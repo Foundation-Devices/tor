@@ -4,8 +4,8 @@
 
 [package]
 name = "tor"
-version = "0.0.8"
-authors = ["Igor Cota <igor@foundationdevices.com>"]
+version = "0.0.9"
+authors = ["Igor Cota <igor@foundation.xyz>"]
 edition = "2021"
 
 [lib]
@@ -14,10 +14,10 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 lazy_static = "1.4"
 tokio = { version = "1", features = ["full"] }
-arti-client = { version = "0.22.0", features = ["static", "onion-service-client"] }
-arti = { version = "1.2.7", features = ["experimental-api", "static"] }
-tor-rtcompat = { version = "0.22.0", features = ["static"] }
-tor-config = "0.22.0"
+arti-client = { version = "0.30.0", features = ["static", "onion-service-client"] }
+arti = { version = "1.4.3", features = ["experimental-api", "static"] }
+tor-rtcompat = { version = "0.30.0", features = ["static"] }
+tor-config = "0.30.0"
 log = "0.4.20"
 #android_log-sys = "0.3.1"
 rlimit = "0.10.1"

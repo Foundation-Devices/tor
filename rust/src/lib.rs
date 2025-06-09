@@ -14,7 +14,7 @@ use tokio::runtime::{Builder, Runtime};
 use tokio::task::JoinHandle;
 use tor_config::Listen;
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
-use tor_rtcompat::BlockOn;
+use tor_rtcompat::ToplevelBlockOn;
 
 pub use crate::error::tor_last_error_message;
 #[cfg(not(target_os = "windows"))]
@@ -127,6 +127,7 @@ fn start_proxy(
         client.runtime().clone(),
         client.clone(),
         Listen::new_localhost(port),
+        None,
     ))
 }
 
