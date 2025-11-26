@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 use crate::error::update_last_error;
-use arti::socks;
+use arti::proxy;
 use arti_client::config::CfgPath;
 use arti_client::{DormantMode, TorClient, TorClientConfig};
 use lazy_static::lazy_static;
@@ -123,7 +123,7 @@ fn start_proxy(
 ) -> JoinHandle<anyhow::Result<()>> {
     println!("Starting proxy!");
     let rt = RUNTIME.as_ref().unwrap();
-    rt.spawn(socks::run_socks_proxy(
+    rt.spawn(proxy::run_proxy(
         client.runtime().clone(),
         client.clone(),
         Listen::new_localhost(port),
