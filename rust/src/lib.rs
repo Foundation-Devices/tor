@@ -58,6 +58,12 @@ pub unsafe extern "C" fn tor_start(
         .state_dir(CfgPath::new(state_dir.to_owned()))
         .cache_dir(CfgPath::new(cache_dir.to_owned()));
     cfg_builder.address_filter().allow_onion_addrs(true);
+    cfg_builder
+        .preemptive_circuits()
+        .disable_at_threshold(1)
+        .min_exit_circs_for_port(1)
+        .initial_predicted_ports()
+        .clear();
 
     let cfg = unwrap_or_return!(cfg_builder.build(), err_ret);
 
@@ -82,10 +88,12 @@ pub unsafe extern "C" fn tor_start(
 
 #[no_mangle]
 pub unsafe extern "C" fn tor_client_bootstrap(client: *mut c_void) -> bool {
-    let client = {
-        assert!(!client.is_null());
-        Box::from_raw(client as *mut TorClient<TokioNativeTlsRuntime>)
-    };
+    // Return false if client is null (not started)
+    if client.is_null() {
+        return false;
+    }
+
+    let client = Box::from_raw(client as *mut TorClient<TokioNativeTlsRuntime>);
 
     unwrap_or_return!(client.runtime().block_on(client.bootstrap()), false);
     true
@@ -93,10 +101,12 @@ pub unsafe extern "C" fn tor_client_bootstrap(client: *mut c_void) -> bool {
 
 #[no_mangle]
 pub unsafe extern "C" fn tor_client_set_dormant(client: *mut c_void, soft_mode: bool) {
-    let client = {
-        assert!(!client.is_null());
-        Box::from_raw(client as *mut TorClient<TokioNativeTlsRuntime>)
-    };
+    // Return early if client is null (not started)
+    if client.is_null() {
+        return;
+    }
+
+    let client = Box::from_raw(client as *mut TorClient<TokioNativeTlsRuntime>);
 
     let dormant_mode = if soft_mode {
         DormantMode::Soft
@@ -109,11 +119,12 @@ pub unsafe extern "C" fn tor_client_set_dormant(client: *mut c_void, soft_mode: 
 
 #[no_mangle]
 pub unsafe extern "C" fn tor_proxy_stop(proxy: *mut c_void) {
-    let proxy = {
-        assert!(!proxy.is_null());
-        Box::from_raw(proxy as *mut JoinHandle<anyhow::Result<()>>)
-    };
+    // Return early if proxy is null (already stopped or never started)
+    if proxy.is_null() {
+        return;
+    }
 
+    let proxy = Box::from_raw(proxy as *mut JoinHandle<anyhow::Result<()>>);
     proxy.abort();
 }
 
