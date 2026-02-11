@@ -34,3 +34,7 @@ License: MIT
 Files: CHANGELOG.md
 Copyright: 2024 Foundation Devices Inc.
 License: MIT
+
+Files: flake.lock
+Copyright: 2024 Foundation Devices Inc.
+License: MIT
