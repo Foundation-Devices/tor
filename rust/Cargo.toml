@@ -24,5 +24,9 @@ rlimit = "0.10.1"
 anyhow = "1.0.79"
 time = "0.3.36"
 
+[target.'cfg(target_os = "ios")'.dependencies]
+# Specific version for iOS
+security-framework = "=2.10.0"
+
 [build-dependencies]
 cbindgen = "= 0.24.3"

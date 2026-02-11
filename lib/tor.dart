@@ -228,9 +228,17 @@ class Tor {
 
   /// Stops the proxy
   Future<void> stop() async {
+    // Return early if already stopped
+    if (_proxyPtr == nullptr) {
+      return;
+    }
+
     final lib = rust.NativeLibrary(_lib);
     lib.tor_proxy_stop(_proxyPtr);
     _proxyPtr = nullptr;
+    _started = false;
+    _bootstrapped = false;
+    broadcastState();
   }
 
   Future<void> setClientDormant(bool dormant) async {
