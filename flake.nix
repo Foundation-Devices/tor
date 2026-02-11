@@ -13,64 +13,70 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    rust-overlay,
-  }:
-    flake-utils.lib.eachDefaultSystem (system: let
-      overlays = [(import rust-overlay)];
-      pkgs = import nixpkgs {inherit system overlays;};
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      rust-overlay,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs { inherit system overlays; };
 
-      rustToolchain = pkgs.rust-bin.stable."1.87.0".default;
-    in {
-      devShells.default = pkgs.mkShell {
-        buildInputs = with pkgs;
-          [
-            # Dart / Flutter
-            dart
-            flutter
+        rustToolchain = pkgs.rust-bin.stable."1.87.0".default;
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs =
+            with pkgs;
+            [
+              # Dart / Flutter
+              dart
+              flutter
 
-            # Rust (pinned to rust-toolchain)
-            rustToolchain
+              # Rust (pinned to rust-toolchain)
+              rustToolchain
 
-            # Native build tools
-            cmake
-            ninja
-            pkg-config
+              # Native build tools
+              cmake
+              ninja
+              pkg-config
 
-            # For ffigen (libclang)
-            libclang
-            llvmPackages.libclang
+              # For ffigen (libclang)
+              libclang
+              llvmPackages.libclang
 
-            # Just (task runner)
-            just
+              # Just (task runner)
+              just
 
-            # Useful for Rust development
-            cargo-ndk
-          ]
-          ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
-            # Linux desktop build deps (GTK runner)
-            gtk3
-            pcre2
-            util-linux
-            libselinux
-            libsepol
-            libthai
-            libdatrie
-            libxkbcommon
-            xorg.libXdmcp
-            lerc
-            libdeflate
-            at-spi2-core
-            dbus
-            epoxy
-          ];
+              # Useful for Rust development
+              cargo-ndk
+            ]
+            ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+              # Linux desktop build deps (GTK runner)
+              gtk3
+              pcre2
+              util-linux
+              libselinux
+              libsepol
+              libthai
+              libdatrie
+              libxkbcommon
+              libxdmcp
+              lerc
+              libdeflate
+              at-spi2-core
+              dbus
+              libepoxy
+            ];
 
-        shellHook = ''
-          export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
-        '';
-      };
-    });
+          shellHook = ''
+            export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+          '';
+        };
+      }
+    );
 }
