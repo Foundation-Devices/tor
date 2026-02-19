@@ -94,8 +94,8 @@ pub fn start_tor(
     state_dir: String,
     cache_dir: String,
 ) -> Result<TorInstance, TorError> {
-    let runtime = TokioNativeTlsRuntime::create()
-        .map_err(|e| TorError::RuntimeError(e.to_string()))?;
+    let runtime =
+        TokioNativeTlsRuntime::create().map_err(|e| TorError::RuntimeError(e.to_string()))?;
 
     let mut cfg_builder = TorClientConfig::builder();
     cfg_builder
@@ -114,13 +114,14 @@ pub fn start_tor(
         .build()
         .map_err(|e| TorError::ConfigError(e.to_string()))?;
 
-    let client = runtime.block_on(async {
-        TorClient::with_runtime(runtime.clone())
-            .config(cfg)
-            .create_bootstrapped()
-            .await
-    })
-    .map_err(|e| TorError::BootstrapError(e.to_string()))?;
+    let client = runtime
+        .block_on(async {
+            TorClient::with_runtime(runtime.clone())
+                .config(cfg)
+                .create_bootstrapped()
+                .await
+        })
+        .map_err(|e| TorError::BootstrapError(e.to_string()))?;
 
     let client_arc = Arc::new(client);
     let proxy_handle = start_proxy_internal(socks_port, Arc::clone(&client_arc))?;
