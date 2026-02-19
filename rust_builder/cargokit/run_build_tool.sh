@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: 2025 Foundation Devices Inc
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
 set -e
 
 BASEDIR=$(dirname "$0")
@@ -79,6 +75,11 @@ if [ ! -f "$PACKAGE_HASH_FILE" ]; then
     "$DART" pub get --no-precompile
     "$DART" compile kernel bin/build_tool_runner.dart
     echo "$PACKAGE_HASH" > "$PACKAGE_HASH_FILE"
+fi
+
+# Rebuild the tool if it was deleted by Android Studio
+if [ ! -f "bin/build_tool_runner.dill" ]; then
+  "$DART" compile kernel bin/build_tool_runner.dart
 fi
 
 set +e

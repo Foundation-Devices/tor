@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2025 Foundation Devices Inc.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
-
 /// This is copied from Cargokit (which is the official way to use it currently)
 /// Details: https://fzyzcjy.github.io/flutter_rust_bridge/manual/integrate/builtin
 
@@ -193,22 +189,7 @@ class AndroidEnvironment {
     if (rustFlags.isNotEmpty) {
       rustFlags = '$rustFlags\x1f';
     }
-
-    if (["arm64-v8a", "x86_64"].contains(target.android)) {
-      rustFlags = '$rustFlags-L\x1f$workaroundDir\x1f';
-
-      const pageSizeArgs = [
-        "-C",
-        "link-arg=-Wl,--hash-style=both",
-        "-C",
-        "link-arg=-Wl,-z,max-page-size=16384"
-      ];
-      final pageSizeArgsString = pageSizeArgs.join("\x1f");
-
-      rustFlags = '$rustFlags$pageSizeArgsString';
-    } else {
-      rustFlags = '$rustFlags-L\x1f$workaroundDir';
-    }
+    rustFlags = '$rustFlags-L\x1f$workaroundDir';
     return rustFlags;
   }
 }

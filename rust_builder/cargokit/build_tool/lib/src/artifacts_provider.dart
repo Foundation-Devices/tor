@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2025 Foundation Devices Inc
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
-
 /// This is copied from Cargokit (which is the official way to use it currently)
 /// Details: https://fzyzcjy.github.io/flutter_rust_bridge/manual/integrate/builtin
 
@@ -242,7 +238,6 @@ List<String> getArtifactNames({
   AritifactType? aritifactType,
 }) {
   aritifactType ??= artifactTypeForTarget(target);
-  print("libraryName  libraryName ${libraryName}");
   if (target.darwinArch != null) {
     if (aritifactType == AritifactType.staticlib) {
       return ['lib$libraryName.a'];
