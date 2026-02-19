@@ -4,46 +4,43 @@
 // SPDX-License-Identifier: MIT
 
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:math';
 
-import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tor/generated_bindings.dart' as rust;
 
-DynamicLibrary load(String name) {
-  if (Platform.isAndroid || Platform.isLinux) {
-    return DynamicLibrary.open('lib$name.so');
-  } else if (Platform.isIOS || Platform.isMacOS) {
-    return DynamicLibrary.open('$name.framework/$name');
-  } else if (Platform.isWindows) {
-    return DynamicLibrary.open('$name.dll');
-  } else {
-    throw NotSupportedPlatform('${Platform.operatingSystem} is not supported!');
-  }
-}
+import 'src/rust/frb_generated.dart';
+import 'src/rust/api/tor.dart' as rust;
+
+export 'src/rust/api/tor.dart' show TorError;
 
 class CouldntBootstrapDirectory implements Exception {
   String? rustError;
 
   CouldntBootstrapDirectory({this.rustError});
+
+  @override
+  String toString() => 'CouldntBootstrapDirectory: $rustError';
 }
 
 class NotSupportedPlatform implements Exception {
-  NotSupportedPlatform(String s);
+  final String platform;
+  NotSupportedPlatform(this.platform);
+
+  @override
+  String toString() => 'NotSupportedPlatform: $platform';
 }
 
-class ClientNotActive implements Exception {}
+class ClientNotActive implements Exception {
+  @override
+  String toString() => 'ClientNotActive: Tor client is not active';
+}
 
 class Tor {
-  static const String libName = "tor";
-  static late DynamicLibrary _lib;
-
-  Pointer<Void> _clientPtr = nullptr;
-  Pointer<Void> _proxyPtr = nullptr;
+  rust.TorClientWrapper? _client;
+  rust.TorProxyHandle? _proxy;
 
   /// Flag to indicate that Tor client and proxy have started. Traffic is routed through the proxy only if it is also [enabled].
   bool get started => _started;
@@ -92,6 +89,9 @@ class Tor {
   /// Getter for the singleton instance of the Tor class.
   static Tor get instance => _instance;
 
+  /// Whether RustLib has been initialized.
+  static bool _rustLibInitialized = false;
+
   /// Initialize the Tor ffi lib instance if it hasn't already been set. Nothing
   /// changes if _tor is already been set.
   ///
@@ -101,13 +101,18 @@ class Tor {
   static Future<Tor> init({bool enabled = true}) async {
     var singleton = Tor._instance;
     singleton._enabled = enabled;
+
+    // Initialize RustLib if not already done
+    if (!_rustLibInitialized) {
+      await RustLib.init();
+      _rustLibInitialized = true;
+    }
+
     return singleton;
   }
 
   /// Private constructor for the Tor class.
   Tor._internal() {
-    _lib = load(libName);
-
     if (kDebugMode) {
       print("Instance of Tor created!");
     }
@@ -155,6 +160,12 @@ class Tor {
   Future<void> start() async {
     broadcastState();
 
+    // Ensure RustLib is initialized
+    if (!_rustLibInitialized) {
+      await RustLib.init();
+      _rustLibInitialized = true;
+    }
+
     // Set the state and cache directories.
     final Directory appSupportDir = await getApplicationSupportDirectory();
     final stateDir =
@@ -165,36 +176,27 @@ class Tor {
     // Generate a random port.
     int newPort = await _getRandomUnusedPort();
 
-    // Start the Tor service in an isolate.
-    final tor = await Isolate.run(() async {
-      // Load the Tor library.
-      var lib = rust.NativeLibrary(load(libName));
+    try {
+      // Start Tor - this is a blocking operation
+      final torInstance = await rust.startTor(
+        socksPort: newPort,
+        stateDir: stateDir.path,
+        cacheDir: cacheDir.path,
+      );
 
-      // Start the Tor service.
-      final tor = lib.tor_start(
-          newPort,
-          stateDir.path.toNativeUtf8() as Pointer<Char>,
-          cacheDir.path.toNativeUtf8() as Pointer<Char>);
+      _client = torInstance.client;
+      _proxy = torInstance.proxy;
+      _proxyPort = torInstance.socksPort;
+      _started = true;
+      _bootstrapped = true; // startTor creates a bootstrapped client
 
-      // Throw an exception if the Tor service fails to start.
-      if (tor.client == nullptr) {
-        throwRustException(lib);
-      }
-
-      return tor;
-    });
-
-    // Set the client pointer and started flag.
-    _clientPtr = Pointer.fromAddress(tor.client.address);
-    _proxyPtr = Pointer.fromAddress(tor.proxy.address);
-    _started = true;
-
-    // Bootstrap the Tor service.
-    bootstrap();
-
-    // Set the proxy port.
-    _proxyPort = newPort;
-    broadcastState();
+      broadcastState();
+    } on rust.TorError catch (e) {
+      throw CouldntBootstrapDirectory(rustError: e.toString());
+    } on PanicException catch (e) {
+      // FRB converts Rust panics to PanicException - this is the key benefit!
+      throw CouldntBootstrapDirectory(rustError: 'Rust panic: ${e.message}');
+    }
   }
 
   /// Bootstrap the Tor service.
@@ -207,16 +209,17 @@ class Tor {
   /// Throws an exception if the Tor service fails to bootstrap.
   ///
   /// Returns void.
-  void bootstrap() {
-    // Load the Tor library.
-    final lib = rust.NativeLibrary(_lib);
+  Future<void> bootstrap() async {
+    if (_client == null) {
+      throw ClientNotActive();
+    }
 
-    // Bootstrap the Tor service.
-    _bootstrapped = lib.tor_client_bootstrap(_clientPtr);
-
-    // Throw an exception if the Tor service fails to bootstrap.
-    if (!bootstrapped) {
-      throwRustException(lib);
+    try {
+      await rust.bootstrap(client: _client!);
+      _bootstrapped = true;
+    } on rust.TorError catch (e) {
+      _bootstrapped = false;
+      throw CouldntBootstrapDirectory(rustError: e.toString());
     }
   }
 
@@ -229,25 +232,37 @@ class Tor {
   /// Stops the proxy
   Future<void> stop() async {
     // Return early if already stopped
-    if (_proxyPtr == nullptr) {
+    if (_proxy == null) {
       return;
     }
 
-    final lib = rust.NativeLibrary(_lib);
-    lib.tor_proxy_stop(_proxyPtr);
-    _proxyPtr = nullptr;
+    try {
+      // This is now safe! FRB catches any panic and throws PanicException
+      await rust.stopProxy(proxy: _proxy!);
+    } on rust.TorError catch (e) {
+      if (kDebugMode) {
+        print('Error stopping proxy: $e');
+      }
+    } on PanicException catch (e) {
+      // Previously this would SIGABRT the app, now it's catchable!
+      if (kDebugMode) {
+        print('Proxy stop panicked (caught safely): ${e.message}');
+      }
+    }
+
+    _proxy = null;
+    _client = null;
     _started = false;
     _bootstrapped = false;
     broadcastState();
   }
 
   Future<void> setClientDormant(bool dormant) async {
-    if (_clientPtr == nullptr || !started || !bootstrapped) {
+    if (_client == null || !started || !bootstrapped) {
       throw ClientNotActive();
     }
 
-    final lib = rust.NativeLibrary(_lib);
-    lib.tor_client_set_dormant(_clientPtr, dormant);
+    await rust.setDormant(client: _client!, softMode: dormant);
   }
 
   Future<void> isReady() async {
@@ -269,21 +284,7 @@ class Tor {
             }));
   }
 
-  static void throwRustException(rust.NativeLibrary lib) {
-    String rustError = lib.tor_last_error_message().cast<Utf8>().toDartString();
-
-    throw _getRustException(rustError);
-  }
-
-  static Exception _getRustException(String rustError) {
-    if (rustError.contains('Unable to bootstrap a working directory')) {
-      return CouldntBootstrapDirectory(rustError: rustError);
-    } else {
-      return Exception(rustError);
-    }
-  }
-
   void hello() {
-    rust.NativeLibrary(_lib).tor_hello();
+    rust.hello();
   }
 }

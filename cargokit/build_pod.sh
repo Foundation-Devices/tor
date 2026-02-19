@@ -1,9 +1,4 @@
 #!/bin/sh
-
-# SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
-#
-# SPDX-License-Identifier: MIT
-
 set -e
 
 BASEDIR=$(dirname "$0")
@@ -54,10 +49,10 @@ do
   fi
 done
 
-"$BASEDIR/run_build_tool.sh" build-pod "$@"
+sh "$BASEDIR/run_build_tool.sh" build-pod "$@"
 
 # Make a symlink from built framework to phony file, which will be used as input to
 # build script. This should force rebuild (podspec currently doesn't support alwaysOutOfDate
 # attribute on custom build phase)
-ln -Fs "$OBJROOT/XCBuildData/build.db" "${BUILT_PRODUCTS_DIR}/cargokit_phony"
-ln -Fs "${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}" "${BUILT_PRODUCTS_DIR}/cargokit_phony_out"
+ln -fs "$OBJROOT/XCBuildData/build.db" "${BUILT_PRODUCTS_DIR}/cargokit_phony"
+ln -fs "${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}" "${BUILT_PRODUCTS_DIR}/cargokit_phony_out"
