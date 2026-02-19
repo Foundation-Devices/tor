@@ -1,5 +1,5 @@
-   0.228700481s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint: fingerprint error for tor v0.1.1 (/home/icota/Code/tor/rust)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tor", ["cdylib", "staticlib"], "/home/icota/Code/tor/rust/src/lib.rs", Edition2021) }
-   0.228730918s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-43238dc03e395752/lib-tor`
+   0.437668479s  INFO prepare_target{force=false package_id=rust_lib_tor v0.2.0 (/home/icota/Code/tor/rust) target="rust_lib_tor"}: cargo::core::compiler::fingerprint: fingerprint error for rust_lib_tor v0.2.0 (/home/icota/Code/tor/rust)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rust_lib_tor", ["cdylib", "staticlib", "rlib"], "/home/icota/Code/tor/rust/src/lib.rs", Edition2021) }
+   0.437782881s  INFO prepare_target{force=false package_id=rust_lib_tor v0.2.0 (/home/icota/Code/tor/rust) target="rust_lib_tor"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/rust_lib_tor-52249cbb1fd741c9/lib-rust_lib_tor`
 
 Caused by:
     No such file or directory (os error 2)
@@ -41,72 +41,8 @@ Stack backtrace:
   24: __libc_start_call_main
   25: __libc_start_main_alias_2
   26: <unknown>
-   0.235737656s  INFO prepare_target{force=false package_id=arti v1.7.0 target="arti"}: cargo::core::compiler::fingerprint: fingerprint dirty for arti v1.7.0/Check { test: false }/TargetInner { ..: lib_target("arti", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/arti-1.7.0/src/lib.rs", Edition2024) }
-   0.235770757s  INFO prepare_target{force=false package_id=arti v1.7.0 target="arti"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.237054693s  INFO prepare_target{force=false package_id=arti-client v0.36.0 target="arti_client"}: cargo::core::compiler::fingerprint: fingerprint dirty for arti-client v0.36.0/Check { test: false }/TargetInner { ..: lib_target("arti_client", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/arti-client-0.36.0/src/lib.rs", Edition2024) }
-   0.237062838s  INFO prepare_target{force=false package_id=arti-client v0.36.0 target="arti_client"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.241020130s  INFO prepare_target{force=false package_id=tor-chanmgr v0.36.0 target="tor_chanmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-chanmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_chanmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-chanmgr-0.36.0/src/lib.rs", Edition2024) }
-   0.241032163s  INFO prepare_target{force=false package_id=tor-chanmgr v0.36.0 target="tor_chanmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.242002586s  INFO prepare_target{force=false package_id=tor-cell v0.36.0 target="tor_cell"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-cell v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_cell", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-cell-0.36.0/src/lib.rs", Edition2024) }
-   0.242010100s  INFO prepare_target{force=false package_id=tor-cell v0.36.0 target="tor_cell"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.242706844s  INFO prepare_target{force=false package_id=tor-bytes v0.36.0 target="tor_bytes"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-bytes v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_bytes", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-bytes-0.36.0/src/lib.rs", Edition2024) }
-   0.242713637s  INFO prepare_target{force=false package_id=tor-bytes v0.36.0 target="tor_bytes"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.243485681s  INFO prepare_target{force=false package_id=tor-llcrypto v0.36.0 target="tor_llcrypto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-llcrypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_llcrypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-llcrypto-0.36.0/src/lib.rs", Edition2024) }
-   0.243495490s  INFO prepare_target{force=false package_id=tor-llcrypto v0.36.0 target="tor_llcrypto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.245529419s  INFO prepare_target{force=false package_id=tor-memquota v0.36.0 target="tor_memquota"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-memquota v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_memquota", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-memquota-0.36.0/src/lib.rs", Edition2024) }
-   0.245543865s  INFO prepare_target{force=false package_id=tor-memquota v0.36.0 target="tor_memquota"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.246530479s  INFO prepare_target{force=false package_id=tor-config v0.36.0 target="tor_config"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-config v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_config", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-config-0.36.0/src/lib.rs", Edition2024) }
-   0.246544034s  INFO prepare_target{force=false package_id=tor-config v0.36.0 target="tor_config"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.251037483s  INFO prepare_target{force=false package_id=tor-cert v0.36.0 target="tor_cert"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-cert v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_cert", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-cert-0.36.0/src/lib.rs", Edition2024) }
-   0.251052661s  INFO prepare_target{force=false package_id=tor-cert v0.36.0 target="tor_cert"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.251798737s  INFO prepare_target{force=false package_id=tor-checkable v0.36.0 target="tor_checkable"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-checkable v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_checkable", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-checkable-0.36.0/src/lib.rs", Edition2024) }
-   0.251805329s  INFO prepare_target{force=false package_id=tor-checkable v0.36.0 target="tor_checkable"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.252232984s  INFO prepare_target{force=false package_id=tor-hscrypto v0.36.0 target="tor_hscrypto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-hscrypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_hscrypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-hscrypto-0.36.0/src/lib.rs", Edition2024) }
-   0.252239115s  INFO prepare_target{force=false package_id=tor-hscrypto v0.36.0 target="tor_hscrypto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.252880126s  INFO prepare_target{force=false package_id=tor-key-forge v0.36.0 target="tor_key_forge"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-key-forge v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_key_forge", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-key-forge-0.36.0/src/lib.rs", Edition2024) }
-   0.252885917s  INFO prepare_target{force=false package_id=tor-key-forge v0.36.0 target="tor_key_forge"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.253475723s  INFO prepare_target{force=false package_id=tor-units v0.36.0 target="tor_units"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-units v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_units", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-units-0.36.0/src/lib.rs", Edition2024) }
-   0.253481874s  INFO prepare_target{force=false package_id=tor-units v0.36.0 target="tor_units"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.253839469s  INFO prepare_target{force=false package_id=tor-linkspec v0.36.0 target="tor_linkspec"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-linkspec v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_linkspec", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-linkspec-0.36.0/src/lib.rs", Edition2024) }
-   0.253844618s  INFO prepare_target{force=false package_id=tor-linkspec v0.36.0 target="tor_linkspec"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.254550680s  INFO prepare_target{force=false package_id=tor-protover v0.36.0 target="tor_protover"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-protover v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_protover", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-protover-0.36.0/src/lib.rs", Edition2024) }
-   0.254556421s  INFO prepare_target{force=false package_id=tor-protover v0.36.0 target="tor_protover"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.255029339s  INFO prepare_target{force=false package_id=tor-keymgr v0.36.0 target="tor_keymgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-keymgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_keymgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-keymgr-0.36.0/src/lib.rs", Edition2024) }
-   0.255034629s  INFO prepare_target{force=false package_id=tor-keymgr v0.36.0 target="tor_keymgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.255816993s  INFO prepare_target{force=false package_id=tor-persist v0.36.0 target="tor_persist"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-persist v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_persist", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-persist-0.36.0/src/lib.rs", Edition2024) }
-   0.255822763s  INFO prepare_target{force=false package_id=tor-persist v0.36.0 target="tor_persist"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.256353069s  INFO prepare_target{force=false package_id=tor-netdir v0.36.0 target="tor_netdir"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-netdir v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_netdir", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-netdir-0.36.0/src/lib.rs", Edition2024) }
-   0.256358429s  INFO prepare_target{force=false package_id=tor-netdir v0.36.0 target="tor_netdir"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.257074729s  INFO prepare_target{force=false package_id=tor-netdoc v0.36.0 target="tor_netdoc"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-netdoc v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_netdoc", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-netdoc-0.36.0/src/lib.rs", Edition2024) }
-   0.257080119s  INFO prepare_target{force=false package_id=tor-netdoc v0.36.0 target="tor_netdoc"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.257981023s  INFO prepare_target{force=false package_id=tor-proto v0.36.0 target="tor_proto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-proto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_proto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-proto-0.36.0/src/lib.rs", Edition2024) }
-   0.257986844s  INFO prepare_target{force=false package_id=tor-proto v0.36.0 target="tor_proto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.259830520s  INFO prepare_target{force=false package_id=tor-relay-crypto v0.36.0 target="tor_relay_crypto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-relay-crypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_relay_crypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-relay-crypto-0.36.0/src/lib.rs", Edition2024) }
-   0.259837944s  INFO prepare_target{force=false package_id=tor-relay-crypto v0.36.0 target="tor_relay_crypto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.260487019s  INFO prepare_target{force=false package_id=tor-rtmock v0.36.0 target="tor_rtmock"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-rtmock v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_rtmock", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-rtmock-0.36.0/src/lib.rs", Edition2024) }
-   0.260493662s  INFO prepare_target{force=false package_id=tor-rtmock v0.36.0 target="tor_rtmock"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.261098365s  INFO prepare_target{force=false package_id=tor-socksproto v0.36.0 target="tor_socksproto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-socksproto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_socksproto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-socksproto-0.36.0/src/lib.rs", Edition2024) }
-   0.261104196s  INFO prepare_target{force=false package_id=tor-socksproto v0.36.0 target="tor_socksproto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.261673324s  INFO prepare_target{force=false package_id=tor-circmgr v0.36.0 target="tor_circmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-circmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_circmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-circmgr-0.36.0/src/lib.rs", Edition2024) }
-   0.261679104s  INFO prepare_target{force=false package_id=tor-circmgr v0.36.0 target="tor_circmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.262628638s  INFO prepare_target{force=false package_id=tor-dircommon v0.36.0 target="tor_dircommon"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-dircommon v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dircommon", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dircommon-0.36.0/src/lib.rs", Edition2024) }
-   0.262634670s  INFO prepare_target{force=false package_id=tor-dircommon v0.36.0 target="tor_dircommon"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.263268087s  INFO prepare_target{force=false package_id=tor-guardmgr v0.36.0 target="tor_guardmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-guardmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_guardmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-guardmgr-0.36.0/src/lib.rs", Edition2024) }
-   0.263274128s  INFO prepare_target{force=false package_id=tor-guardmgr v0.36.0 target="tor_guardmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.264154544s  INFO prepare_target{force=false package_id=tor-relay-selection v0.36.0 target="tor_relay_selection"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-relay-selection v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_relay_selection", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-relay-selection-0.36.0/src/lib.rs", Edition2024) }
-   0.264160295s  INFO prepare_target{force=false package_id=tor-relay-selection v0.36.0 target="tor_relay_selection"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.264741094s  INFO prepare_target{force=false package_id=tor-dirmgr v0.36.0 target="tor_dirmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-dirmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dirmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dirmgr-0.36.0/src/lib.rs", Edition2024) }
-   0.264746654s  INFO prepare_target{force=false package_id=tor-dirmgr v0.36.0 target="tor_dirmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.266017034s  INFO prepare_target{force=false package_id=tor-consdiff v0.36.0 target="tor_consdiff"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-consdiff v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_consdiff", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-consdiff-0.36.0/src/lib.rs", Edition2024) }
-   0.266023396s  INFO prepare_target{force=false package_id=tor-consdiff v0.36.0 target="tor_consdiff"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.266508377s  INFO prepare_target{force=false package_id=tor-dirclient v0.36.0 target="tor_dirclient"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-dirclient v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dirclient", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dirclient-0.36.0/src/lib.rs", Edition2024) }
-   0.266513787s  INFO prepare_target{force=false package_id=tor-dirclient v0.36.0 target="tor_dirclient"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.267824522s  INFO prepare_target{force=false package_id=tor-hsclient v0.36.0 target="tor_hsclient"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-hsclient v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_hsclient", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-hsclient-0.36.0/src/lib.rs", Edition2024) }
-   0.267830694s  INFO prepare_target{force=false package_id=tor-hsclient v0.36.0 target="tor_hsclient"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.268693778s  INFO prepare_target{force=false package_id=tor-ptmgr v0.36.0 target="tor_ptmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-ptmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_ptmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-ptmgr-0.36.0/src/lib.rs", Edition2024) }
-   0.268699047s  INFO prepare_target{force=false package_id=tor-ptmgr v0.36.0 target="tor_ptmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
-   0.269654723s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint error for tor v0.1.1 (/home/icota/Code/tor/rust)/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/icota/Code/tor/rust/build.rs", Edition2021) }
-   0.269660103s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="build-script-build"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-34f33e628f83d9a5/run-build-script-build-script-build`
+   0.446597665s  INFO prepare_target{force=false package_id=arti v1.7.0 target="arti"}: cargo::core::compiler::fingerprint: fingerprint error for arti v1.7.0/Check { test: false }/TargetInner { ..: lib_target("arti", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/arti-1.7.0/src/lib.rs", Edition2024) }
+   0.446622821s  INFO prepare_target{force=false package_id=arti v1.7.0 target="arti"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/arti-67477e690baadcc1/lib-arti`
 
 Caused by:
     No such file or directory (os error 2)
@@ -116,7 +52,51 @@ Stack backtrace:
    1: cargo_util::paths::read
    2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
    3: cargo::core::compiler::fingerprint::prepare_target
-   4: cargo::core::compiler::custom_build::build_work
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  16: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  17: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  18: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  19: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  24: main
+  25: __libc_start_call_main
+  26: __libc_start_main_alias_2
+  27: <unknown>
+   0.448577281s  INFO prepare_target{force=false package_id=arti-client v0.36.0 target="arti_client"}: cargo::core::compiler::fingerprint: fingerprint error for arti-client v0.36.0/Check { test: false }/TargetInner { ..: lib_target("arti_client", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/arti-client-0.36.0/src/lib.rs", Edition2024) }
+   0.448588662s  INFO prepare_target{force=false package_id=arti-client v0.36.0 target="arti_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/arti-client-fa09836dbcb302f1/lib-arti_client`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
    5: cargo::core::compiler::compile
    6: cargo::core::compiler::compile
    7: <cargo::core::compiler::build_runner::BuildRunner>::compile
@@ -150,8 +130,2795 @@ Stack backtrace:
   26: __libc_start_call_main
   27: __libc_start_main_alias_2
   28: <unknown>
-   0.270484885s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint: fingerprint error for tor v0.1.1 (/home/icota/Code/tor/rust)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("tor", ["cdylib", "staticlib"], "/home/icota/Code/tor/rust/src/lib.rs", Edition2021) }
-   0.270491618s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-ca8d033f4493af77/test-lib-tor`
+   0.453455785s  INFO prepare_target{force=false package_id=once_cell v1.21.3 target="once_cell"}: cargo::core::compiler::fingerprint: fingerprint error for once_cell v1.21.3/Check { test: false }/TargetInner { ..: lib_target("once_cell", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/once_cell-1.21.3/src/lib.rs", Edition2021) }
+   0.453491311s  INFO prepare_target{force=false package_id=once_cell v1.21.3 target="once_cell"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/once_cell-bc7a45c545f1fd75/lib-once_cell`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.453804741s  INFO prepare_target{force=false package_id=portable-atomic v1.11.1 target="portable_atomic"}: cargo::core::compiler::fingerprint: fingerprint error for portable-atomic v1.11.1/Check { test: false }/TargetInner { doc_scrape_examples: Disabled, ..: lib_target("portable_atomic", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/portable-atomic-1.11.1/src/lib.rs", Edition2018) }
+   0.453810412s  INFO prepare_target{force=false package_id=portable-atomic v1.11.1 target="portable_atomic"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/portable-atomic-ee45d6ce4edd676c/lib-portable_atomic`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.454037162s  INFO prepare_target{force=false package_id=portable-atomic v1.11.1 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint error for portable-atomic v1.11.1/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/portable-atomic-1.11.1/build.rs", Edition2018) }
+   0.454043694s  INFO prepare_target{force=false package_id=portable-atomic v1.11.1 target="build-script-build"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/portable-atomic-3de5c13cf18dba1c/run-build-script-build-script-build`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::custom_build::build_work
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.455529846s  INFO prepare_target{force=false package_id=tor-chanmgr v0.36.0 target="tor_chanmgr"}: cargo::core::compiler::fingerprint: fingerprint error for tor-chanmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_chanmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-chanmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.455545936s  INFO prepare_target{force=false package_id=tor-chanmgr v0.36.0 target="tor_chanmgr"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-chanmgr-089ade99ab647f4e/lib-tor_chanmgr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.457123617s  INFO prepare_target{force=false package_id=tor-cell v0.36.0 target="tor_cell"}: cargo::core::compiler::fingerprint: fingerprint error for tor-cell v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_cell", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-cell-0.36.0/src/lib.rs", Edition2024) }
+   0.457135069s  INFO prepare_target{force=false package_id=tor-cell v0.36.0 target="tor_cell"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-cell-5b23ca18ce901525/lib-tor_cell`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.457996063s  INFO prepare_target{force=false package_id=tor-bytes v0.36.0 target="tor_bytes"}: cargo::core::compiler::fingerprint: fingerprint error for tor-bytes v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_bytes", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-bytes-0.36.0/src/lib.rs", Edition2024) }
+   0.458003467s  INFO prepare_target{force=false package_id=tor-bytes v0.36.0 target="tor_bytes"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-bytes-dd389bb2f702b2a3/lib-tor_bytes`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.458844474s  INFO prepare_target{force=false package_id=tor-error v0.36.0 target="tor_error"}: cargo::core::compiler::fingerprint: fingerprint error for tor-error v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_error", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-error-0.36.0/src/lib.rs", Edition2024) }
+   0.458863970s  INFO prepare_target{force=false package_id=tor-error v0.36.0 target="tor_error"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-error-44e3a86eb53fb3a3/lib-tor_error`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.459146674s  INFO prepare_target{force=false package_id=tracing v0.1.41 target="tracing"}: cargo::core::compiler::fingerprint: fingerprint error for tracing v0.1.41/Check { test: false }/TargetInner { ..: lib_target("tracing", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.41/src/lib.rs", Edition2018) }
+   0.459150631s  INFO prepare_target{force=false package_id=tracing v0.1.41 target="tracing"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tracing-2a776af9f277050c/lib-tracing`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  26: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  27: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  28: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  29: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  30: main
+  31: __libc_start_call_main
+  32: __libc_start_main_alias_2
+  33: <unknown>
+   0.459266045s  INFO prepare_target{force=false package_id=tracing-core v0.1.33 target="tracing_core"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-core v0.1.33/Check { test: false }/TargetInner { ..: lib_target("tracing_core", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-core-0.1.33/src/lib.rs", Edition2018) }
+   0.459269852s  INFO prepare_target{force=false package_id=tracing-core v0.1.33 target="tracing_core"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tracing-core-37abcc8364a5eee8/lib-tracing_core`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  27: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  28: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  29: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  30: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  31: main
+  32: __libc_start_call_main
+  33: __libc_start_main_alias_2
+  34: <unknown>
+   0.459342006s  INFO prepare_target{force=false package_id=tor-llcrypto v0.36.0 target="tor_llcrypto"}: cargo::core::compiler::fingerprint: fingerprint error for tor-llcrypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_llcrypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-llcrypto-0.36.0/src/lib.rs", Edition2024) }
+   0.459344761s  INFO prepare_target{force=false package_id=tor-llcrypto v0.36.0 target="tor_llcrypto"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-llcrypto-79a7e8de0d81323b/lib-tor_llcrypto`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.461739245s  INFO prepare_target{force=false package_id=tor-memquota v0.36.0 target="tor_memquota"}: cargo::core::compiler::fingerprint: fingerprint error for tor-memquota v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_memquota", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-memquota-0.36.0/src/lib.rs", Edition2024) }
+   0.461747050s  INFO prepare_target{force=false package_id=tor-memquota v0.36.0 target="tor_memquota"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-memquota-ccdafbfb7b56c8b1/lib-tor_memquota`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  26: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  27: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  28: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  29: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  30: main
+  31: __libc_start_call_main
+  32: __libc_start_main_alias_2
+  33: <unknown>
+   0.462479957s  INFO prepare_target{force=false package_id=tor-config v0.36.0 target="tor_config"}: cargo::core::compiler::fingerprint: fingerprint error for tor-config v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_config", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-config-0.36.0/src/lib.rs", Edition2024) }
+   0.462489424s  INFO prepare_target{force=false package_id=tor-config v0.36.0 target="tor_config"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-config-9fc7e3dd07cf9e02/lib-tor_config`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  27: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  28: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  29: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  30: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  31: main
+  32: __libc_start_call_main
+  33: __libc_start_main_alias_2
+  34: <unknown>
+   0.463754587s  INFO prepare_target{force=false package_id=tor-rtcompat v0.36.0 target="tor_rtcompat"}: cargo::core::compiler::fingerprint: fingerprint error for tor-rtcompat v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_rtcompat", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-rtcompat-0.36.0/src/lib.rs", Edition2024) }
+   0.463763363s  INFO prepare_target{force=false package_id=tor-rtcompat v0.36.0 target="tor_rtcompat"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-rtcompat-0a93d12766b1e661/lib-tor_rtcompat`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  15: cargo::ops::cargo_compile::compile_ws
+  16: cargo::ops::cargo_compile::compile_with_exec
+  17: cargo::ops::cargo_compile::compile
+  18: cargo::commands::check::exec
+  19: <cargo::cli::Exec>::exec
+  20: cargo::main
+  21: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  22: std::rt::lang_start::<()>::{closure#0}
+  23: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  28: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  29: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  30: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  31: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  32: main
+  33: __libc_start_call_main
+  34: __libc_start_main_alias_2
+  35: <unknown>
+   0.464333169s  INFO prepare_target{force=false package_id=async-native-tls v0.5.0 target="async_native_tls"}: cargo::core::compiler::fingerprint: fingerprint error for async-native-tls v0.5.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("async_native_tls", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-native-tls-0.5.0/src/lib.rs", Edition2018) }
+   0.464340713s  INFO prepare_target{force=false package_id=async-native-tls v0.5.0 target="async_native_tls"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/async-native-tls-59e071d4ca70240b/lib-async_native_tls`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: cargo::core::compiler::compile
+  15: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  16: cargo::ops::cargo_compile::compile_ws
+  17: cargo::ops::cargo_compile::compile_with_exec
+  18: cargo::ops::cargo_compile::compile
+  19: cargo::commands::check::exec
+  20: <cargo::cli::Exec>::exec
+  21: cargo::main
+  22: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  23: std::rt::lang_start::<()>::{closure#0}
+  24: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  29: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  30: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  31: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  32: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  33: main
+  34: __libc_start_call_main
+  35: __libc_start_main_alias_2
+  36: <unknown>
+   0.464655055s  INFO prepare_target{force=false package_id=native-tls v0.2.14 target="native_tls"}: cargo::core::compiler::fingerprint: fingerprint error for native-tls v0.2.14/Check { test: false }/TargetInner { ..: lib_target("native_tls", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/native-tls-0.2.14/src/lib.rs", Edition2015) }
+   0.464662889s  INFO prepare_target{force=false package_id=native-tls v0.2.14 target="native_tls"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/native-tls-6629cd15cfb9d8b8/lib-native_tls`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: cargo::core::compiler::compile
+  15: cargo::core::compiler::compile
+  16: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  17: cargo::ops::cargo_compile::compile_ws
+  18: cargo::ops::cargo_compile::compile_with_exec
+  19: cargo::ops::cargo_compile::compile
+  20: cargo::commands::check::exec
+  21: <cargo::cli::Exec>::exec
+  22: cargo::main
+  23: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  24: std::rt::lang_start::<()>::{closure#0}
+  25: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  26: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  27: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  28: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  29: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  30: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  31: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  32: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  33: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  34: main
+  35: __libc_start_call_main
+  36: __libc_start_main_alias_2
+  37: <unknown>
+   0.467669337s  INFO prepare_target{force=false package_id=openssl v0.10.72 target="openssl"}: cargo::core::compiler::fingerprint: fingerprint error for openssl v0.10.72/Check { test: false }/TargetInner { ..: lib_target("openssl", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-0.10.72/src/lib.rs", Edition2021) }
+   0.467697619s  INFO prepare_target{force=false package_id=openssl v0.10.72 target="openssl"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/openssl-85aa94bf64761b85/lib-openssl`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: cargo::core::compiler::compile
+  15: cargo::core::compiler::compile
+  16: cargo::core::compiler::compile
+  17: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  18: cargo::ops::cargo_compile::compile_ws
+  19: cargo::ops::cargo_compile::compile_with_exec
+  20: cargo::ops::cargo_compile::compile
+  21: cargo::commands::check::exec
+  22: <cargo::cli::Exec>::exec
+  23: cargo::main
+  24: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  25: std::rt::lang_start::<()>::{closure#0}
+  26: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  27: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  28: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  29: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  30: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  31: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  32: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  33: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  34: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  35: main
+  36: __libc_start_call_main
+  37: __libc_start_main_alias_2
+  38: <unknown>
+   0.469937838s  INFO prepare_target{force=false package_id=tor-log-ratelim v0.36.0 target="tor_log_ratelim"}: cargo::core::compiler::fingerprint: fingerprint error for tor-log-ratelim v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_log_ratelim", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-log-ratelim-0.36.0/src/lib.rs", Edition2024) }
+   0.469956392s  INFO prepare_target{force=false package_id=tor-log-ratelim v0.36.0 target="tor_log_ratelim"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-log-ratelim-61510588239dbe7b/lib-tor_log_ratelim`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  27: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  28: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  29: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  30: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  31: main
+  32: __libc_start_call_main
+  33: __libc_start_main_alias_2
+  34: <unknown>
+   0.470782382s  INFO prepare_target{force=false package_id=tor-cert v0.36.0 target="tor_cert"}: cargo::core::compiler::fingerprint: fingerprint error for tor-cert v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_cert", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-cert-0.36.0/src/lib.rs", Edition2024) }
+   0.470803400s  INFO prepare_target{force=false package_id=tor-cert v0.36.0 target="tor_cert"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-cert-faa056e936835d5f/lib-tor_cert`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.471941779s  INFO prepare_target{force=false package_id=tor-checkable v0.36.0 target="tor_checkable"}: cargo::core::compiler::fingerprint: fingerprint error for tor-checkable v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_checkable", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-checkable-0.36.0/src/lib.rs", Edition2024) }
+   0.471951006s  INFO prepare_target{force=false package_id=tor-checkable v0.36.0 target="tor_checkable"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-checkable-44ebe99e2ffe655a/lib-tor_checkable`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.472606720s  INFO prepare_target{force=false package_id=tor-hscrypto v0.36.0 target="tor_hscrypto"}: cargo::core::compiler::fingerprint: fingerprint error for tor-hscrypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_hscrypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-hscrypto-0.36.0/src/lib.rs", Edition2024) }
+   0.472613883s  INFO prepare_target{force=false package_id=tor-hscrypto v0.36.0 target="tor_hscrypto"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-hscrypto-1be45d60038f701a/lib-tor_hscrypto`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.473399017s  INFO prepare_target{force=false package_id=tor-key-forge v0.36.0 target="tor_key_forge"}: cargo::core::compiler::fingerprint: fingerprint error for tor-key-forge v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_key_forge", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-key-forge-0.36.0/src/lib.rs", Edition2024) }
+   0.473405038s  INFO prepare_target{force=false package_id=tor-key-forge v0.36.0 target="tor_key_forge"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-key-forge-86c0ebbe152364d8/lib-tor_key_forge`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.474160638s  INFO prepare_target{force=false package_id=tor-units v0.36.0 target="tor_units"}: cargo::core::compiler::fingerprint: fingerprint error for tor-units v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_units", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-units-0.36.0/src/lib.rs", Edition2024) }
+   0.474167480s  INFO prepare_target{force=false package_id=tor-units v0.36.0 target="tor_units"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-units-e5cd9f71416ad76d/lib-tor_units`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.474584973s  INFO prepare_target{force=false package_id=tor-linkspec v0.36.0 target="tor_linkspec"}: cargo::core::compiler::fingerprint: fingerprint error for tor-linkspec v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_linkspec", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-linkspec-0.36.0/src/lib.rs", Edition2024) }
+   0.474589171s  INFO prepare_target{force=false package_id=tor-linkspec v0.36.0 target="tor_linkspec"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-linkspec-fd4f13da97b11656/lib-tor_linkspec`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.475306299s  INFO prepare_target{force=false package_id=tor-protover v0.36.0 target="tor_protover"}: cargo::core::compiler::fingerprint: fingerprint error for tor-protover v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_protover", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-protover-0.36.0/src/lib.rs", Edition2024) }
+   0.475312861s  INFO prepare_target{force=false package_id=tor-protover v0.36.0 target="tor_protover"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-protover-b3806e680c5f10e9/lib-tor_protover`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.475802618s  INFO prepare_target{force=false package_id=tor-keymgr v0.36.0 target="tor_keymgr"}: cargo::core::compiler::fingerprint: fingerprint error for tor-keymgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_keymgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-keymgr-0.36.0/src/lib.rs", Edition2024) }
+   0.475807487s  INFO prepare_target{force=false package_id=tor-keymgr v0.36.0 target="tor_keymgr"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-keymgr-7863e143e1b33033/lib-tor_keymgr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.476871197s  INFO prepare_target{force=false package_id=tor-config-path v0.36.0 target="tor_config_path"}: cargo::core::compiler::fingerprint: fingerprint error for tor-config-path v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_config_path", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-config-path-0.36.0/src/lib.rs", Edition2024) }
+   0.476883169s  INFO prepare_target{force=false package_id=tor-config-path v0.36.0 target="tor_config_path"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-config-path-0287966029b75b5d/lib-tor_config_path`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.477313256s  INFO prepare_target{force=false package_id=tor-persist v0.36.0 target="tor_persist"}: cargo::core::compiler::fingerprint: fingerprint error for tor-persist v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_persist", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-persist-0.36.0/src/lib.rs", Edition2024) }
+   0.477323134s  INFO prepare_target{force=false package_id=tor-persist v0.36.0 target="tor_persist"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-persist-bfb6e576ebcba4b2/lib-tor_persist`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.477996741s  INFO prepare_target{force=false package_id=tor-netdir v0.36.0 target="tor_netdir"}: cargo::core::compiler::fingerprint: fingerprint error for tor-netdir v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_netdir", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-netdir-0.36.0/src/lib.rs", Edition2024) }
+   0.478004566s  INFO prepare_target{force=false package_id=tor-netdir v0.36.0 target="tor_netdir"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-netdir-7ba5b77183e3c7e9/lib-tor_netdir`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.478826408s  INFO prepare_target{force=false package_id=tor-netdoc v0.36.0 target="tor_netdoc"}: cargo::core::compiler::fingerprint: fingerprint error for tor-netdoc v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_netdoc", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-netdoc-0.36.0/src/lib.rs", Edition2024) }
+   0.478835364s  INFO prepare_target{force=false package_id=tor-netdoc v0.36.0 target="tor_netdoc"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-netdoc-2b814244319e7c9d/lib-tor_netdoc`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.479931364s  INFO prepare_target{force=false package_id=tor-proto v0.36.0 target="tor_proto"}: cargo::core::compiler::fingerprint: fingerprint error for tor-proto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_proto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-proto-0.36.0/src/lib.rs", Edition2024) }
+   0.479938627s  INFO prepare_target{force=false package_id=tor-proto v0.36.0 target="tor_proto"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-proto-e6f977f42ab71f1d/lib-tor_proto`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.482465106s  INFO prepare_target{force=false package_id=tor-relay-crypto v0.36.0 target="tor_relay_crypto"}: cargo::core::compiler::fingerprint: fingerprint error for tor-relay-crypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_relay_crypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-relay-crypto-0.36.0/src/lib.rs", Edition2024) }
+   0.482479623s  INFO prepare_target{force=false package_id=tor-relay-crypto v0.36.0 target="tor_relay_crypto"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-relay-crypto-da31542fef0677dc/lib-tor_relay_crypto`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.483211909s  INFO prepare_target{force=false package_id=tor-rtmock v0.36.0 target="tor_rtmock"}: cargo::core::compiler::fingerprint: fingerprint error for tor-rtmock v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_rtmock", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-rtmock-0.36.0/src/lib.rs", Edition2024) }
+   0.483217600s  INFO prepare_target{force=false package_id=tor-rtmock v0.36.0 target="tor_rtmock"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-rtmock-75b8884f97f6ae1d/lib-tor_rtmock`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.483718718s  INFO prepare_target{force=false package_id=tracing-test v0.2.5 target="tracing_test"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-test v0.2.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tracing_test", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-test-0.2.5/src/lib.rs", Edition2018) }
+   0.483724008s  INFO prepare_target{force=false package_id=tracing-test v0.2.5 target="tracing_test"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tracing-test-b84e3687a911bcbb/lib-tracing_test`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.483884315s  INFO prepare_target{force=false package_id=tracing-subscriber v0.3.20 target="tracing_subscriber"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-subscriber v0.3.20/Check { test: false }/TargetInner { ..: lib_target("tracing_subscriber", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-subscriber-0.3.20/src/lib.rs", Edition2018) }
+   0.483888713s  INFO prepare_target{force=false package_id=tracing-subscriber v0.3.20 target="tracing_subscriber"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tracing-subscriber-fd221601d31e265b/lib-tracing_subscriber`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  26: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  27: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  28: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  29: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  30: main
+  31: __libc_start_call_main
+  32: __libc_start_main_alias_2
+  33: <unknown>
+   0.484212032s  INFO prepare_target{force=false package_id=thread_local v1.1.8 target="thread_local"}: cargo::core::compiler::fingerprint: fingerprint error for thread_local v1.1.8/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("thread_local", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thread_local-1.1.8/src/lib.rs", Edition2021) }
+   0.484218393s  INFO prepare_target{force=false package_id=thread_local v1.1.8 target="thread_local"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/thread_local-10368fcedf27f49c/lib-thread_local`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  27: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  28: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  29: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  30: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  31: main
+  32: __libc_start_call_main
+  33: __libc_start_main_alias_2
+  34: <unknown>
+   0.484349196s  INFO prepare_target{force=false package_id=tracing-log v0.2.0 target="tracing_log"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-log v0.2.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tracing_log", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-log-0.2.0/src/lib.rs", Edition2018) }
+   0.484354936s  INFO prepare_target{force=false package_id=tracing-log v0.2.0 target="tracing_log"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tracing-log-1a7a6ec611d4e416/lib-tracing_log`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  27: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  28: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  29: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  30: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  31: main
+  32: __libc_start_call_main
+  33: __libc_start_main_alias_2
+  34: <unknown>
+   0.484513139s  INFO prepare_target{force=false package_id=tor-socksproto v0.36.0 target="tor_socksproto"}: cargo::core::compiler::fingerprint: fingerprint error for tor-socksproto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_socksproto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-socksproto-0.36.0/src/lib.rs", Edition2024) }
+   0.484517998s  INFO prepare_target{force=false package_id=tor-socksproto v0.36.0 target="tor_socksproto"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-socksproto-dabd7c8ef38c03f2/lib-tor_socksproto`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.485844875s  INFO prepare_target{force=false package_id=tor-circmgr v0.36.0 target="tor_circmgr"}: cargo::core::compiler::fingerprint: fingerprint error for tor-circmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_circmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-circmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.485855224s  INFO prepare_target{force=false package_id=tor-circmgr v0.36.0 target="tor_circmgr"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-circmgr-59f42eb5601aceed/lib-tor_circmgr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.488277901s  INFO prepare_target{force=false package_id=tor-dircommon v0.36.0 target="tor_dircommon"}: cargo::core::compiler::fingerprint: fingerprint error for tor-dircommon v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dircommon", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dircommon-0.36.0/src/lib.rs", Edition2024) }
+   0.488295403s  INFO prepare_target{force=false package_id=tor-dircommon v0.36.0 target="tor_dircommon"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-dircommon-05da549fd6719777/lib-tor_dircommon`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.489584851s  INFO prepare_target{force=false package_id=tor-guardmgr v0.36.0 target="tor_guardmgr"}: cargo::core::compiler::fingerprint: fingerprint error for tor-guardmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_guardmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-guardmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.489600460s  INFO prepare_target{force=false package_id=tor-guardmgr v0.36.0 target="tor_guardmgr"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-guardmgr-59c76a126b918266/lib-tor_guardmgr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.490847900s  INFO prepare_target{force=false package_id=tor-relay-selection v0.36.0 target="tor_relay_selection"}: cargo::core::compiler::fingerprint: fingerprint error for tor-relay-selection v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_relay_selection", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-relay-selection-0.36.0/src/lib.rs", Edition2024) }
+   0.490856847s  INFO prepare_target{force=false package_id=tor-relay-selection v0.36.0 target="tor_relay_selection"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-relay-selection-96cd5fb46b237527/lib-tor_relay_selection`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  24: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  25: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  26: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  27: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  28: main
+  29: __libc_start_call_main
+  30: __libc_start_main_alias_2
+  31: <unknown>
+   0.491502703s  INFO prepare_target{force=false package_id=tor-dirmgr v0.36.0 target="tor_dirmgr"}: cargo::core::compiler::fingerprint: fingerprint error for tor-dirmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dirmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dirmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.491508694s  INFO prepare_target{force=false package_id=tor-dirmgr v0.36.0 target="tor_dirmgr"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-dirmgr-b28f7fda7fc1d309/lib-tor_dirmgr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.493221255s  INFO prepare_target{force=false package_id=tor-consdiff v0.36.0 target="tor_consdiff"}: cargo::core::compiler::fingerprint: fingerprint error for tor-consdiff v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_consdiff", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-consdiff-0.36.0/src/lib.rs", Edition2024) }
+   0.493239389s  INFO prepare_target{force=false package_id=tor-consdiff v0.36.0 target="tor_consdiff"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-consdiff-8b103ab782d3c514/lib-tor_consdiff`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.494042867s  INFO prepare_target{force=false package_id=tor-dirclient v0.36.0 target="tor_dirclient"}: cargo::core::compiler::fingerprint: fingerprint error for tor-dirclient v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dirclient", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dirclient-0.36.0/src/lib.rs", Edition2024) }
+   0.494051252s  INFO prepare_target{force=false package_id=tor-dirclient v0.36.0 target="tor_dirclient"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-dirclient-1b98df4e7c46e045/lib-tor_dirclient`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.495694305s  INFO prepare_target{force=false package_id=tor-hsclient v0.36.0 target="tor_hsclient"}: cargo::core::compiler::fingerprint: fingerprint error for tor-hsclient v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_hsclient", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-hsclient-0.36.0/src/lib.rs", Edition2024) }
+   0.495704965s  INFO prepare_target{force=false package_id=tor-hsclient v0.36.0 target="tor_hsclient"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-hsclient-090472b56b01c590/lib-tor_hsclient`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.497101641s  INFO prepare_target{force=false package_id=tor-ptmgr v0.36.0 target="tor_ptmgr"}: cargo::core::compiler::fingerprint: fingerprint error for tor-ptmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_ptmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-ptmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.497114174s  INFO prepare_target{force=false package_id=tor-ptmgr v0.36.0 target="tor_ptmgr"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-ptmgr-aab8abdeade64765/lib-tor_ptmgr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.498469805s  INFO prepare_target{force=false package_id=hickory-proto v0.25.2 target="hickory_proto"}: cargo::core::compiler::fingerprint: fingerprint error for hickory-proto v0.25.2/Check { test: false }/TargetInner { ..: lib_target("hickory_proto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hickory-proto-0.25.2/src/lib.rs", Edition2021) }
+   0.498481456s  INFO prepare_target{force=false package_id=hickory-proto v0.25.2 target="hickory_proto"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/hickory-proto-54dfcdad77834ad7/lib-hickory_proto`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  17: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  18: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  19: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  20: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  25: main
+  26: __libc_start_call_main
+  27: __libc_start_main_alias_2
+  28: <unknown>
+   0.499304711s  INFO prepare_target{force=false package_id=secmem-proc v0.3.7 target="secmem_proc"}: cargo::core::compiler::fingerprint: fingerprint error for secmem-proc v0.3.7/Check { test: false }/TargetInner { ..: lib_target("secmem_proc", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/secmem-proc-0.3.7/src/lib.rs", Edition2021) }
+   0.499312676s  INFO prepare_target{force=false package_id=secmem-proc v0.3.7 target="secmem_proc"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/secmem-proc-ae7f5edb3c2803a0/lib-secmem_proc`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  17: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  18: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  19: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  20: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  25: main
+  26: __libc_start_call_main
+  27: __libc_start_main_alias_2
+  28: <unknown>
+   0.499520801s  INFO prepare_target{force=false package_id=rustix-linux-procfs v0.1.1 target="rustix_linux_procfs"}: cargo::core::compiler::fingerprint: fingerprint error for rustix-linux-procfs v0.1.1/Check { test: false }/TargetInner { ..: lib_target("rustix_linux_procfs", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustix-linux-procfs-0.1.1/src/lib.rs", Edition2021) }
+   0.499526632s  INFO prepare_target{force=false package_id=rustix-linux-procfs v0.1.1 target="rustix_linux_procfs"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/rustix-linux-procfs-ce6f901b128eef52/lib-rustix_linux_procfs`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.499656031s  INFO prepare_target{force=false package_id=tracing-appender v0.2.3 target="tracing_appender"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-appender v0.2.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tracing_appender", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-appender-0.2.3/src/lib.rs", Edition2018) }
+   0.499662053s  INFO prepare_target{force=false package_id=tracing-appender v0.2.3 target="tracing_appender"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tracing-appender-4dcdb0973cc6cf8b/lib-tracing_appender`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  17: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  18: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  19: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  20: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  25: main
+  26: __libc_start_call_main
+  27: __libc_start_main_alias_2
+  28: <unknown>
+   0.499902498s  INFO prepare_target{force=false package_id=flutter_rust_bridge v2.11.1 target="flutter_rust_bridge"}: cargo::core::compiler::fingerprint: fingerprint error for flutter_rust_bridge v2.11.1/Check { test: false }/TargetInner { ..: lib_target("flutter_rust_bridge", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/flutter_rust_bridge-2.11.1/src/lib.rs", Edition2021) }
+   0.499906836s  INFO prepare_target{force=false package_id=flutter_rust_bridge v2.11.1 target="flutter_rust_bridge"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/flutter_rust_bridge-588ec00583450863/lib-flutter_rust_bridge`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  16: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  17: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  18: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  19: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  20: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  21: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  22: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  23: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  24: main
+  25: __libc_start_call_main
+  26: __libc_start_main_alias_2
+  27: <unknown>
+   0.500262154s  INFO prepare_target{force=false package_id=allo-isolate v0.1.27 target="allo_isolate"}: cargo::core::compiler::fingerprint: fingerprint error for allo-isolate v0.1.27/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("allo_isolate", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/lib.rs", Edition2021) }
+   0.500266742s  INFO prepare_target{force=false package_id=allo-isolate v0.1.27 target="allo_isolate"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/allo-isolate-3fd07e81c73a2b29/lib-allo_isolate`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  17: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  18: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  19: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  20: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  25: main
+  26: __libc_start_call_main
+  27: __libc_start_main_alias_2
+  28: <unknown>
+   0.500372148s  INFO prepare_target{force=false package_id=backtrace v0.3.75 target="backtrace"}: cargo::core::compiler::fingerprint: fingerprint error for backtrace v0.3.75/Check { test: false }/TargetInner { ..: lib_target("backtrace", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/backtrace-0.3.75/src/lib.rs", Edition2021) }
+   0.500375654s  INFO prepare_target{force=false package_id=backtrace v0.3.75 target="backtrace"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/backtrace-3046d90ef1617adf/lib-backtrace`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.500547092s  INFO prepare_target{force=false package_id=object v0.36.7 target="object"}: cargo::core::compiler::fingerprint: fingerprint error for object v0.36.7/Check { test: false }/TargetInner { ..: lib_target("object", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/object-0.36.7/src/lib.rs", Edition2018) }
+   0.500550608s  INFO prepare_target{force=false package_id=object v0.36.7 target="object"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/object-1a0f0ed18f8ce74c/lib-object`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.500692561s  INFO prepare_target{force=false package_id=object v0.36.7 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint error for object v0.36.7/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/object-0.36.7/build.rs", Edition2018) }
+   0.500696518s  INFO prepare_target{force=false package_id=object v0.36.7 target="build-script-build"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/object-cc48047827a31f8e/run-build-script-build-script-build`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::custom_build::build_work
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  25: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  26: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  27: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  28: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  29: main
+  30: __libc_start_call_main
+  31: __libc_start_main_alias_2
+  32: <unknown>
+   0.500783569s  INFO prepare_target{force=false package_id=dart-sys v4.1.5 target="dart_sys"}: cargo::core::compiler::fingerprint: fingerprint error for dart-sys v4.1.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("dart_sys", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/src/lib.rs", Edition2021) }
+   0.500787006s  INFO prepare_target{force=false package_id=dart-sys v4.1.5 target="dart_sys"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/dart-sys-1f422946721ba5b9/lib-dart_sys`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  17: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  18: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  19: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  20: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  25: main
+  26: __libc_start_call_main
+  27: __libc_start_main_alias_2
+  28: <unknown>
+   0.500926334s  INFO prepare_target{force=false package_id=dart-sys v4.1.5 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint error for dart-sys v4.1.5/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/build.rs", Edition2021) }
+   0.500936302s  INFO prepare_target{force=false package_id=dart-sys v4.1.5 target="build-script-build"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/dart-sys-c37be52d28d7c120/run-build-script-build-script-build`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::custom_build::build_work
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  23: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  24: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  25: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  26: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  27: main
+  28: __libc_start_call_main
+  29: __libc_start_main_alias_2
+  30: <unknown>
+   0.501090207s  INFO prepare_target{force=false package_id=flutter_rust_bridge v2.11.1 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint error for flutter_rust_bridge v2.11.1/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/flutter_rust_bridge-2.11.1/build.rs", Edition2021) }
+   0.501094024s  INFO prepare_target{force=false package_id=flutter_rust_bridge v2.11.1 target="build-script-build"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/flutter_rust_bridge-b6d676b1359fb6df/run-build-script-build-script-build`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::custom_build::build_work
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  18: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  19: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  20: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  21: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  22: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  23: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  24: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  25: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  26: main
+  27: __libc_start_call_main
+  28: __libc_start_main_alias_2
+  29: <unknown>
+   0.501345320s  INFO prepare_target{force=false package_id=rust_lib_tor v0.2.0 (/home/icota/Code/tor/rust) target="rust_lib_tor"}: cargo::core::compiler::fingerprint: fingerprint error for rust_lib_tor v0.2.0 (/home/icota/Code/tor/rust)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("rust_lib_tor", ["cdylib", "staticlib", "rlib"], "/home/icota/Code/tor/rust/src/lib.rs", Edition2021) }
+   0.501358895s  INFO prepare_target{force=false package_id=rust_lib_tor v0.2.0 (/home/icota/Code/tor/rust) target="rust_lib_tor"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/rust_lib_tor-fe8878b6792e3a6b/test-lib-rust_lib_tor`
 
 Caused by:
     No such file or directory (os error 2)
@@ -193,44 +2960,36 @@ Stack backtrace:
   24: __libc_start_call_main
   25: __libc_start_main_alias_2
   26: <unknown>
-    Checking tor-config v0.36.0
-    Checking tor-persist v0.36.0
-    Checking tor-rtmock v0.36.0
-   Compiling tor v0.1.1 (/home/icota/Code/tor/rust)
-error: failed to run custom build command for `tor v0.1.1 (/home/icota/Code/tor/rust)`
+   Compiling portable-atomic v1.11.1
+error: failed to run custom build command for `portable-atomic v1.11.1`
 note: To improve backtraces for build dependencies, set the CARGO_PROFILE_DEV_BUILD_OVERRIDE_DEBUG=true environment variable to enable debug information generation.
 
 Caused by:
-  process didn't exit successfully: `/home/icota/Code/tor/rust/target/debug/build/tor-dd82e77d90cfe758/build-script-build` (exit status: 127)
+  process didn't exit successfully: `/home/icota/Code/tor/rust/target/debug/build/portable-atomic-2b0a155430aeaf9f/build-script-build` (exit status: 127)
   --- stderr
-  /home/icota/Code/tor/rust/target/debug/build/tor-dd82e77d90cfe758/build-script-build: symbol lookup error: /nix/store/daamdpmaz2vjvna55ccrc30qw3qb8h6d-glibc-2.40-66/lib/libc.so.6: undefined symbol: __nptl_change_stack_perm, version GLIBC_PRIVATE
+  /home/icota/Code/tor/rust/target/debug/build/portable-atomic-2b0a155430aeaf9f/build-script-build: symbol lookup error: /nix/store/daamdpmaz2vjvna55ccrc30qw3qb8h6d-glibc-2.40-66/lib/libc.so.6: undefined symbol: __nptl_change_stack_perm, version GLIBC_PRIVATE
 warning: build failed, waiting for other jobs to finish...
-    Checking tor-memquota v0.36.0
-    Checking tor-llcrypto v0.36.0
-    Checking tor-units v0.36.0
-    Checking tor-bytes v0.36.0
-    Checking tor-checkable v0.36.0
-    Checking tor-consdiff v0.36.0
-    Checking tor-cert v0.36.0
-    Checking tor-protover v0.36.0
-    Checking tor-socksproto v0.36.0
-    Checking tor-linkspec v0.36.0
-    Checking tor-key-forge v0.36.0
-    Checking tor-hscrypto v0.36.0
-    Checking tor-cell v0.36.0
-    Checking tor-keymgr v0.36.0
-    Checking tor-relay-crypto v0.36.0
-    Checking tor-netdoc v0.36.0
-    Checking tor-proto v0.36.0
-    Checking tor-netdir v0.36.0
-    Checking tor-dircommon v0.36.0
-    Checking tor-relay-selection v0.36.0
-    Checking tor-chanmgr v0.36.0
-    Checking tor-guardmgr v0.36.0
-    Checking tor-ptmgr v0.36.0
-    Checking tor-circmgr v0.36.0
-    Checking tor-dirclient v0.36.0
-    Checking tor-hsclient v0.36.0
-    Checking tor-dirmgr v0.36.0
-    Checking arti-client v0.36.0
-    Checking arti v1.7.0
+   Compiling object v0.36.7
+   Compiling dart-sys v4.1.5
+   Compiling flutter_rust_bridge v2.11.1
+error: failed to run custom build command for `object v0.36.7`
+note: To improve backtraces for build dependencies, set the CARGO_PROFILE_DEV_BUILD_OVERRIDE_DEBUG=true environment variable to enable debug information generation.
+
+Caused by:
+  process didn't exit successfully: `/home/icota/Code/tor/rust/target/debug/build/object-5cfb9b4238f78b53/build-script-build` (exit status: 127)
+  --- stderr
+  /home/icota/Code/tor/rust/target/debug/build/object-5cfb9b4238f78b53/build-script-build: symbol lookup error: /nix/store/daamdpmaz2vjvna55ccrc30qw3qb8h6d-glibc-2.40-66/lib/libc.so.6: undefined symbol: __nptl_change_stack_perm, version GLIBC_PRIVATE
+error: failed to run custom build command for `dart-sys v4.1.5`
+note: To improve backtraces for build dependencies, set the CARGO_PROFILE_DEV_BUILD_OVERRIDE_DEBUG=true environment variable to enable debug information generation.
+
+Caused by:
+  process didn't exit successfully: `/home/icota/Code/tor/rust/target/debug/build/dart-sys-9f8efd17270748d6/build-script-build` (exit status: 127)
+  --- stderr
+  /home/icota/Code/tor/rust/target/debug/build/dart-sys-9f8efd17270748d6/build-script-build: symbol lookup error: /nix/store/daamdpmaz2vjvna55ccrc30qw3qb8h6d-glibc-2.40-66/lib/libc.so.6: undefined symbol: __nptl_change_stack_perm, version GLIBC_PRIVATE
+error: failed to run custom build command for `flutter_rust_bridge v2.11.1`
+note: To improve backtraces for build dependencies, set the CARGO_PROFILE_DEV_BUILD_OVERRIDE_DEBUG=true environment variable to enable debug information generation.
+
+Caused by:
+  process didn't exit successfully: `/home/icota/Code/tor/rust/target/debug/build/flutter_rust_bridge-0575f5bfbcb58cb9/build-script-build` (exit status: 127)
+  --- stderr
+  /home/icota/Code/tor/rust/target/debug/build/flutter_rust_bridge-0575f5bfbcb58cb9/build-script-build: symbol lookup error: /nix/store/daamdpmaz2vjvna55ccrc30qw3qb8h6d-glibc-2.40-66/lib/libc.so.6: undefined symbol: __nptl_change_stack_perm, version GLIBC_PRIVATE

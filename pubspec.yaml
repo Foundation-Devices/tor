@@ -17,8 +17,6 @@ dependencies:
   path_provider: ^2.1.5
   flutter_rust_bridge: 2.11.1
   freezed_annotation: ^2.4.1
-  rust_lib_tor:
-    path: rust_builder
 
 dev_dependencies:
   flutter_test:
@@ -27,5 +25,16 @@ dev_dependencies:
   freezed: ^2.4.5
   build_runner: ^2.4.7
 
-# Note: The actual FFI plugin is rust_lib_tor in rust_builder/
-# This package is a pure Dart wrapper around rust_lib_tor
+flutter:
+  plugin:
+    platforms:
+      android:
+        ffiPlugin: true
+      ios:
+        ffiPlugin: true
+      linux:
+        ffiPlugin: true
+      macos:
+        ffiPlugin: true
+      windows:
+        ffiPlugin: true

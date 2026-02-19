@@ -9,4 +9,4 @@ analyzer:
   exclude:
     - 'lib/generated*'
     - 'lib/src/rust/**'
-    - 'rust_builder/cargokit/**'
+    - 'cargokit/**'

@@ -3,7 +3,7 @@ Upstream-Name: tor
 Upstream-Contact: Igor Cota <igor@foundationdevices.com>
 Source: https://github.com/Foundation-Devices/tor
 
-Files: rust_builder/cargokit/*
+Files: cargokit/*
 Copyright: 2022 Matej Knopp
 License: MIT
 
@@ -48,5 +48,9 @@ Copyright: 2024 Foundation Devices Inc.
 License: MIT
 
 Files: flake.lock
+Copyright: 2024 Foundation Devices Inc.
+License: MIT
+
+Files: android/.gradle/*
 Copyright: 2024 Foundation Devices Inc.
 License: MIT
