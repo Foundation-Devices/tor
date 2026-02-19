@@ -56,6 +56,10 @@
               cargo-ndk
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+              # C++ toolchain for Flutter Linux builds
+              gcc
+              glibc
+
               # Linux desktop build deps (GTK runner)
               gtk3
               pcre2
@@ -75,6 +79,12 @@
 
           shellHook = ''
             export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+            # Use GCC for compiling C/C++ code (Flutter/CMake)
+            export CC="${pkgs.gcc}/bin/gcc"
+            export CXX="${pkgs.gcc}/bin/g++"
+            # Ensure linker can find C runtime and C++ libraries
+            export LIBRARY_PATH="${pkgs.glibc}/lib:${pkgs.gcc.cc.lib}/lib:$LIBRARY_PATH"
+            export LD_LIBRARY_PATH="${pkgs.gcc.cc.lib}/lib:$LD_LIBRARY_PATH"
           '';
         };
       }
