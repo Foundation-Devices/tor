@@ -1,0 +1,236 @@
+   0.228700481s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint: fingerprint error for tor v0.1.1 (/home/icota/Code/tor/rust)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tor", ["cdylib", "staticlib"], "/home/icota/Code/tor/rust/src/lib.rs", Edition2021) }
+   0.228730918s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-43238dc03e395752/lib-tor`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  15: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  16: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  17: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  23: main
+  24: __libc_start_call_main
+  25: __libc_start_main_alias_2
+  26: <unknown>
+   0.235737656s  INFO prepare_target{force=false package_id=arti v1.7.0 target="arti"}: cargo::core::compiler::fingerprint: fingerprint dirty for arti v1.7.0/Check { test: false }/TargetInner { ..: lib_target("arti", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/arti-1.7.0/src/lib.rs", Edition2024) }
+   0.235770757s  INFO prepare_target{force=false package_id=arti v1.7.0 target="arti"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.237054693s  INFO prepare_target{force=false package_id=arti-client v0.36.0 target="arti_client"}: cargo::core::compiler::fingerprint: fingerprint dirty for arti-client v0.36.0/Check { test: false }/TargetInner { ..: lib_target("arti_client", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/arti-client-0.36.0/src/lib.rs", Edition2024) }
+   0.237062838s  INFO prepare_target{force=false package_id=arti-client v0.36.0 target="arti_client"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.241020130s  INFO prepare_target{force=false package_id=tor-chanmgr v0.36.0 target="tor_chanmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-chanmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_chanmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-chanmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.241032163s  INFO prepare_target{force=false package_id=tor-chanmgr v0.36.0 target="tor_chanmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.242002586s  INFO prepare_target{force=false package_id=tor-cell v0.36.0 target="tor_cell"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-cell v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_cell", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-cell-0.36.0/src/lib.rs", Edition2024) }
+   0.242010100s  INFO prepare_target{force=false package_id=tor-cell v0.36.0 target="tor_cell"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.242706844s  INFO prepare_target{force=false package_id=tor-bytes v0.36.0 target="tor_bytes"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-bytes v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_bytes", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-bytes-0.36.0/src/lib.rs", Edition2024) }
+   0.242713637s  INFO prepare_target{force=false package_id=tor-bytes v0.36.0 target="tor_bytes"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.243485681s  INFO prepare_target{force=false package_id=tor-llcrypto v0.36.0 target="tor_llcrypto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-llcrypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_llcrypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-llcrypto-0.36.0/src/lib.rs", Edition2024) }
+   0.243495490s  INFO prepare_target{force=false package_id=tor-llcrypto v0.36.0 target="tor_llcrypto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.245529419s  INFO prepare_target{force=false package_id=tor-memquota v0.36.0 target="tor_memquota"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-memquota v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_memquota", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-memquota-0.36.0/src/lib.rs", Edition2024) }
+   0.245543865s  INFO prepare_target{force=false package_id=tor-memquota v0.36.0 target="tor_memquota"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.246530479s  INFO prepare_target{force=false package_id=tor-config v0.36.0 target="tor_config"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-config v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_config", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-config-0.36.0/src/lib.rs", Edition2024) }
+   0.246544034s  INFO prepare_target{force=false package_id=tor-config v0.36.0 target="tor_config"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.251037483s  INFO prepare_target{force=false package_id=tor-cert v0.36.0 target="tor_cert"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-cert v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_cert", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-cert-0.36.0/src/lib.rs", Edition2024) }
+   0.251052661s  INFO prepare_target{force=false package_id=tor-cert v0.36.0 target="tor_cert"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.251798737s  INFO prepare_target{force=false package_id=tor-checkable v0.36.0 target="tor_checkable"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-checkable v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_checkable", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-checkable-0.36.0/src/lib.rs", Edition2024) }
+   0.251805329s  INFO prepare_target{force=false package_id=tor-checkable v0.36.0 target="tor_checkable"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.252232984s  INFO prepare_target{force=false package_id=tor-hscrypto v0.36.0 target="tor_hscrypto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-hscrypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_hscrypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-hscrypto-0.36.0/src/lib.rs", Edition2024) }
+   0.252239115s  INFO prepare_target{force=false package_id=tor-hscrypto v0.36.0 target="tor_hscrypto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.252880126s  INFO prepare_target{force=false package_id=tor-key-forge v0.36.0 target="tor_key_forge"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-key-forge v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_key_forge", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-key-forge-0.36.0/src/lib.rs", Edition2024) }
+   0.252885917s  INFO prepare_target{force=false package_id=tor-key-forge v0.36.0 target="tor_key_forge"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.253475723s  INFO prepare_target{force=false package_id=tor-units v0.36.0 target="tor_units"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-units v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_units", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-units-0.36.0/src/lib.rs", Edition2024) }
+   0.253481874s  INFO prepare_target{force=false package_id=tor-units v0.36.0 target="tor_units"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.253839469s  INFO prepare_target{force=false package_id=tor-linkspec v0.36.0 target="tor_linkspec"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-linkspec v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_linkspec", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-linkspec-0.36.0/src/lib.rs", Edition2024) }
+   0.253844618s  INFO prepare_target{force=false package_id=tor-linkspec v0.36.0 target="tor_linkspec"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.254550680s  INFO prepare_target{force=false package_id=tor-protover v0.36.0 target="tor_protover"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-protover v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_protover", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-protover-0.36.0/src/lib.rs", Edition2024) }
+   0.254556421s  INFO prepare_target{force=false package_id=tor-protover v0.36.0 target="tor_protover"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.255029339s  INFO prepare_target{force=false package_id=tor-keymgr v0.36.0 target="tor_keymgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-keymgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_keymgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-keymgr-0.36.0/src/lib.rs", Edition2024) }
+   0.255034629s  INFO prepare_target{force=false package_id=tor-keymgr v0.36.0 target="tor_keymgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.255816993s  INFO prepare_target{force=false package_id=tor-persist v0.36.0 target="tor_persist"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-persist v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_persist", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-persist-0.36.0/src/lib.rs", Edition2024) }
+   0.255822763s  INFO prepare_target{force=false package_id=tor-persist v0.36.0 target="tor_persist"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.256353069s  INFO prepare_target{force=false package_id=tor-netdir v0.36.0 target="tor_netdir"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-netdir v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_netdir", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-netdir-0.36.0/src/lib.rs", Edition2024) }
+   0.256358429s  INFO prepare_target{force=false package_id=tor-netdir v0.36.0 target="tor_netdir"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.257074729s  INFO prepare_target{force=false package_id=tor-netdoc v0.36.0 target="tor_netdoc"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-netdoc v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_netdoc", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-netdoc-0.36.0/src/lib.rs", Edition2024) }
+   0.257080119s  INFO prepare_target{force=false package_id=tor-netdoc v0.36.0 target="tor_netdoc"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.257981023s  INFO prepare_target{force=false package_id=tor-proto v0.36.0 target="tor_proto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-proto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_proto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-proto-0.36.0/src/lib.rs", Edition2024) }
+   0.257986844s  INFO prepare_target{force=false package_id=tor-proto v0.36.0 target="tor_proto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.259830520s  INFO prepare_target{force=false package_id=tor-relay-crypto v0.36.0 target="tor_relay_crypto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-relay-crypto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_relay_crypto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-relay-crypto-0.36.0/src/lib.rs", Edition2024) }
+   0.259837944s  INFO prepare_target{force=false package_id=tor-relay-crypto v0.36.0 target="tor_relay_crypto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.260487019s  INFO prepare_target{force=false package_id=tor-rtmock v0.36.0 target="tor_rtmock"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-rtmock v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_rtmock", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-rtmock-0.36.0/src/lib.rs", Edition2024) }
+   0.260493662s  INFO prepare_target{force=false package_id=tor-rtmock v0.36.0 target="tor_rtmock"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.261098365s  INFO prepare_target{force=false package_id=tor-socksproto v0.36.0 target="tor_socksproto"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-socksproto v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_socksproto", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-socksproto-0.36.0/src/lib.rs", Edition2024) }
+   0.261104196s  INFO prepare_target{force=false package_id=tor-socksproto v0.36.0 target="tor_socksproto"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.261673324s  INFO prepare_target{force=false package_id=tor-circmgr v0.36.0 target="tor_circmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-circmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_circmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-circmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.261679104s  INFO prepare_target{force=false package_id=tor-circmgr v0.36.0 target="tor_circmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.262628638s  INFO prepare_target{force=false package_id=tor-dircommon v0.36.0 target="tor_dircommon"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-dircommon v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dircommon", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dircommon-0.36.0/src/lib.rs", Edition2024) }
+   0.262634670s  INFO prepare_target{force=false package_id=tor-dircommon v0.36.0 target="tor_dircommon"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.263268087s  INFO prepare_target{force=false package_id=tor-guardmgr v0.36.0 target="tor_guardmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-guardmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_guardmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-guardmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.263274128s  INFO prepare_target{force=false package_id=tor-guardmgr v0.36.0 target="tor_guardmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.264154544s  INFO prepare_target{force=false package_id=tor-relay-selection v0.36.0 target="tor_relay_selection"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-relay-selection v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_relay_selection", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-relay-selection-0.36.0/src/lib.rs", Edition2024) }
+   0.264160295s  INFO prepare_target{force=false package_id=tor-relay-selection v0.36.0 target="tor_relay_selection"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.264741094s  INFO prepare_target{force=false package_id=tor-dirmgr v0.36.0 target="tor_dirmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-dirmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dirmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dirmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.264746654s  INFO prepare_target{force=false package_id=tor-dirmgr v0.36.0 target="tor_dirmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.266017034s  INFO prepare_target{force=false package_id=tor-consdiff v0.36.0 target="tor_consdiff"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-consdiff v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_consdiff", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-consdiff-0.36.0/src/lib.rs", Edition2024) }
+   0.266023396s  INFO prepare_target{force=false package_id=tor-consdiff v0.36.0 target="tor_consdiff"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.266508377s  INFO prepare_target{force=false package_id=tor-dirclient v0.36.0 target="tor_dirclient"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-dirclient v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_dirclient", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-dirclient-0.36.0/src/lib.rs", Edition2024) }
+   0.266513787s  INFO prepare_target{force=false package_id=tor-dirclient v0.36.0 target="tor_dirclient"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.267824522s  INFO prepare_target{force=false package_id=tor-hsclient v0.36.0 target="tor_hsclient"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-hsclient v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_hsclient", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-hsclient-0.36.0/src/lib.rs", Edition2024) }
+   0.267830694s  INFO prepare_target{force=false package_id=tor-hsclient v0.36.0 target="tor_hsclient"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.268693778s  INFO prepare_target{force=false package_id=tor-ptmgr v0.36.0 target="tor_ptmgr"}: cargo::core::compiler::fingerprint: fingerprint dirty for tor-ptmgr v0.36.0/Check { test: false }/TargetInner { ..: lib_target("tor_ptmgr", ["lib"], "/home/icota/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tor-ptmgr-0.36.0/src/lib.rs", Edition2024) }
+   0.268699047s  INFO prepare_target{force=false package_id=tor-ptmgr v0.36.0 target="tor_ptmgr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.269654723s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint error for tor v0.1.1 (/home/icota/Code/tor/rust)/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/icota/Code/tor/rust/build.rs", Edition2021) }
+   0.269660103s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="build-script-build"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-34f33e628f83d9a5/run-build-script-build-script-build`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::custom_build::build_work
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  17: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  18: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  19: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  20: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  21: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  22: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  23: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  24: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  25: main
+  26: __libc_start_call_main
+  27: __libc_start_main_alias_2
+  28: <unknown>
+   0.270484885s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint: fingerprint error for tor v0.1.1 (/home/icota/Code/tor/rust)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("tor", ["cdylib", "staticlib"], "/home/icota/Code/tor/rust/src/lib.rs", Edition2021) }
+   0.270491618s  INFO prepare_target{force=false package_id=tor v0.1.1 (/home/icota/Code/tor/rust) target="tor"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/icota/Code/tor/rust/target/debug/.fingerprint/tor-ca8d033f4493af77/test-lib-tor`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/core/src/ops/function.rs:284:13
+  15: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  16: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  17: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:168:24
+  19: std::panicking::try::do_call
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:589:40
+  20: std::panicking::try
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/17067e9ac6d7ecb70e50f92c1944e545188d2359/library/std/src/rt.rs:164:5
+  23: main
+  24: __libc_start_call_main
+  25: __libc_start_main_alias_2
+  26: <unknown>
+    Checking tor-config v0.36.0
+    Checking tor-persist v0.36.0
+    Checking tor-rtmock v0.36.0
+   Compiling tor v0.1.1 (/home/icota/Code/tor/rust)
+error: failed to run custom build command for `tor v0.1.1 (/home/icota/Code/tor/rust)`
+note: To improve backtraces for build dependencies, set the CARGO_PROFILE_DEV_BUILD_OVERRIDE_DEBUG=true environment variable to enable debug information generation.
+
+Caused by:
+  process didn't exit successfully: `/home/icota/Code/tor/rust/target/debug/build/tor-dd82e77d90cfe758/build-script-build` (exit status: 127)
+  --- stderr
+  /home/icota/Code/tor/rust/target/debug/build/tor-dd82e77d90cfe758/build-script-build: symbol lookup error: /nix/store/daamdpmaz2vjvna55ccrc30qw3qb8h6d-glibc-2.40-66/lib/libc.so.6: undefined symbol: __nptl_change_stack_perm, version GLIBC_PRIVATE
+warning: build failed, waiting for other jobs to finish...
+    Checking tor-memquota v0.36.0
+    Checking tor-llcrypto v0.36.0
+    Checking tor-units v0.36.0
+    Checking tor-bytes v0.36.0
+    Checking tor-checkable v0.36.0
+    Checking tor-consdiff v0.36.0
+    Checking tor-cert v0.36.0
+    Checking tor-protover v0.36.0
+    Checking tor-socksproto v0.36.0
+    Checking tor-linkspec v0.36.0
+    Checking tor-key-forge v0.36.0
+    Checking tor-hscrypto v0.36.0
+    Checking tor-cell v0.36.0
+    Checking tor-keymgr v0.36.0
+    Checking tor-relay-crypto v0.36.0
+    Checking tor-netdoc v0.36.0
+    Checking tor-proto v0.36.0
+    Checking tor-netdir v0.36.0
+    Checking tor-dircommon v0.36.0
+    Checking tor-relay-selection v0.36.0
+    Checking tor-chanmgr v0.36.0
+    Checking tor-guardmgr v0.36.0
+    Checking tor-ptmgr v0.36.0
+    Checking tor-circmgr v0.36.0
+    Checking tor-dirclient v0.36.0
+    Checking tor-hsclient v0.36.0
+    Checking tor-dirmgr v0.36.0
+    Checking arti-client v0.36.0
+    Checking arti v1.7.0

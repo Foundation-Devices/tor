@@ -2,5 +2,4 @@
 //
 // SPDX-License-Identifier: MIT
 
-pub mod api;
-mod frb_generated;
+pub mod tor;
