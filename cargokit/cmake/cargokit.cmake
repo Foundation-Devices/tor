@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
-#
-# SPDX-License-Identifier: MIT
-
 SET(cargokit_cmake_root "${CMAKE_CURRENT_LIST_DIR}/..")
 
 # Workaround for https://github.com/dart-lang/pub/issues/4010
@@ -9,7 +5,7 @@ get_filename_component(cargokit_cmake_root "${cargokit_cmake_root}" REALPATH)
 
 if(WIN32)
     # REALPATH does not properly resolve symlinks on windows :-/
-    execute_process(COMMAND powershell -File "${CMAKE_CURRENT_LIST_DIR}/resolve_symlinks.ps1" "${cargokit_cmake_root}" OUTPUT_VARIABLE cargokit_cmake_root OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_LIST_DIR}/resolve_symlinks.ps1" "${cargokit_cmake_root}" OUTPUT_VARIABLE cargokit_cmake_root OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
 # Arguments
@@ -54,6 +50,7 @@ function(apply_cargokit target manifest_dir lib_name any_symbol_name)
     else()
         set(SCRIPT_EXTENSION ".sh")
         set(IMPORT_LIB_EXTENSION "")
+        execute_process(COMMAND chmod +x "${cargokit_cmake_root}/run_build_tool${SCRIPT_EXTENSION}")
     endif()
 
     # Using generators in custom command is only supported in CMake 3.20+
@@ -78,6 +75,7 @@ function(apply_cargokit target manifest_dir lib_name any_symbol_name)
             VERBATIM
         )
     endif()
+
 
     set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/_phony_" PROPERTIES SYMBOLIC TRUE)
 

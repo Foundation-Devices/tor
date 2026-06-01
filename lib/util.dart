@@ -2,13 +2,14 @@
 //
 // SPDX-License-Identifier: MIT
 
-import 'package:tor/generated_bindings.dart' as rust;
-import 'package:tor/tor.dart';
+import 'src/rust/api/tor.dart' as rust;
 
-int getNofileLimit() {
-  return rust.NativeLibrary(load(Tor.libName)).tor_get_nofile_limit();
+Future<int> getNofileLimit() async {
+  final limit = await rust.getNofileLimit();
+  return limit.toInt();
 }
 
-int setNofileLimit(int limit) {
-  return rust.NativeLibrary(load(Tor.libName)).tor_set_nofile_limit(limit);
+Future<int> setNofileLimit(int limit) async {
+  final result = await rust.setNofileLimit(limit: BigInt.from(limit));
+  return result.toInt();
 }

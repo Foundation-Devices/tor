@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
+#
+# SPDX-License-Identifier: MIT
+
+rust_input: crate::api
+rust_root: rust/
+dart_output: lib/src/rust
+dart_entrypoint_class_name: RustLib
