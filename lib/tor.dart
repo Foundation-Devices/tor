@@ -10,8 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'src/rust/frb_generated.dart';
 import 'src/rust/api/tor.dart' as rust;
+import 'src/rust_lib_init.dart';
 
 export 'src/rust/api/tor.dart' show TorError;
 
@@ -88,9 +88,6 @@ class Tor {
   /// Getter for the singleton instance of the Tor class.
   static Tor get instance => _instance;
 
-  /// Whether RustLib has been initialized.
-  static bool _rustLibInitialized = false;
-
   /// Initialize the Tor ffi lib instance if it hasn't already been set. Nothing
   /// changes if _tor is already been set.
   ///
@@ -100,13 +97,7 @@ class Tor {
   static Future<Tor> init({bool enabled = true}) async {
     var singleton = Tor._instance;
     singleton._enabled = enabled;
-
-    // Initialize RustLib if not already done
-    if (!_rustLibInitialized) {
-      await RustLib.init();
-      _rustLibInitialized = true;
-    }
-
+    await ensureRustLibInit();
     return singleton;
   }
 
@@ -158,11 +149,7 @@ class Tor {
   Future<void> start() async {
     broadcastState();
 
-    // Ensure RustLib is initialized
-    if (!_rustLibInitialized) {
-      await RustLib.init();
-      _rustLibInitialized = true;
-    }
+    await ensureRustLibInit();
 
     // Set the state and cache directories.
     final Directory appSupportDir = await getApplicationSupportDirectory();
