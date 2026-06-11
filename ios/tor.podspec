@@ -6,7 +6,7 @@
 # Run `pod lib lint rust_lib_tor.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'rust_lib_tor'
+  s.name             = 'tor'
   s.version          = '0.0.1'
   s.summary          = 'Rust library for Tor proxy'
   s.description      = <<-DESC
