@@ -514,7 +514,7 @@ class _MyAppState extends State<Home> {
     );
   }
 
-  _setRequestResponse(String response, bool loading) {
+  void _setRequestResponse(String response, bool loading) {
     setState(() {
       _loading = loading;
       requestResponse = response;

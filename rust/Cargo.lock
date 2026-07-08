@@ -3334,6 +3334,7 @@ dependencies = [
  "flutter_rust_bridge",
  "lazy_static",
  "libc",
+ "liblzma",
  "log",
  "rlimit 0.10.2",
  "security-framework 2.10.0",

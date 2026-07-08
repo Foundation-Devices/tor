@@ -2,4 +2,9 @@
 //
 // SPDX-License-Identifier: MIT
 
-#import "GeneratedPluginRegistrant.h"
+import Flutter
+import UIKit
+
+class SceneDelegate: FlutterSceneDelegate {
+
+}

@@ -16,6 +16,7 @@ flutter_rust_bridge = "=2.11.1"
 lazy_static = "1.4"
 tokio = { version = "1", features = ["full"] }
 libc = "0.2"
+liblzma = { version = "0.4.7", features = ["static"] }
 arti-client = { version = "0.44.0", features = ["static", "onion-service-client"] }
 arti = { version = "2.5.0", features = ["experimental-api", "static"] }
 tor-rtcompat = { version = "0.44.0", features = ["static"] }

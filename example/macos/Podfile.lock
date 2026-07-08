@@ -1,27 +1,21 @@
 PODS:
   - FlutterMacOS (1.0.0)
-  - path_provider_foundation (0.0.1):
-    - Flutter
+  - tor (0.0.1):
     - FlutterMacOS
-  - tor (0.0.1)
 
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - tor (from `Flutter/ephemeral/.symlinks/plugins/tor/macos`)
 
 EXTERNAL SOURCES:
   FlutterMacOS:
     :path: Flutter/ephemeral
-  path_provider_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   tor:
     :path: Flutter/ephemeral/.symlinks/plugins/tor/macos
 
 SPEC CHECKSUMS:
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  tor: 2138c48428e696b83eacdda404de6d5574932e26
+  tor: b911de8065e8fffdc9f089524a8eda8c17f9d857
 
 PODFILE CHECKSUM: 9ebaf0ce3d369aaa26a9ea0e159195ed94724cf3
 

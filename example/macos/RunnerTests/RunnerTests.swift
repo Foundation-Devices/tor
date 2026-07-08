@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MIT
 
-import FlutterMacOS
 import Cocoa
+import FlutterMacOS
 import XCTest
 
 class RunnerTests: XCTestCase {
