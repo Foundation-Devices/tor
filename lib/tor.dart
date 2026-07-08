@@ -63,7 +63,7 @@ class Tor {
   /// A stream of Tor events.
   ///
   /// This stream broadcast just the port for now (-1 if circuit not established or proxy not enabled)
-  final StreamController events = StreamController.broadcast();
+  final StreamController<int> events = StreamController<int>.broadcast();
 
   /// Getter for the proxy port.
   ///

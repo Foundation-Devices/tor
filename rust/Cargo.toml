@@ -15,10 +15,11 @@ crate-type = ["cdylib", "staticlib", "rlib"]
 flutter_rust_bridge = "=2.11.1"
 lazy_static = "1.4"
 tokio = { version = "1", features = ["full"] }
-arti-client = { version = "0.36.0", features = ["static", "onion-service-client"] }
-arti = { version = "1.7.0", features = ["experimental-api", "static"] }
-tor-rtcompat = { version = "0.36.0", features = ["static"] }
-tor-config = "0.36.0"
+libc = "0.2"
+arti-client = { version = "0.44.0", features = ["static", "onion-service-client"] }
+arti = { version = "2.5.0", features = ["experimental-api", "static"] }
+tor-rtcompat = { version = "0.44.0", features = ["static"] }
+tor-config = "0.44.0"
 log = "0.4.20"
 rlimit = "0.10.1"
 anyhow = "1.0.79"

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 use anyhow::Result;
-use arti::proxy;
+use arti::proxy::{self, ListenProtocols};
 use arti_client::config::CfgPath;
 use arti_client::{DormantMode, TorClient, TorClientConfig};
 use flutter_rust_bridge::frb;
@@ -14,7 +14,7 @@ use tokio::runtime::{Builder, Runtime};
 use tokio::task::JoinHandle;
 use tor_config::Listen;
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
-use tor_rtcompat::ToplevelBlockOn;
+use tor_rtcompat::{NetStreamProvider, TcpListenOptions, ToplevelBlockOn};
 
 lazy_static! {
     static ref RUNTIME: io::Result<Runtime> = Builder::new_multi_thread().enable_all().build();
@@ -123,14 +123,10 @@ pub fn start_tor(
         })
         .map_err(|e| TorError::BootstrapError(e.to_string()))?;
 
-    let client_arc = Arc::new(client);
-    let proxy_handle = start_proxy_internal(socks_port, Arc::clone(&client_arc))?;
+    let proxy_handle = start_proxy_internal(socks_port, Arc::clone(&client))?;
 
     Ok(TorInstance {
-        client: TorClientWrapper {
-            client: client_arc,
-            runtime,
-        },
+        client: TorClientWrapper { client, runtime },
         proxy: TorProxyHandle {
             handle: Arc::new(std::sync::Mutex::new(Some(proxy_handle))),
         },
@@ -146,13 +142,40 @@ fn start_proxy_internal(
         .as_ref()
         .map_err(|e| TorError::RuntimeError(e.to_string()))?;
 
-    let client_ref = client.as_ref();
-    Ok(rt.spawn(proxy::run_proxy(
-        client_ref.runtime().clone(),
-        client_ref.clone(),
-        Listen::new_localhost(port),
-        None,
-    )))
+    let runtime = client.runtime().clone();
+
+    Ok(rt.spawn(async move {
+        let listen = Listen::new_localhost(port);
+        let listen_options = TcpListenOptions::default();
+        let mut listeners = Vec::new();
+
+        for addrgroup in listen.ip_addrs()? {
+            let mut bound_in_group = false;
+            for addr in addrgroup {
+                match runtime.listen(&addr, &listen_options).await {
+                    Ok(listener) => {
+                        bound_in_group = true;
+                        listeners.push(listener);
+                    }
+                    #[cfg(unix)]
+                    Err(ref e) if e.raw_os_error() == Some(libc::EAFNOSUPPORT) => {}
+                    Err(e) => return Err(anyhow::anyhow!("Can't listen on {addr}: {e}")),
+                }
+            }
+
+            if !bound_in_group {
+                return Err(anyhow::anyhow!(
+                    "Couldn't open any SOCKS listener in address group"
+                ));
+            }
+        }
+
+        if listeners.is_empty() {
+            return Err(anyhow::anyhow!("Couldn't open SOCKS listeners"));
+        }
+
+        proxy::run_proxy_with_listeners(client, listeners, ListenProtocols::SocksOnly, None).await
+    }))
 }
 
 /// Re-bootstrap the Tor client
