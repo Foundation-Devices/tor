@@ -1,0 +1,5 @@
+framework module rust_lib_tor {
+  umbrella header "rust_lib_tor.h"
+  export *
+  module * { export * }
+}

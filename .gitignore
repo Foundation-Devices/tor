@@ -32,6 +32,7 @@ migrate_working_dir/
 .dart_tool/
 .packages
 build/
+**/.swiftpm/
 
 rust/target/.rustc_info.json
 rust/target/debug

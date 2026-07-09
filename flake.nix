@@ -26,7 +26,17 @@
         overlays = [ (import rust-overlay) ];
         pkgs = import nixpkgs { inherit system overlays; };
 
-        rustToolchain = pkgs.rust-bin.stable."1.91.0".default;
+        appleRustTargets = pkgs.lib.optionals pkgs.stdenv.isDarwin [
+          "aarch64-apple-ios"
+          "aarch64-apple-ios-sim"
+          "x86_64-apple-ios"
+          "aarch64-apple-darwin"
+          "x86_64-apple-darwin"
+        ];
+
+        rustToolchain = pkgs.rust-bin.stable."1.91.0".default.override {
+          targets = appleRustTargets;
+        };
       in
       {
         devShells.default = pkgs.mkShell {
@@ -77,15 +87,18 @@
               libepoxy
             ];
 
-          shellHook = ''
-            export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
-            # Use GCC for compiling C/C++ code (Flutter/CMake)
-            export CC="${pkgs.gcc}/bin/gcc"
-            export CXX="${pkgs.gcc}/bin/g++"
-            # Ensure linker can find C runtime and C++ libraries
-            export LIBRARY_PATH="${pkgs.glibc}/lib:${pkgs.gcc.cc.lib}/lib:$LIBRARY_PATH"
-            export LD_LIBRARY_PATH="${pkgs.gcc.cc.lib}/lib:$LD_LIBRARY_PATH"
-          '';
+          shellHook =
+            ''
+              export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+            ''
+            + pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+              # Use GCC for compiling C/C++ code (Flutter/CMake)
+              export CC="${pkgs.gcc}/bin/gcc"
+              export CXX="${pkgs.gcc}/bin/g++"
+              # Ensure linker can find C runtime and C++ libraries
+              export LIBRARY_PATH="${pkgs.glibc}/lib:${pkgs.gcc.cc.lib}/lib:$LIBRARY_PATH"
+              export LD_LIBRARY_PATH="${pkgs.gcc.cc.lib}/lib:$LD_LIBRARY_PATH"
+            '';
         };
       }
     );

@@ -54,3 +54,7 @@ License: MIT
 Files: android/.gradle/*
 Copyright: 2024 Foundation Devices Inc.
 License: MIT
+
+Files: ios/tor/rust_lib_tor.xcframework/* macos/tor/rust_lib_tor.xcframework/*
+Copyright: 2024 Foundation Devices Inc.
+License: MIT

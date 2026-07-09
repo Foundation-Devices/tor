@@ -10,16 +10,34 @@ import 'rust/frb_generated.dart';
 
 Future<void> ensureRustLibInit() async {
   if (!RustLib.instance.initialized) {
-    // Apple: the Rust staticlib is force-loaded into this plugin's own
-    // `tor.framework` (see ios/tor.podspec), so there's no standalone
-    // `rust_lib_tor` framework for the default loader to dlopen. Open
-    // `tor.framework` by name so symbols resolve within it. Not
-    // ExternalLibrary.process(): FRB's unprefixed C symbols collide across
-    // multiple FRB crates in one app.
     await RustLib.init(
-      externalLibrary: (Platform.isIOS || Platform.isMacOS)
-          ? ExternalLibrary.open('tor.framework/tor')
-          : null,
+      externalLibrary:
+          (Platform.isIOS || Platform.isMacOS) ? _openAppleRustLibrary() : null,
     );
   }
+}
+
+ExternalLibrary _openAppleRustLibrary() {
+  // SwiftPM links the Rust cdylib as its own binary framework. CocoaPods keeps
+  // the Rust staticlib force-loaded into this plugin's `tor.framework`.
+  return _openFirstAvailableAppleLibrary([
+    'rust_lib_tor.framework/rust_lib_tor',
+    'tor.framework/tor',
+  ]);
+}
+
+ExternalLibrary _openFirstAvailableAppleLibrary(List<String> names) {
+  Object? firstError;
+  StackTrace? firstStackTrace;
+
+  for (final name in names) {
+    try {
+      return ExternalLibrary.open(name);
+    } catch (error, stackTrace) {
+      firstError ??= error;
+      firstStackTrace ??= stackTrace;
+    }
+  }
+
+  Error.throwWithStackTrace(firstError!, firstStackTrace!);
 }
