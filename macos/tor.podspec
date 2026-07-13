@@ -41,5 +41,11 @@ Rust library providing Tor proxy functionality via arti.
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/librust_lib_tor.a',
+    # Strip the large static Rust library from release builds to reduce the
+    # shipped binary size.
+    'DEAD_CODE_STRIPPING' => 'YES',
+    'STRIP_INSTALLED_PRODUCT[config=Release][sdk=*][arch=*]' => 'YES',
+    'STRIP_STYLE[config=Release][sdk=*][arch=*]' => 'non-global',
+    'DEPLOYMENT_POSTPROCESSING[config=Release][sdk=*][arch=*]' => 'YES',
   }
 end
