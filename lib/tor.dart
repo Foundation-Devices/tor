@@ -109,10 +109,14 @@ class Tor {
   }
 
   /// Start the Tor service.
-  Future<void> enable() async {
+  ///
+  /// If [dataDirPath] is provided, the Tor state and cache directories are
+  /// created underneath it. Otherwise the application support directory is
+  /// used.
+  Future<void> enable({String? dataDirPath}) async {
     _enabled = true;
     if (!started) {
-      await start();
+      await start(dataDirPath: dataDirPath);
     }
     broadcastState();
   }
@@ -143,20 +147,23 @@ class Tor {
   ///
   /// This will start the Tor service and establish a Tor circuit.
   ///
+  /// If [dataDirPath] is provided, the Tor state and cache directories are
+  /// created underneath it. Otherwise the application support directory is
+  /// used.
+  ///
   /// Throws an exception if the Tor service fails to start.
   ///
   /// Returns a Future that completes when the Tor service has started.
-  Future<void> start() async {
+  Future<void> start({String? dataDirPath}) async {
     broadcastState();
 
     await ensureRustLibInit();
 
     // Set the state and cache directories.
-    final Directory appSupportDir = await getApplicationSupportDirectory();
-    final stateDir =
-        await Directory('${appSupportDir.path}/tor_state').create();
-    final cacheDir =
-        await Directory('${appSupportDir.path}/tor_cache').create();
+    final String baseDirPath =
+        dataDirPath ?? (await getApplicationSupportDirectory()).path;
+    final stateDir = await Directory('$baseDirPath/tor_state').create();
+    final cacheDir = await Directory('$baseDirPath/tor_cache').create();
 
     // Generate a random port.
     int newPort = await _getRandomUnusedPort();
