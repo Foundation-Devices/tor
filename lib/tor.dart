@@ -60,6 +60,11 @@ class Tor {
   /// Getter for the bootstrapped flag.
   bool _bootstrapped = false;
 
+  /// Changes whenever callers must stop using a previously published route.
+  int get routeGeneration => _routeGeneration;
+
+  int _routeGeneration = 0;
+
   /// A stream of Tor events.
   ///
   /// This stream broadcast just the port for now (-1 if circuit not established or proxy not enabled)
@@ -96,6 +101,9 @@ class Tor {
   /// Throws an exception if the Tor service fails to start.
   static Future<Tor> init({bool enabled = true}) async {
     var singleton = Tor._instance;
+    if (singleton._enabled != enabled) {
+      singleton._routeGeneration++;
+    }
     singleton._enabled = enabled;
     await ensureRustLibInit();
     return singleton;
@@ -110,6 +118,9 @@ class Tor {
 
   /// Start the Tor service.
   Future<void> enable() async {
+    if (!_enabled) {
+      _routeGeneration++;
+    }
     _enabled = true;
     if (!started) {
       await start();
@@ -174,6 +185,7 @@ class Tor {
       _proxyPort = torInstance.socksPort;
       _started = true;
       _bootstrapped = true; // startTor creates a bootstrapped client
+      _routeGeneration++;
 
       broadcastState();
     } on rust.TorError catch (e) {
@@ -210,6 +222,9 @@ class Tor {
 
   /// Prevent traffic flowing through the proxy
   void disable() {
+    if (_enabled) {
+      _routeGeneration++;
+    }
     _enabled = false;
     broadcastState();
   }
@@ -217,6 +232,10 @@ class Tor {
   /// Stops the proxy
   Future<void> stop() async {
     final proxy = _proxy;
+
+    if (_proxy != null || _started || _proxyPort != -1) {
+      _routeGeneration++;
+    }
 
     // Stop publishing the route before awaiting native shutdown so callers
     // cannot start new work against a proxy that is being torn down.
