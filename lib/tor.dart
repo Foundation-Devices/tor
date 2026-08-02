@@ -73,7 +73,7 @@ class Tor {
   ///
   /// This is the port that should be used for all requests.
   int get port {
-    if (!_enabled) {
+    if (!_enabled || !_started || !_bootstrapped) {
       return -1;
     }
     return _proxyPort;
@@ -216,14 +216,24 @@ class Tor {
 
   /// Stops the proxy
   Future<void> stop() async {
-    // Return early if already stopped
-    if (_proxy == null) {
+    final proxy = _proxy;
+
+    // Stop publishing the route before awaiting native shutdown so callers
+    // cannot start new work against a proxy that is being torn down.
+    _proxy = null;
+    _client = null;
+    _proxyPort = -1;
+    _started = false;
+    _bootstrapped = false;
+    broadcastState();
+
+    if (proxy == null) {
       return;
     }
 
     try {
       // This is now safe! FRB catches any panic and throws PanicException
-      await rust.stopProxy(proxy: _proxy!);
+      await rust.stopProxy(proxy: proxy);
     } on rust.TorError catch (e) {
       if (kDebugMode) {
         print('Error stopping proxy: $e');
@@ -234,12 +244,6 @@ class Tor {
         print('Proxy stop panicked (caught safely): ${e.message}');
       }
     }
-
-    _proxy = null;
-    _client = null;
-    _started = false;
-    _bootstrapped = false;
-    broadcastState();
   }
 
   Future<void> setClientDormant(bool dormant) async {
