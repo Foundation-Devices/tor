@@ -47,6 +47,13 @@ class Tor {
   /// Getter for the started flag.
   bool _started = false;
 
+  /// True while the client is starting or re-bootstrapping.
+  bool get starting =>
+      _startInFlight != null || _bootstrapInFlight != null;
+
+  Future<void>? _startInFlight;
+  Future<void>? _bootstrapInFlight;
+
   /// Flag to indicate that traffic should flow through the proxy.
   bool _enabled = false;
 
@@ -157,7 +164,25 @@ class Tor {
   /// Throws an exception if the Tor service fails to start.
   ///
   /// Returns a Future that completes when the Tor service has started.
-  Future<void> start() async {
+  Future<void> start() {
+    if (_started) {
+      return _bootstrapped ? Future.value() : bootstrap();
+    }
+
+    final inFlight = _startInFlight;
+    if (inFlight != null) return inFlight;
+
+    late final Future<void> start;
+    start = _startInternal().whenComplete(() {
+      if (identical(_startInFlight, start)) {
+        _startInFlight = null;
+      }
+    });
+    _startInFlight = start;
+    return start;
+  }
+
+  Future<void> _startInternal() async {
     broadcastState();
 
     await ensureRustLibInit();
@@ -206,7 +231,21 @@ class Tor {
   /// Throws an exception if the Tor service fails to bootstrap.
   ///
   /// Returns void.
-  Future<void> bootstrap() async {
+  Future<void> bootstrap() {
+    final inFlight = _bootstrapInFlight;
+    if (inFlight != null) return inFlight;
+
+    late final Future<void> bootstrap;
+    bootstrap = _bootstrapInternal().whenComplete(() {
+      if (identical(_bootstrapInFlight, bootstrap)) {
+        _bootstrapInFlight = null;
+      }
+    });
+    _bootstrapInFlight = bootstrap;
+    return bootstrap;
+  }
+
+  Future<void> _bootstrapInternal() async {
     if (_client == null) {
       throw ClientNotActive();
     }
@@ -214,8 +253,11 @@ class Tor {
     try {
       await rust.bootstrap(client: _client!);
       _bootstrapped = true;
+      _routeGeneration++;
+      broadcastState();
     } on rust.TorError catch (e) {
       _bootstrapped = false;
+      broadcastState();
       throw CouldntBootstrapDirectory(rustError: e.toString());
     }
   }
