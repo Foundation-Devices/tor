@@ -47,6 +47,13 @@ class Tor {
   /// Getter for the started flag.
   bool _started = false;
 
+  /// True while the client is starting or re-bootstrapping.
+  bool get starting =>
+      _startInFlight != null || _bootstrapInFlight != null;
+
+  Future<void>? _startInFlight;
+  Future<void>? _bootstrapInFlight;
+
   /// Flag to indicate that traffic should flow through the proxy.
   bool _enabled = false;
 
@@ -73,7 +80,7 @@ class Tor {
   ///
   /// This is the port that should be used for all requests.
   int get port {
-    if (!_enabled) {
+    if (!_enabled || !_started || !_bootstrapped) {
       return -1;
     }
     return _proxyPort;
@@ -146,7 +153,25 @@ class Tor {
   /// Throws an exception if the Tor service fails to start.
   ///
   /// Returns a Future that completes when the Tor service has started.
-  Future<void> start() async {
+  Future<void> start() {
+    if (_started) {
+      return _bootstrapped ? Future.value() : bootstrap();
+    }
+
+    final inFlight = _startInFlight;
+    if (inFlight != null) return inFlight;
+
+    late final Future<void> start;
+    start = _startInternal().whenComplete(() {
+      if (identical(_startInFlight, start)) {
+        _startInFlight = null;
+      }
+    });
+    _startInFlight = start;
+    return start;
+  }
+
+  Future<void> _startInternal() async {
     broadcastState();
 
     await ensureRustLibInit();
@@ -194,7 +219,21 @@ class Tor {
   /// Throws an exception if the Tor service fails to bootstrap.
   ///
   /// Returns void.
-  Future<void> bootstrap() async {
+  Future<void> bootstrap() {
+    final inFlight = _bootstrapInFlight;
+    if (inFlight != null) return inFlight;
+
+    late final Future<void> bootstrap;
+    bootstrap = _bootstrapInternal().whenComplete(() {
+      if (identical(_bootstrapInFlight, bootstrap)) {
+        _bootstrapInFlight = null;
+      }
+    });
+    _bootstrapInFlight = bootstrap;
+    return bootstrap;
+  }
+
+  Future<void> _bootstrapInternal() async {
     if (_client == null) {
       throw ClientNotActive();
     }
@@ -202,8 +241,10 @@ class Tor {
     try {
       await rust.bootstrap(client: _client!);
       _bootstrapped = true;
+      broadcastState();
     } on rust.TorError catch (e) {
       _bootstrapped = false;
+      broadcastState();
       throw CouldntBootstrapDirectory(rustError: e.toString());
     }
   }
@@ -216,14 +257,24 @@ class Tor {
 
   /// Stops the proxy
   Future<void> stop() async {
-    // Return early if already stopped
-    if (_proxy == null) {
+    final proxy = _proxy;
+
+    // Stop publishing the route before awaiting native shutdown so callers
+    // cannot start new work against a proxy that is being torn down.
+    _proxy = null;
+    _client = null;
+    _proxyPort = -1;
+    _started = false;
+    _bootstrapped = false;
+    broadcastState();
+
+    if (proxy == null) {
       return;
     }
 
     try {
       // This is now safe! FRB catches any panic and throws PanicException
-      await rust.stopProxy(proxy: _proxy!);
+      await rust.stopProxy(proxy: proxy);
     } on rust.TorError catch (e) {
       if (kDebugMode) {
         print('Error stopping proxy: $e');
@@ -234,12 +285,6 @@ class Tor {
         print('Proxy stop panicked (caught safely): ${e.message}');
       }
     }
-
-    _proxy = null;
-    _client = null;
-    _started = false;
-    _bootstrapped = false;
-    broadcastState();
   }
 
   Future<void> setClientDormant(bool dormant) async {

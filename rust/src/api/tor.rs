@@ -143,39 +143,47 @@ fn start_proxy_internal(
         .map_err(|e| TorError::RuntimeError(e.to_string()))?;
 
     let runtime = client.runtime().clone();
+    let listeners = runtime
+        .block_on(async {
+            let listen = Listen::new_localhost(port);
+            let listen_options = TcpListenOptions::default();
+            let mut listeners = Vec::new();
 
-    Ok(rt.spawn(async move {
-        let listen = Listen::new_localhost(port);
-        let listen_options = TcpListenOptions::default();
-        let mut listeners = Vec::new();
-
-        for addrgroup in listen.ip_addrs()? {
-            let mut bound_in_group = false;
-            for addr in addrgroup {
-                match runtime.listen(&addr, &listen_options).await {
-                    Ok(listener) => {
-                        bound_in_group = true;
-                        listeners.push(listener);
+            for addrgroup in listen.ip_addrs()? {
+                let mut bound_in_group = false;
+                for addr in addrgroup {
+                    match runtime.listen(&addr, &listen_options).await {
+                        Ok(listener) => {
+                            bound_in_group = true;
+                            listeners.push(listener);
+                        }
+                        #[cfg(unix)]
+                        Err(ref e) if e.raw_os_error() == Some(libc::EAFNOSUPPORT) => {}
+                        Err(e) => return Err(anyhow::anyhow!("Can't listen on {addr}: {e}")),
                     }
-                    #[cfg(unix)]
-                    Err(ref e) if e.raw_os_error() == Some(libc::EAFNOSUPPORT) => {}
-                    Err(e) => return Err(anyhow::anyhow!("Can't listen on {addr}: {e}")),
+                }
+
+                if !bound_in_group {
+                    return Err(anyhow::anyhow!(
+                        "Couldn't open any SOCKS listener in address group"
+                    ));
                 }
             }
 
-            if !bound_in_group {
-                return Err(anyhow::anyhow!(
-                    "Couldn't open any SOCKS listener in address group"
-                ));
+            if listeners.is_empty() {
+                return Err(anyhow::anyhow!("Couldn't open SOCKS listeners"));
             }
-        }
 
-        if listeners.is_empty() {
-            return Err(anyhow::anyhow!("Couldn't open SOCKS listeners"));
-        }
+            Ok(listeners)
+        })
+        .map_err(|e: anyhow::Error| TorError::ProxyStartError(e.to_string()))?;
 
-        proxy::run_proxy_with_listeners(client, listeners, ListenProtocols::SocksOnly, None).await
-    }))
+    Ok(rt.spawn(proxy::run_proxy_with_listeners(
+        client,
+        listeners,
+        ListenProtocols::SocksOnly,
+        None,
+    )))
 }
 
 /// Re-bootstrap the Tor client
