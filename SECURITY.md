@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Foundation Devices Inc.
+
+SPDX-License-Identifier: MIT
+-->
+
 # Security Policy
 
 ## Reporting a vulnerability
