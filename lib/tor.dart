@@ -273,21 +273,11 @@ class Tor {
 
     try {
       if (proxy != null) {
-        // This is now safe! FRB catches any panic and throws PanicException
         await rust.stopProxy(proxy: proxy);
-      }
-    } on rust.TorError catch (e) {
-      if (kDebugMode) {
-        print('Error stopping proxy: $e');
-      }
-    } on PanicException catch (e) {
-      // Previously this would SIGABRT the app, now it's catchable!
-      if (kDebugMode) {
-        print('Proxy stop panicked (caught safely): ${e.message}');
       }
     } finally {
       // Drop the Rust client now instead of at GC: a lingering client holds
-      // arti's dir.lock, forcing a restarted client's dirmgr into read-only.
+      // tor_cache/dir.lock, forcing a restarted client's dirmgr into read-only.
       client?.dispose();
     }
   }

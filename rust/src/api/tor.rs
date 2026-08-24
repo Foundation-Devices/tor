@@ -10,14 +10,22 @@ use flutter_rust_bridge::frb;
 use lazy_static::lazy_static;
 use std::io;
 use std::sync::Arc;
-use tokio::runtime::{Builder, Runtime};
+use tokio::runtime::{Builder, Runtime as TokioRuntime};
 use tokio::task::JoinHandle;
 use tor_config::Listen;
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
 use tor_rtcompat::{NetStreamProvider, TcpListenOptions, ToplevelBlockOn};
 
 lazy_static! {
-    static ref RUNTIME: io::Result<Runtime> = Builder::new_multi_thread().enable_all().build();
+    static ref RUNTIME: io::Result<TokioRuntime> = Builder::new_multi_thread().enable_all().build();
+}
+
+const PROXY_SHUTDOWN_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+
+fn create_arti_runtime() -> io::Result<(TokioNativeTlsRuntime, TokioRuntime)> {
+    let runtime = Builder::new_multi_thread().enable_all().build()?;
+    let handle = TokioNativeTlsRuntime::from(runtime.handle().clone());
+    Ok((handle, runtime))
 }
 
 /// Custom error types for Tor operations
@@ -61,13 +69,18 @@ impl Clone for TorClientWrapper {
 /// Opaque wrapper for proxy handle
 #[frb(opaque)]
 pub struct TorProxyHandle {
-    handle: Arc<std::sync::Mutex<Option<JoinHandle<Result<()>>>>>,
+    state: Arc<std::sync::Mutex<TorProxyState>>,
+}
+
+struct TorProxyState {
+    accept_loop: Option<JoinHandle<Result<()>>>,
+    runtime: Option<TokioRuntime>,
 }
 
 impl Clone for TorProxyHandle {
     fn clone(&self) -> Self {
         TorProxyHandle {
-            handle: Arc::clone(&self.handle),
+            state: Arc::clone(&self.state),
         }
     }
 }
@@ -94,8 +107,8 @@ pub fn start_tor(
     state_dir: String,
     cache_dir: String,
 ) -> Result<TorInstance, TorError> {
-    let runtime =
-        TokioNativeTlsRuntime::create().map_err(|e| TorError::RuntimeError(e.to_string()))?;
+    let (runtime, runtime_owner) =
+        create_arti_runtime().map_err(|e| TorError::RuntimeError(e.to_string()))?;
 
     let mut cfg_builder = TorClientConfig::builder();
     cfg_builder
@@ -128,7 +141,10 @@ pub fn start_tor(
     Ok(TorInstance {
         client: TorClientWrapper { client, runtime },
         proxy: TorProxyHandle {
-            handle: Arc::new(std::sync::Mutex::new(Some(proxy_handle))),
+            state: Arc::new(std::sync::Mutex::new(TorProxyState {
+                accept_loop: Some(proxy_handle),
+                runtime: Some(runtime_owner),
+            })),
         },
         socks_port,
     })
@@ -199,7 +215,7 @@ pub fn bootstrap(client: &TorClientWrapper) -> Result<(), TorError> {
 /// Set the client dormant mode
 ///
 /// * `soft_mode` - If true, uses Soft dormant mode (keeps some circuits warm)
-///                 If false, uses Normal mode (full operation)
+///   If false, uses Normal mode (full operation)
 pub fn set_dormant(client: &TorClientWrapper, soft_mode: bool) {
     let dormant_mode = if soft_mode {
         DormantMode::Soft
@@ -211,30 +227,45 @@ pub fn set_dormant(client: &TorClientWrapper, soft_mode: bool) {
 
 /// Stop the Tor proxy
 ///
-/// This safely aborts the proxy task. Previously this could panic
-/// and crash the app - with FRB, any panic becomes a catchable exception.
+/// Stops the accept loop and the client runtime that owns accepted connections.
 pub fn stop_proxy(proxy: TorProxyHandle) -> Result<(), TorError> {
-    // Take the handle out of the Option to abort it
-    // This ensures we only abort once even if called multiple times
-    let mut guard = proxy
-        .handle
-        .lock()
-        .map_err(|e| TorError::ProxyStopError(e.to_string()))?;
+    let (accept_loop, runtime) = {
+        let mut state = proxy
+            .state
+            .lock()
+            .map_err(|e| TorError::ProxyStopError(e.to_string()))?;
+        (state.accept_loop.take(), state.runtime.take())
+    };
 
-    if let Some(handle) = guard.take() {
-        // The abort() call is safe with FRB - any panic becomes PanicException
-        handle.abort();
-
-        // Wait for the accept loop to actually finish so its listeners and
-        // TorClient clone are dropped before we report the proxy stopped.
-        if let Ok(rt) = RUNTIME.as_ref() {
-            let _ = rt.block_on(async {
-                tokio::time::timeout(std::time::Duration::from_secs(5), handle).await
-            });
+    let accept_result = match accept_loop {
+        Some(handle) => {
+            handle.abort();
+            match RUNTIME.as_ref() {
+                Ok(rt) => rt.block_on(async {
+                    match tokio::time::timeout(PROXY_SHUTDOWN_TIMEOUT, handle).await {
+                        Err(_) => Err(TorError::ProxyStopError(
+                            "Timed out stopping Tor proxy accept loop".to_owned(),
+                        )),
+                        Ok(Ok(result)) => {
+                            result.map_err(|e| TorError::ProxyStopError(e.to_string()))
+                        }
+                        Ok(Err(error)) if error.is_cancelled() => Ok(()),
+                        Ok(Err(error)) => Err(TorError::ProxyStopError(error.to_string())),
+                    }
+                }),
+                Err(error) => Err(TorError::RuntimeError(error.to_string())),
+            }
         }
+        None => Ok(()),
+    };
+
+    // Arti spawns one task per accepted SOCKS connection on its own runtime.
+    // Shut that runtime down so even idle connections release their TorClient.
+    if let Some(runtime) = runtime {
+        runtime.shutdown_timeout(PROXY_SHUTDOWN_TIMEOUT);
     }
 
-    Ok(())
+    accept_result
 }
 
 /// Test function to verify library linking
@@ -263,4 +294,69 @@ pub fn get_nofile_limit() -> Result<u64, TorError> {
 #[cfg(target_os = "windows")]
 pub fn set_nofile_limit(_limit: u64) -> Result<u64, TorError> {
     Ok(0) // Not applicable on Windows
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use arti_client::config::TorClientConfigBuilder;
+    use std::net::TcpStream;
+    use std::thread;
+    use std::time::{Duration, Instant};
+    use tor_rtcompat::NetStreamListener;
+
+    #[test]
+    fn stop_proxy_drops_an_idle_connection() {
+        let state_dir = tempfile::tempdir().unwrap();
+        let cache_dir = tempfile::tempdir().unwrap();
+        let config = TorClientConfigBuilder::from_directories(state_dir.path(), cache_dir.path())
+            .build()
+            .unwrap();
+        let (runtime, runtime_owner) = create_arti_runtime().unwrap();
+        let client = TorClient::with_runtime(runtime.clone())
+            .config(config)
+            .create_unbootstrapped()
+            .unwrap();
+        let baseline_client_references = Arc::strong_count(&client);
+        let listen_address: std::net::SocketAddr = "127.0.0.1:0".parse().unwrap();
+        let (listener, address) = runtime.block_on(async {
+            let listener = runtime
+                .listen(&listen_address, &TcpListenOptions::default())
+                .await
+                .unwrap();
+            let address = listener.local_addr().unwrap();
+            (listener, address)
+        });
+        let proxy_task = RUNTIME
+            .as_ref()
+            .unwrap()
+            .spawn(proxy::run_proxy_with_listeners(
+                Arc::clone(&client),
+                vec![listener],
+                ListenProtocols::SocksOnly,
+                None,
+            ));
+        let _idle_connection = TcpStream::connect(address).unwrap();
+
+        let deadline = Instant::now() + Duration::from_secs(1);
+        while Arc::strong_count(&client) <= baseline_client_references + 1
+            && Instant::now() < deadline
+        {
+            thread::sleep(Duration::from_millis(10));
+        }
+        assert!(
+            Arc::strong_count(&client) > baseline_client_references + 1,
+            "the idle connection was not accepted"
+        );
+
+        stop_proxy(TorProxyHandle {
+            state: Arc::new(std::sync::Mutex::new(TorProxyState {
+                accept_loop: Some(proxy_task),
+                runtime: Some(runtime_owner),
+            })),
+        })
+        .unwrap();
+
+        assert_eq!(Arc::strong_count(&client), baseline_client_references);
+    }
 }

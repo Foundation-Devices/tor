@@ -3338,6 +3338,7 @@ dependencies = [
  "log",
  "rlimit 0.10.2",
  "security-framework 2.10.0",
+ "tempfile",
  "thiserror 1.0.69",
  "time",
  "tokio",
