@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: Foundation-Devices/tor
-          ref: bda9b3a1742f6647a55390776d053485489f4703
+          ref: bda9b3afe8e660091ae3b54161f9cb02bd58c639
 
       - name: Build Apple XCFrameworks
         run: scripts/build_apple_xcframework.sh release
