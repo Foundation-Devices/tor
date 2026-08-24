@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2026 Foundation Devices Inc.
+#
+# SPDX-License-Identifier: MIT
+
+name: Temporary Apple XCFramework build
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Foundation-Devices/tor
+          ref: bda9b3a1742f6647a55390776d053485489f4703
+
+      - name: Build Apple XCFrameworks
+        run: scripts/build_apple_xcframework.sh release
+
+      - name: Verify iOS framework metadata
+        run: |
+          grep -A1 CFBundleShortVersionString ios/tor/rust_lib_tor.xcframework/ios-arm64/rust_lib_tor.framework/Info.plist
+          shasum -a 256 ios/tor/rust_lib_tor.xcframework/*/rust_lib_tor.framework/rust_lib_tor
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tor-ios-xcframework
+          path: ios/tor/rust_lib_tor.xcframework
+          if-no-files-found: error
+          retention-days: 1
