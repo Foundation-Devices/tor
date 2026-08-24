@@ -224,6 +224,14 @@ pub fn stop_proxy(proxy: TorProxyHandle) -> Result<(), TorError> {
     if let Some(handle) = guard.take() {
         // The abort() call is safe with FRB - any panic becomes PanicException
         handle.abort();
+
+        // Wait for the accept loop to actually finish so its listeners and
+        // TorClient clone are dropped before we report the proxy stopped.
+        if let Ok(rt) = RUNTIME.as_ref() {
+            let _ = rt.block_on(async {
+                tokio::time::timeout(std::time::Duration::from_secs(5), handle).await
+            });
+        }
     }
 
     Ok(())

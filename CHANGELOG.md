@@ -4,6 +4,13 @@ SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
 SPDX-License-Identifier: MIT
 -->
 
+## 0.2.1
+
+* Tear down the Tor client deterministically on `stop()`: await the proxy
+  accept loop and dispose the Rust client instead of waiting for Dart GC,
+  which left `dir.lock` held and forced a restarted client's directory
+  store into silent read-only mode.
+
 ## 0.0.9
 
 * Bumped arti to version 1.4.3
