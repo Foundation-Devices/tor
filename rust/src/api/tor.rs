@@ -242,15 +242,22 @@ pub fn stop_proxy(proxy: TorProxyHandle) -> Result<(), TorError> {
             handle.abort();
             match RUNTIME.as_ref() {
                 Ok(rt) => rt.block_on(async {
+                    // A loop that already ended - by its own error or a panic -
+                    // has released its listeners and client clone, so only an
+                    // unfinished task leaves teardown unconfirmed.
                     match tokio::time::timeout(PROXY_SHUTDOWN_TIMEOUT, handle).await {
                         Err(_) => Err(TorError::ProxyStopError(
                             "Timed out stopping Tor proxy accept loop".to_owned(),
                         )),
-                        Ok(Ok(result)) => {
-                            result.map_err(|e| TorError::ProxyStopError(e.to_string()))
+                        Ok(Ok(Err(error))) => {
+                            log::warn!("Tor proxy accept loop had already failed: {error}");
+                            Ok(())
                         }
-                        Ok(Err(error)) if error.is_cancelled() => Ok(()),
-                        Ok(Err(error)) => Err(TorError::ProxyStopError(error.to_string())),
+                        Ok(Err(error)) if !error.is_cancelled() => {
+                            log::warn!("Tor proxy accept loop panicked: {error}");
+                            Ok(())
+                        }
+                        Ok(_) => Ok(()),
                     }
                 }),
                 Err(error) => Err(TorError::RuntimeError(error.to_string())),
@@ -358,5 +365,29 @@ mod tests {
         .unwrap();
 
         assert_eq!(Arc::strong_count(&client), baseline_client_references);
+    }
+
+    #[test]
+    fn stop_proxy_succeeds_when_the_accept_loop_already_failed() {
+        let accept_loop = RUNTIME
+            .as_ref()
+            .unwrap()
+            .spawn(async { Err(anyhow::anyhow!("fatal accept error")) });
+
+        let deadline = Instant::now() + Duration::from_secs(1);
+        while !accept_loop.is_finished() && Instant::now() < deadline {
+            thread::sleep(Duration::from_millis(10));
+        }
+        assert!(accept_loop.is_finished(), "the accept loop did not finish");
+
+        // A proxy that already died is exactly when the caller has to be able
+        // to restart, so a stale accept-loop error must not fail teardown.
+        stop_proxy(TorProxyHandle {
+            state: Arc::new(std::sync::Mutex::new(TorProxyState {
+                accept_loop: Some(accept_loop),
+                runtime: None,
+            })),
+        })
+        .unwrap();
     }
 }
