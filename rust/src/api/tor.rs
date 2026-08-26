@@ -12,6 +12,7 @@ use futures::task::{Spawn, SpawnError};
 use lazy_static::lazy_static;
 use std::future::Future;
 use std::io;
+use std::net::{Ipv4Addr, SocketAddr};
 use std::sync::Arc;
 use tokio::runtime::{Builder, Runtime as TokioRuntime};
 use tokio::task::JoinHandle;
@@ -20,7 +21,8 @@ use tokio_util::task::TaskTracker;
 use tor_config::Listen;
 use tor_rtcompat::tokio::TokioNativeTlsRuntime;
 use tor_rtcompat::{
-    Blocking, CompoundRuntime, NetStreamProvider, TcpListenOptions, ToplevelBlockOn,
+    Blocking, CompoundRuntime, NetStreamListener, NetStreamProvider, TcpListenOptions,
+    ToplevelBlockOn,
 };
 
 lazy_static! {
@@ -257,7 +259,7 @@ pub fn start_tor(
         })
         .map_err(|e| TorError::BootstrapError(e.to_string()))?;
 
-    let proxy_handle = start_proxy_internal(socks_port, Arc::clone(&client))?;
+    let (proxy_handle, socks_port) = start_proxy_internal(socks_port, Arc::clone(&client))?;
 
     Ok(TorInstance {
         client: TorClientWrapper { client, runtime },
@@ -274,14 +276,27 @@ pub fn start_tor(
 fn start_proxy_internal(
     port: u16,
     client: Arc<TorClient<TrackedTorRuntime>>,
-) -> Result<JoinHandle<Result<()>>, TorError> {
+) -> Result<(JoinHandle<Result<()>>, u16), TorError> {
     let rt = RUNTIME
         .as_ref()
         .map_err(|e| TorError::RuntimeError(e.to_string()))?;
 
     let runtime = client.runtime().clone();
-    let listeners = runtime
+    let (listeners, bound_port) = runtime
         .block_on(async {
+            if port == 0 {
+                let address = SocketAddr::from((Ipv4Addr::LOCALHOST, 0));
+                let listener = runtime
+                    .listen(&address, &TcpListenOptions::default())
+                    .await
+                    .map_err(|error| anyhow::anyhow!("Can't listen on {address}: {error}"))?;
+                let bound_port = listener
+                    .local_addr()
+                    .map_err(|error| anyhow::anyhow!("Can't read SOCKS listener address: {error}"))?
+                    .port();
+                return Ok((vec![listener], bound_port));
+            }
+
             let listen = Listen::new_localhost(port);
             let listen_options = TcpListenOptions::default();
             let mut listeners = Vec::new();
@@ -311,16 +326,19 @@ fn start_proxy_internal(
                 return Err(anyhow::anyhow!("Couldn't open SOCKS listeners"));
             }
 
-            Ok(listeners)
+            Ok((listeners, port))
         })
         .map_err(|e: anyhow::Error| TorError::ProxyStartError(e.to_string()))?;
 
-    Ok(rt.spawn(proxy::run_proxy_with_listeners(
-        client,
-        listeners,
-        ListenProtocols::SocksOnly,
-        None,
-    )))
+    Ok((
+        rt.spawn(proxy::run_proxy_with_listeners(
+            client,
+            listeners,
+            ListenProtocols::SocksOnly,
+            None,
+        )),
+        bound_port,
+    ))
 }
 
 /// Re-bootstrap the Tor client
@@ -424,10 +442,62 @@ pub fn set_nofile_limit(_limit: u64) -> Result<u64, TorError> {
 mod tests {
     use super::*;
     use arti_client::config::TorClientConfigBuilder;
-    use std::net::TcpStream;
+    use std::net::{TcpListener, TcpStream};
     use std::thread;
     use std::time::{Duration, Instant};
     use tor_rtcompat::NetStreamListener;
+
+    #[test]
+    fn proxy_selects_and_holds_its_ephemeral_port() {
+        let state_dir = tempfile::tempdir().unwrap();
+        let cache_dir = tempfile::tempdir().unwrap();
+        let config = TorClientConfigBuilder::from_directories(state_dir.path(), cache_dir.path())
+            .build()
+            .unwrap();
+        let (runtime, tasks) = create_arti_runtime().unwrap();
+        let client = TorClient::with_runtime(runtime.clone())
+            .config(config)
+            .create_unbootstrapped()
+            .unwrap();
+
+        let (proxy_task, port) = start_proxy_internal(0, Arc::clone(&client)).unwrap();
+
+        assert_ne!(port, 0);
+        assert!(
+            TcpListener::bind((Ipv4Addr::LOCALHOST, port)).is_err(),
+            "the published SOCKS port was not retained by the proxy"
+        );
+
+        stop_proxy(TorProxyHandle {
+            state: Arc::new(std::sync::Mutex::new(TorProxyState {
+                accept_loop: Some(proxy_task),
+                tasks: Some(tasks),
+            })),
+        })
+        .unwrap();
+
+        TcpListener::bind((Ipv4Addr::LOCALHOST, port)).unwrap();
+    }
+
+    #[test]
+    fn proxy_start_fails_when_a_requested_port_is_already_owned() {
+        let state_dir = tempfile::tempdir().unwrap();
+        let cache_dir = tempfile::tempdir().unwrap();
+        let config = TorClientConfigBuilder::from_directories(state_dir.path(), cache_dir.path())
+            .build()
+            .unwrap();
+        let (runtime, _tasks) = create_arti_runtime().unwrap();
+        let client = TorClient::with_runtime(runtime)
+            .config(config)
+            .create_unbootstrapped()
+            .unwrap();
+        let occupied = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
+        let port = occupied.local_addr().unwrap().port();
+
+        let result = start_proxy_internal(port, client);
+
+        assert!(matches!(result, Err(TorError::ProxyStartError(_))));
+    }
 
     #[test]
     fn stop_proxy_drops_an_idle_connection() {

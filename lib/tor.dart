@@ -127,24 +127,6 @@ class Tor {
     events.add(port);
   }
 
-  Future<int> _getRandomUnusedPort({List<int> excluded = const []}) async {
-    int port = 0;
-
-    retry:
-    while (port == 0 || excluded.contains(port)) {
-      try {
-        var socket = await ServerSocket.bind("0.0.0.0", 0);
-        port = socket.port;
-        socket.close();
-        return port;
-      } catch (_) {
-        continue retry;
-      }
-    }
-
-    return -1;
-  }
-
   /// Start the Tor service.
   ///
   /// This will start the Tor service and establish a Tor circuit.
@@ -182,13 +164,11 @@ class Tor {
     final cacheDir =
         await Directory('${appSupportDir.path}/tor_cache').create();
 
-    // Generate a random port.
-    int newPort = await _getRandomUnusedPort();
-
     try {
       // Start Tor - this is a blocking operation
       final torInstance = await rust.startTor(
-        socksPort: newPort,
+        // Let the final native listener select and retain the ephemeral port.
+        socksPort: 0,
         stateDir: stateDir.path,
         cacheDir: cacheDir.path,
       );
