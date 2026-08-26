@@ -181,7 +181,7 @@ EOF
   <key>CFBundlePackageType</key>
   <string>FMWK</string>
   <key>CFBundleShortVersionString</key>
-  <string>0.2.0</string>
+  <string>$CRATE_VERSION</string>
   <key>CFBundleSupportedPlatforms</key>
   <array>
     <string>$platform_name</string>
@@ -236,6 +236,13 @@ require_tool xcrun
 require_tool lipo
 require_tool install_name_tool
 require_tool xcodebuild
+
+CRATE_PACKAGE_ID="$(cargo pkgid --manifest-path "$CRATE_DIR/Cargo.toml")"
+CRATE_VERSION="${CRATE_PACKAGE_ID##*@}"
+if [ "$CRATE_VERSION" = "$CRATE_PACKAGE_ID" ]; then
+  echo "Could not determine $CRATE_NAME version from Cargo metadata" >&2
+  exit 70
+fi
 
 mkdir -p "$BUILD_DIR/merged" "$BUILD_DIR/frameworks"
 

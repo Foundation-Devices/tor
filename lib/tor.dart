@@ -48,8 +48,7 @@ class Tor {
   bool _started = false;
 
   /// True while the client is starting or re-bootstrapping.
-  bool get starting =>
-      _startInFlight != null || _bootstrapInFlight != null;
+  bool get starting => _startInFlight != null || _bootstrapInFlight != null;
 
   Future<void>? _startInFlight;
   Future<void>? _bootstrapInFlight;
@@ -197,6 +196,9 @@ class Tor {
       _client = torInstance.client;
       _proxy = torInstance.proxy;
       _proxyPort = torInstance.socksPort;
+      // The getters above clone; free the container now instead of at GC so
+      // it cannot keep an extra client reference (and dir.lock) alive.
+      torInstance.dispose();
       _started = true;
       _bootstrapped = true; // startTor creates a bootstrapped client
 
@@ -258,6 +260,7 @@ class Tor {
   /// Stops the proxy
   Future<void> stop() async {
     final proxy = _proxy;
+    final client = _client;
 
     // Stop publishing the route before awaiting native shutdown so callers
     // cannot start new work against a proxy that is being torn down.
@@ -268,22 +271,14 @@ class Tor {
     _bootstrapped = false;
     broadcastState();
 
-    if (proxy == null) {
-      return;
-    }
-
     try {
-      // This is now safe! FRB catches any panic and throws PanicException
-      await rust.stopProxy(proxy: proxy);
-    } on rust.TorError catch (e) {
-      if (kDebugMode) {
-        print('Error stopping proxy: $e');
+      if (proxy != null) {
+        await rust.stopProxy(proxy: proxy);
       }
-    } on PanicException catch (e) {
-      // Previously this would SIGABRT the app, now it's catchable!
-      if (kDebugMode) {
-        print('Proxy stop panicked (caught safely): ${e.message}');
-      }
+    } finally {
+      // Drop the Rust client now instead of at GC: a lingering client holds
+      // tor_cache/dir.lock, forcing a restarted client's dirmgr into read-only.
+      client?.dispose();
     }
   }
 
