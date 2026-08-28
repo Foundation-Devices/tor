@@ -57,6 +57,9 @@ class Tor {
   int? _bootstrapGeneration;
   final TorLifecycleGate _lifecycle = TorLifecycleGate();
 
+  /// Changes whenever the published Tor route is invalidated.
+  int get routeGeneration => _lifecycle.generation;
+
   /// Flag to indicate that traffic should flow through the proxy.
   bool _enabled = false;
 
@@ -235,14 +238,13 @@ class Tor {
     }
 
     late final Future<void> bootstrap;
-    bootstrap = _lifecycle
-        .run(() => _bootstrapInternal(generation))
-        .whenComplete(() {
-          if (identical(_bootstrapInFlight, bootstrap)) {
-            _bootstrapInFlight = null;
-            _bootstrapGeneration = null;
-          }
-        });
+    bootstrap =
+        _lifecycle.run(() => _bootstrapInternal(generation)).whenComplete(() {
+      if (identical(_bootstrapInFlight, bootstrap)) {
+        _bootstrapInFlight = null;
+        _bootstrapGeneration = null;
+      }
+    });
     _bootstrapInFlight = bootstrap;
     _bootstrapGeneration = generation;
     return bootstrap;

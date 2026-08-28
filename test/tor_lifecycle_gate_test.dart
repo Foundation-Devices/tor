@@ -50,6 +50,7 @@ void main() {
     await startEntered.future;
 
     gate.invalidate();
+    expect(gate.generation, generation + 1);
     final stop = gate.run(() async {});
     releaseStart.complete();
 
