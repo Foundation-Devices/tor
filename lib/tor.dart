@@ -38,6 +38,15 @@ class ClientNotActive implements Exception {
   String toString() => 'ClientNotActive: Tor client is not active';
 }
 
+class TorProxyFailure {
+  final String message;
+
+  TorProxyFailure(this.message);
+
+  @override
+  String toString() => 'TorProxyFailure: $message';
+}
+
 class Tor {
   rust.TorClientWrapper? _client;
   rust.TorProxyHandle? _proxy;
@@ -55,6 +64,7 @@ class Tor {
   int? _startGeneration;
   Future<void>? _bootstrapInFlight;
   int? _bootstrapGeneration;
+  rust.TorBootstrapCancellationToken? _bootstrapCancellationToken;
   final TorLifecycleGate _lifecycle = TorLifecycleGate();
 
   /// Changes whenever the published Tor route is invalidated.
@@ -77,6 +87,10 @@ class Tor {
   ///
   /// This stream broadcast just the port for now (-1 if circuit not established or proxy not enabled)
   final StreamController<int> events = StreamController<int>.broadcast();
+
+  /// Reports an unexpected loss of the published SOCKS proxy.
+  final StreamController<TorProxyFailure> failures =
+      StreamController<TorProxyFailure>.broadcast();
 
   /// Getter for the proxy port.
   ///
@@ -178,21 +192,37 @@ class Tor {
       '${appSupportDir.path}/tor_cache',
     ).create();
 
+    if (!_lifecycle.owns(generation)) return;
+
     try {
+      final cancellationToken = rust.TorBootstrapCancellationToken();
+      _bootstrapCancellationToken = cancellationToken;
+
       // Start Tor - this is a blocking operation
-      final torInstance = await rust.startTor(
-        // Let the final native listener select and retain the ephemeral port.
-        socksPort: 0,
-        stateDir: stateDir.path,
-        cacheDir: cacheDir.path,
-      );
+      late final rust.TorInstance torInstance;
+      try {
+        torInstance = await rust.startTor(
+          // Let the final native listener select and retain the ephemeral port.
+          socksPort: 0,
+          stateDir: stateDir.path,
+          cacheDir: cacheDir.path,
+          cancellationToken: cancellationToken,
+        );
+      } finally {
+        if (identical(_bootstrapCancellationToken, cancellationToken)) {
+          _bootstrapCancellationToken = null;
+        }
+        cancellationToken.dispose();
+      }
 
       late final rust.TorClientWrapper client;
       late final rust.TorProxyHandle proxy;
+      late final rust.TorProxyMonitor proxyMonitor;
       late final int proxyPort;
       try {
         client = torInstance.client;
         proxy = torInstance.proxy;
+        proxyMonitor = torInstance.proxyMonitor;
         proxyPort = torInstance.socksPort;
       } finally {
         // The getters above clone; free the container now instead of at GC so
@@ -201,6 +231,7 @@ class Tor {
       }
 
       if (!_lifecycle.owns(generation)) {
+        proxyMonitor.dispose();
         await _stopResources(proxy, client);
         return;
       }
@@ -212,9 +243,12 @@ class Tor {
       _bootstrapped = true; // startTor creates a bootstrapped client
 
       broadcastState();
+      unawaited(_monitorProxy(proxy, proxyMonitor, generation));
     } on rust.TorError catch (e) {
+      if (!_lifecycle.owns(generation)) return;
       throw CouldntBootstrapDirectory(rustError: e.toString());
     } on PanicException catch (e) {
+      if (!_lifecycle.owns(generation)) return;
       // FRB converts Rust panics to PanicException - this is the key benefit!
       throw CouldntBootstrapDirectory(rustError: 'Rust panic: ${e.message}');
     }
@@ -259,15 +293,26 @@ class Tor {
     }
 
     try {
-      await rust.bootstrap(client: client);
+      final cancellationToken = rust.TorBootstrapCancellationToken();
+      _bootstrapCancellationToken = cancellationToken;
+      try {
+        await rust.bootstrap(
+          client: client,
+          cancellationToken: cancellationToken,
+        );
+      } finally {
+        if (identical(_bootstrapCancellationToken, cancellationToken)) {
+          _bootstrapCancellationToken = null;
+        }
+        cancellationToken.dispose();
+      }
       if (!_lifecycle.owns(generation) || !identical(_client, client)) return;
       _bootstrapped = true;
       broadcastState();
     } on rust.TorError catch (e) {
-      if (_lifecycle.owns(generation) && identical(_client, client)) {
-        _bootstrapped = false;
-        broadcastState();
-      }
+      if (!_lifecycle.owns(generation) || !identical(_client, client)) return;
+      _bootstrapped = false;
+      broadcastState();
       throw CouldntBootstrapDirectory(rustError: e.toString());
     }
   }
@@ -286,6 +331,7 @@ class Tor {
     // Invalidate a start or bootstrap before it can publish stale state. The
     // queued stop then waits for that operation to release its native handles.
     _lifecycle.invalidate();
+    _bootstrapCancellationToken?.cancel();
 
     // Stop publishing the route before awaiting native shutdown so callers
     // cannot start new work against a proxy that is being torn down.
@@ -297,6 +343,40 @@ class Tor {
     broadcastState();
 
     return _lifecycle.run(() => _stopResources(proxy, client));
+  }
+
+  Future<void> _monitorProxy(
+    rust.TorProxyHandle proxy,
+    rust.TorProxyMonitor monitor,
+    int generation,
+  ) async {
+    try {
+      final message = await rust.waitForProxyExit(monitor: monitor);
+      if (message == null ||
+          !_lifecycle.owns(generation) ||
+          !identical(_proxy, proxy)) {
+        return;
+      }
+      await _handleProxyFailure(proxy, generation, message);
+    } catch (error) {
+      await _handleProxyFailure(proxy, generation, error.toString());
+    }
+  }
+
+  Future<void> _handleProxyFailure(
+    rust.TorProxyHandle proxy,
+    int generation,
+    String message,
+  ) async {
+    if (!_lifecycle.owns(generation) || !identical(_proxy, proxy)) return;
+
+    try {
+      await stop();
+    } catch (error) {
+      message = '$message; teardown failed: $error';
+    } finally {
+      failures.add(TorProxyFailure(message));
+    }
   }
 
   Future<void> _stopResources(

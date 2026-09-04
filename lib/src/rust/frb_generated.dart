@@ -70,7 +70,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 333622112;
+  int get rustContentHash => -1554608784;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -81,10 +81,18 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  void crateApiTorTorBootstrapCancellationTokenCancel(
+      {required TorBootstrapCancellationToken that});
+
+  TorBootstrapCancellationToken crateApiTorTorBootstrapCancellationTokenNew();
+
   TorClientWrapper crateApiTorTorInstanceAutoAccessorGetClient(
       {required TorInstance that});
 
   TorProxyHandle crateApiTorTorInstanceAutoAccessorGetProxy(
+      {required TorInstance that});
+
+  TorProxyMonitor crateApiTorTorInstanceAutoAccessorGetProxyMonitor(
       {required TorInstance that});
 
   int crateApiTorTorInstanceAutoAccessorGetSocksPort(
@@ -96,10 +104,15 @@ abstract class RustLibApi extends BaseApi {
   void crateApiTorTorInstanceAutoAccessorSetProxy(
       {required TorInstance that, required TorProxyHandle proxy});
 
+  void crateApiTorTorInstanceAutoAccessorSetProxyMonitor(
+      {required TorInstance that, required TorProxyMonitor proxyMonitor});
+
   void crateApiTorTorInstanceAutoAccessorSetSocksPort(
       {required TorInstance that, required int socksPort});
 
-  Future<void> crateApiTorBootstrap({required TorClientWrapper client});
+  Future<void> crateApiTorBootstrap(
+      {required TorClientWrapper client,
+      required TorBootstrapCancellationToken cancellationToken});
 
   Future<BigInt> crateApiTorGetNofileLimit();
 
@@ -115,9 +128,22 @@ abstract class RustLibApi extends BaseApi {
   Future<TorInstance> crateApiTorStartTor(
       {required int socksPort,
       required String stateDir,
-      required String cacheDir});
+      required String cacheDir,
+      required TorBootstrapCancellationToken cancellationToken});
 
   Future<void> crateApiTorStopProxy({required TorProxyHandle proxy});
+
+  Future<String?> crateApiTorWaitForProxyExit(
+      {required TorProxyMonitor monitor});
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TorBootstrapCancellationToken;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TorBootstrapCancellationToken;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_TorBootstrapCancellationTokenPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_TorClientWrapper;
@@ -144,6 +170,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_TorProxyHandlePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TorProxyMonitor;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TorProxyMonitor;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_TorProxyMonitorPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -155,6 +190,56 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  void crateApiTorTorBootstrapCancellationTokenCancel(
+      {required TorBootstrapCancellationToken that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiTorTorBootstrapCancellationTokenCancelConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiTorTorBootstrapCancellationTokenCancelConstMeta =>
+      const TaskConstMeta(
+        debugName: "TorBootstrapCancellationToken_cancel",
+        argNames: ["that"],
+      );
+
+  @override
+  TorBootstrapCancellationToken crateApiTorTorBootstrapCancellationTokenNew() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiTorTorBootstrapCancellationTokenNewConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiTorTorBootstrapCancellationTokenNewConstMeta =>
+      const TaskConstMeta(
+        debugName: "TorBootstrapCancellationToken_new",
+        argNames: [],
+      );
+
+  @override
   TorClientWrapper crateApiTorTorInstanceAutoAccessorGetClient(
       {required TorInstance that}) {
     return handler.executeSync(SyncTask(
@@ -162,7 +247,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -189,7 +274,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -209,6 +294,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  TorProxyMonitor crateApiTorTorInstanceAutoAccessorGetProxyMonitor(
+      {required TorInstance that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiTorTorInstanceAutoAccessorGetProxyMonitorConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiTorTorInstanceAutoAccessorGetProxyMonitorConstMeta =>
+          const TaskConstMeta(
+            debugName: "TorInstance_auto_accessor_get_proxy_monitor",
+            argNames: ["that"],
+          );
+
+  @override
   int crateApiTorTorInstanceAutoAccessorGetSocksPort(
       {required TorInstance that}) {
     return handler.executeSync(SyncTask(
@@ -216,7 +329,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_u_16,
@@ -244,7 +357,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorClientWrapper(
             client, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -272,7 +385,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyHandle(
             proxy, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -291,6 +404,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  void crateApiTorTorInstanceAutoAccessorSetProxyMonitor(
+      {required TorInstance that, required TorProxyMonitor proxyMonitor}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
+            that, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+            proxyMonitor, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiTorTorInstanceAutoAccessorSetProxyMonitorConstMeta,
+      argValues: [that, proxyMonitor],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiTorTorInstanceAutoAccessorSetProxyMonitorConstMeta =>
+          const TaskConstMeta(
+            debugName: "TorInstance_auto_accessor_set_proxy_monitor",
+            argNames: ["that", "proxyMonitor"],
+          );
+
+  @override
   void crateApiTorTorInstanceAutoAccessorSetSocksPort(
       {required TorInstance that, required int socksPort}) {
     return handler.executeSync(SyncTask(
@@ -299,7 +441,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
             that, serializer);
         sse_encode_u_16(socksPort, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -318,28 +460,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiTorBootstrap({required TorClientWrapper client}) {
+  Future<void> crateApiTorBootstrap(
+      {required TorClientWrapper client,
+      required TorBootstrapCancellationToken cancellationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorClientWrapper(
             client, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+            cancellationToken, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
+            funcId: 11, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_tor_error,
       ),
       constMeta: kCrateApiTorBootstrapConstMeta,
-      argValues: [client],
+      argValues: [client, cancellationToken],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiTorBootstrapConstMeta => const TaskConstMeta(
         debugName: "bootstrap",
-        argNames: ["client"],
+        argNames: ["client", "cancellationToken"],
       );
 
   @override
@@ -348,7 +494,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
+            funcId: 12, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_u_64,
@@ -371,7 +517,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
+            funcId: 13, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -394,7 +540,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
+            funcId: 14, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -421,7 +567,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_bool(softMode, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
+            funcId: 15, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -445,7 +591,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_u_64(limit, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 12, port: port_);
+            funcId: 16, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_u_64,
@@ -466,15 +612,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Future<TorInstance> crateApiTorStartTor(
       {required int socksPort,
       required String stateDir,
-      required String cacheDir}) {
+      required String cacheDir,
+      required TorBootstrapCancellationToken cancellationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_u_16(socksPort, serializer);
         sse_encode_String(stateDir, serializer);
         sse_encode_String(cacheDir, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+            cancellationToken, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 13, port: port_);
+            funcId: 17, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -482,14 +631,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_tor_error,
       ),
       constMeta: kCrateApiTorStartTorConstMeta,
-      argValues: [socksPort, stateDir, cacheDir],
+      argValues: [socksPort, stateDir, cacheDir, cancellationToken],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiTorStartTorConstMeta => const TaskConstMeta(
         debugName: "start_tor",
-        argNames: ["socksPort", "stateDir", "cacheDir"],
+        argNames: ["socksPort", "stateDir", "cacheDir", "cancellationToken"],
       );
 
   @override
@@ -500,7 +649,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyHandle(
             proxy, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 14, port: port_);
+            funcId: 18, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -516,6 +665,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         debugName: "stop_proxy",
         argNames: ["proxy"],
       );
+
+  @override
+  Future<String?> crateApiTorWaitForProxyExit(
+      {required TorProxyMonitor monitor}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+            monitor, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 19, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_opt_String,
+        decodeErrorData: sse_decode_tor_error,
+      ),
+      constMeta: kCrateApiTorWaitForProxyExitConstMeta,
+      argValues: [monitor],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiTorWaitForProxyExitConstMeta =>
+      const TaskConstMeta(
+        debugName: "wait_for_proxy_exit",
+        argNames: ["monitor"],
+      );
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TorBootstrapCancellationToken => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TorBootstrapCancellationToken => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_TorClientWrapper => wire
@@ -540,6 +724,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_TorProxyHandle => wire
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyHandle;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TorProxyMonitor => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TorProxyMonitor => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor;
+
+  @protected
+  TorBootstrapCancellationToken
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TorBootstrapCancellationTokenImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
 
   @protected
   TorClientWrapper
@@ -566,11 +767,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TorProxyMonitor
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TorProxyMonitorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   TorInstance
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return TorInstanceImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  TorBootstrapCancellationToken
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TorBootstrapCancellationTokenImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -587,6 +805,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return TorInstanceImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  TorBootstrapCancellationToken
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TorBootstrapCancellationTokenImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -614,6 +841,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TorProxyMonitor
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TorProxyMonitorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as String;
@@ -629,6 +864,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_String(raw);
   }
 
   @protected
@@ -693,6 +934,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TorBootstrapCancellationToken
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TorBootstrapCancellationTokenImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   TorClientWrapper
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorClientWrapper(
           SseDeserializer deserializer) {
@@ -720,11 +970,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TorProxyMonitor
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TorProxyMonitorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   TorInstance
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return TorInstanceImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  TorBootstrapCancellationToken
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TorBootstrapCancellationTokenImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -743,6 +1011,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return TorInstanceImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  TorBootstrapCancellationToken
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TorBootstrapCancellationTokenImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -774,6 +1051,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TorProxyMonitor
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TorProxyMonitorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -791,6 +1077,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -858,6 +1155,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          TorBootstrapCancellationToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TorBootstrapCancellationTokenImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorClientWrapper(
           TorClientWrapper self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -887,11 +1195,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+          TorProxyMonitor self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TorProxyMonitorImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorInstance(
           TorInstance self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as TorInstanceImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          TorBootstrapCancellationToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TorBootstrapCancellationTokenImpl)
+            .frbInternalSseEncode(move: false),
         serializer);
   }
 
@@ -912,6 +1241,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as TorInstanceImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+          TorBootstrapCancellationToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TorBootstrapCancellationTokenImpl)
+            .frbInternalSseEncode(move: null),
         serializer);
   }
 
@@ -945,6 +1285,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+          TorProxyMonitor self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TorProxyMonitorImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
@@ -962,6 +1312,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_String(self, serializer);
+    }
   }
 
   @protected
@@ -1025,6 +1385,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 }
 
 @sealed
+class TorBootstrapCancellationTokenImpl extends RustOpaque
+    implements TorBootstrapCancellationToken {
+  // Not to be used by end users
+  TorBootstrapCancellationTokenImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  TorBootstrapCancellationTokenImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_TorBootstrapCancellationToken,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_TorBootstrapCancellationToken,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_TorBootstrapCancellationTokenPtr,
+  );
+
+  void cancel() =>
+      RustLib.instance.api.crateApiTorTorBootstrapCancellationTokenCancel(
+        that: this,
+      );
+}
+
+@sealed
 class TorClientWrapperImpl extends RustOpaque implements TorClientWrapper {
   // Not to be used by end users
   TorClientWrapperImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -1074,6 +1461,11 @@ class TorInstanceImpl extends RustOpaque implements TorInstance {
         that: this,
       );
 
+  TorProxyMonitor get proxyMonitor =>
+      RustLib.instance.api.crateApiTorTorInstanceAutoAccessorGetProxyMonitor(
+        that: this,
+      );
+
   int get socksPort =>
       RustLib.instance.api.crateApiTorTorInstanceAutoAccessorGetSocksPort(
         that: this,
@@ -1084,6 +1476,10 @@ class TorInstanceImpl extends RustOpaque implements TorInstance {
 
   set proxy(TorProxyHandle proxy) => RustLib.instance.api
       .crateApiTorTorInstanceAutoAccessorSetProxy(that: this, proxy: proxy);
+
+  set proxyMonitor(TorProxyMonitor proxyMonitor) =>
+      RustLib.instance.api.crateApiTorTorInstanceAutoAccessorSetProxyMonitor(
+          that: this, proxyMonitor: proxyMonitor);
 
   set socksPort(int socksPort) =>
       RustLib.instance.api.crateApiTorTorInstanceAutoAccessorSetSocksPort(
@@ -1107,5 +1503,25 @@ class TorProxyHandleImpl extends RustOpaque implements TorProxyHandle {
         RustLib.instance.api.rust_arc_decrement_strong_count_TorProxyHandle,
     rustArcDecrementStrongCountPtr:
         RustLib.instance.api.rust_arc_decrement_strong_count_TorProxyHandlePtr,
+  );
+}
+
+@sealed
+class TorProxyMonitorImpl extends RustOpaque implements TorProxyMonitor {
+  // Not to be used by end users
+  TorProxyMonitorImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  TorProxyMonitorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_TorProxyMonitor,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_TorProxyMonitor,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_TorProxyMonitorPtr,
   );
 }

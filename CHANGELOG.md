@@ -4,6 +4,12 @@ SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
 SPDX-License-Identifier: MIT
 -->
 
+## 0.2.2
+
+* Bound and cancel native Arti bootstrap work, and report unexpected SOCKS
+  proxy exits to Dart so consumers can recover without waiting for a failed
+  request.
+
 ## 0.2.1
 
 * Tear down the Tor client deterministically on `stop()`: await the proxy
