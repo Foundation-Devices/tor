@@ -13,9 +13,11 @@ use lazy_static::lazy_static;
 use std::future::Future;
 use std::io;
 use std::net::{Ipv4Addr, SocketAddr};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use tokio::runtime::{Builder, Runtime as TokioRuntime};
-use tokio::task::JoinHandle;
+use tokio::sync::watch;
+use tokio::task::{AbortHandle, JoinHandle};
 use tokio_util::sync::CancellationToken;
 use tokio_util::task::TaskTracker;
 use tor_config::Listen;
@@ -30,6 +32,7 @@ lazy_static! {
 }
 
 const PROXY_SHUTDOWN_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+const BOOTSTRAP_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(180);
 
 type TrackedTorRuntime = CompoundRuntime<
     TrackedSpawner,
@@ -42,6 +45,7 @@ type TrackedTorRuntime = CompoundRuntime<
 >;
 
 #[derive(Clone, Debug, Default)]
+#[frb(ignore)]
 struct TrackedTasks {
     tracker: TaskTracker,
     cancellation: CancellationToken,
@@ -151,6 +155,40 @@ fn create_arti_runtime() -> io::Result<(TrackedTorRuntime, TrackedTasks)> {
     Ok((runtime, tasks))
 }
 
+enum BootstrapWaitError<E> {
+    Cancelled,
+    TimedOut,
+    Failed(E),
+}
+
+async fn wait_for_bootstrap<F, T, E>(
+    future: F,
+    cancellation: &CancellationToken,
+    timeout: std::time::Duration,
+) -> std::result::Result<T, BootstrapWaitError<E>>
+where
+    F: Future<Output = std::result::Result<T, E>>,
+{
+    tokio::select! {
+        biased;
+        _ = cancellation.cancelled() => Err(BootstrapWaitError::Cancelled),
+        result = tokio::time::timeout(timeout, future) => match result {
+            Err(_) => Err(BootstrapWaitError::TimedOut),
+            Ok(Err(error)) => Err(BootstrapWaitError::Failed(error)),
+            Ok(Ok(value)) => Ok(value),
+        },
+    }
+}
+
+fn finish_failed_start(tasks: TrackedTasks, error: TorError) -> TorError {
+    match tasks.stop_and_wait() {
+        Ok(()) => error,
+        Err(cleanup_error) => TorError::RuntimeError(format!(
+            "{error}; failed to stop partially started Tor tasks: {cleanup_error}"
+        )),
+    }
+}
+
 /// Custom error types for Tor operations
 #[derive(Debug, thiserror::Error)]
 pub enum TorError {
@@ -171,6 +209,25 @@ pub enum TorError {
 
     #[error("Configuration error: {0}")]
     ConfigError(String),
+}
+
+#[frb(opaque)]
+pub struct TorBootstrapCancellationToken {
+    token: CancellationToken,
+}
+
+impl TorBootstrapCancellationToken {
+    #[frb(sync)]
+    pub fn new() -> Self {
+        Self {
+            token: CancellationToken::new(),
+        }
+    }
+
+    #[frb(sync)]
+    pub fn cancel(&self) {
+        self.token.cancel();
+    }
 }
 
 /// Opaque wrapper for TorClient - FRB handles this automatically
@@ -196,8 +253,29 @@ pub struct TorProxyHandle {
 }
 
 struct TorProxyState {
-    accept_loop: Option<JoinHandle<Result<()>>>,
+    accept_loop_abort: Option<AbortHandle>,
+    accept_loop_monitor: Option<JoinHandle<()>>,
+    expected_stop: Arc<AtomicBool>,
     tasks: Option<TrackedTasks>,
+}
+
+#[derive(Clone, Debug)]
+struct TorProxyExit {
+    expected: bool,
+    message: String,
+}
+
+#[frb(opaque)]
+pub struct TorProxyMonitor {
+    exit: watch::Receiver<Option<TorProxyExit>>,
+}
+
+impl Clone for TorProxyMonitor {
+    fn clone(&self) -> Self {
+        Self {
+            exit: self.exit.clone(),
+        }
+    }
 }
 
 impl Clone for TorProxyHandle {
@@ -212,6 +290,7 @@ impl Clone for TorProxyHandle {
 pub struct TorInstance {
     pub client: TorClientWrapper,
     pub proxy: TorProxyHandle,
+    pub proxy_monitor: TorProxyMonitor,
     pub socks_port: u16,
 }
 
@@ -229,10 +308,8 @@ pub fn start_tor(
     socks_port: u16,
     state_dir: String,
     cache_dir: String,
+    cancellation_token: &TorBootstrapCancellationToken,
 ) -> Result<TorInstance, TorError> {
-    let (runtime, tasks) =
-        create_arti_runtime().map_err(|e| TorError::RuntimeError(e.to_string()))?;
-
     let mut cfg_builder = TorClientConfig::builder();
     cfg_builder
         .storage()
@@ -250,25 +327,51 @@ pub fn start_tor(
         .build()
         .map_err(|e| TorError::ConfigError(e.to_string()))?;
 
-    let client = runtime
-        .block_on(async {
+    let (runtime, tasks) =
+        create_arti_runtime().map_err(|e| TorError::RuntimeError(e.to_string()))?;
+
+    let client = runtime.block_on(wait_for_bootstrap(
+        async {
             TorClient::with_runtime(runtime.clone())
                 .config(cfg)
                 .create_bootstrapped()
                 .await
-        })
-        .map_err(|e| TorError::BootstrapError(e.to_string()))?;
+        },
+        &cancellation_token.token,
+        BOOTSTRAP_TIMEOUT,
+    ));
+    let client = match client {
+        Ok(client) => client,
+        Err(BootstrapWaitError::Cancelled) => {
+            return Err(finish_failed_start(
+                tasks,
+                TorError::BootstrapError("Bootstrap was cancelled".to_owned()),
+            ));
+        }
+        Err(BootstrapWaitError::TimedOut) => {
+            return Err(finish_failed_start(
+                tasks,
+                TorError::BootstrapError("Bootstrap timed out".to_owned()),
+            ));
+        }
+        Err(BootstrapWaitError::Failed(error)) => {
+            return Err(finish_failed_start(
+                tasks,
+                TorError::BootstrapError(error.to_string()),
+            ));
+        }
+    };
 
-    let (proxy_handle, socks_port) = start_proxy_internal(socks_port, Arc::clone(&client))?;
+    let (accept_loop, socks_port) = match start_proxy_internal(socks_port, Arc::clone(&client)) {
+        Ok(proxy) => proxy,
+        Err(error) => return Err(finish_failed_start(tasks, error)),
+    };
+    let (proxy, proxy_monitor) = monitor_proxy(accept_loop, Some(tasks))?;
 
     Ok(TorInstance {
         client: TorClientWrapper { client, runtime },
-        proxy: TorProxyHandle {
-            state: Arc::new(std::sync::Mutex::new(TorProxyState {
-                accept_loop: Some(proxy_handle),
-                tasks: Some(tasks),
-            })),
-        },
+        proxy,
+        proxy_monitor,
         socks_port,
     })
 }
@@ -341,14 +444,90 @@ fn start_proxy_internal(
     ))
 }
 
+fn monitor_proxy(
+    accept_loop: JoinHandle<Result<()>>,
+    tasks: Option<TrackedTasks>,
+) -> Result<(TorProxyHandle, TorProxyMonitor), TorError> {
+    let rt = match RUNTIME.as_ref() {
+        Ok(rt) => rt,
+        Err(error) => {
+            accept_loop.abort();
+            let error = TorError::RuntimeError(error.to_string());
+            return Err(match tasks {
+                Some(tasks) => finish_failed_start(tasks, error),
+                None => error,
+            });
+        }
+    };
+    let accept_loop_abort = accept_loop.abort_handle();
+    let expected_stop = Arc::new(AtomicBool::new(false));
+    let expected_stop_for_monitor = Arc::clone(&expected_stop);
+    let (exit_sender, exit_receiver) = watch::channel(None);
+    let accept_loop_monitor = rt.spawn(async move {
+        let result = accept_loop.await;
+        let expected = expected_stop_for_monitor.load(Ordering::Acquire);
+        let message = match result {
+            Ok(Ok(())) => "Tor proxy accept loop exited".to_owned(),
+            Ok(Err(error)) => format!("Tor proxy accept loop failed: {error}"),
+            Err(error) if error.is_cancelled() => "Tor proxy accept loop was cancelled".to_owned(),
+            Err(error) => format!("Tor proxy accept loop panicked: {error}"),
+        };
+
+        if !expected {
+            log::warn!("{message}");
+        }
+        let _ = exit_sender.send(Some(TorProxyExit { expected, message }));
+    });
+
+    Ok((
+        TorProxyHandle {
+            state: Arc::new(std::sync::Mutex::new(TorProxyState {
+                accept_loop_abort: Some(accept_loop_abort),
+                accept_loop_monitor: Some(accept_loop_monitor),
+                expected_stop,
+                tasks,
+            })),
+        },
+        TorProxyMonitor {
+            exit: exit_receiver,
+        },
+    ))
+}
+
+pub async fn wait_for_proxy_exit(mut monitor: TorProxyMonitor) -> Result<Option<String>, TorError> {
+    if monitor.exit.borrow().is_none() {
+        monitor.exit.changed().await.map_err(|_| {
+            TorError::RuntimeError("Tor proxy monitor stopped without an exit event".to_owned())
+        })?;
+    }
+
+    let exit = monitor.exit.borrow().clone().ok_or_else(|| {
+        TorError::RuntimeError("Tor proxy monitor stopped without an exit event".to_owned())
+    })?;
+    Ok((!exit.expected).then_some(exit.message))
+}
+
 /// Re-bootstrap the Tor client
 ///
 /// Call this after network changes or to refresh the connection.
-pub fn bootstrap(client: &TorClientWrapper) -> Result<(), TorError> {
-    client
-        .runtime
-        .block_on(client.client.as_ref().bootstrap())
-        .map_err(|e| TorError::BootstrapError(e.to_string()))
+pub fn bootstrap(
+    client: &TorClientWrapper,
+    cancellation_token: &TorBootstrapCancellationToken,
+) -> Result<(), TorError> {
+    match client.runtime.block_on(wait_for_bootstrap(
+        client.client.as_ref().bootstrap(),
+        &cancellation_token.token,
+        BOOTSTRAP_TIMEOUT,
+    )) {
+        Ok(()) => Ok(()),
+        Err(BootstrapWaitError::Cancelled) => {
+            Err(TorError::BootstrapError("Bootstrap was cancelled".to_owned()))
+        }
+        Err(BootstrapWaitError::TimedOut) => {
+            Err(TorError::BootstrapError("Bootstrap timed out".to_owned()))
+        }
+        Err(BootstrapWaitError::Failed(error)) => Err(TorError::BootstrapError(error.to_string())),
+    }
 }
 
 /// Set the client dormant mode
@@ -368,41 +547,38 @@ pub fn set_dormant(client: &TorClientWrapper, soft_mode: bool) {
 ///
 /// Stops the accept loop and the client runtime that owns accepted connections.
 pub fn stop_proxy(proxy: TorProxyHandle) -> Result<(), TorError> {
-    let (accept_loop, tasks) = {
+    let (accept_loop_abort, accept_loop_monitor, expected_stop, tasks) = {
         let mut state = proxy
             .state
             .lock()
             .map_err(|e| TorError::ProxyStopError(e.to_string()))?;
-        (state.accept_loop.take(), state.tasks.take())
+        (
+            state.accept_loop_abort.take(),
+            state.accept_loop_monitor.take(),
+            Arc::clone(&state.expected_stop),
+            state.tasks.take(),
+        )
     };
 
-    let accept_result = match accept_loop {
-        Some(handle) => {
-            handle.abort();
-            match RUNTIME.as_ref() {
-                Ok(rt) => rt.block_on(async {
-                    // A loop that already ended - by its own error or a panic -
-                    // has released its listeners and client clone, so only an
-                    // unfinished task leaves teardown unconfirmed.
-                    match tokio::time::timeout(PROXY_SHUTDOWN_TIMEOUT, handle).await {
-                        Err(_) => Err(TorError::ProxyStopError(
-                            "Timed out stopping Tor proxy accept loop".to_owned(),
-                        )),
-                        Ok(Ok(Err(error))) => {
-                            log::warn!("Tor proxy accept loop had already failed: {error}");
-                            Ok(())
-                        }
-                        Ok(Err(error)) if !error.is_cancelled() => {
-                            log::warn!("Tor proxy accept loop panicked: {error}");
-                            Ok(())
-                        }
-                        Ok(_) => Ok(()),
-                    }
-                }),
-                Err(error) => Err(TorError::RuntimeError(error.to_string())),
+    expected_stop.store(true, Ordering::Release);
+    if let Some(abort) = accept_loop_abort {
+        abort.abort();
+    }
+
+    let accept_result = match (accept_loop_monitor, RUNTIME.as_ref()) {
+        (Some(monitor), Ok(rt)) => rt.block_on(async {
+            match tokio::time::timeout(PROXY_SHUTDOWN_TIMEOUT, monitor).await {
+                Err(_) => Err(TorError::ProxyStopError(
+                    "Timed out stopping Tor proxy accept loop".to_owned(),
+                )),
+                Ok(Err(error)) => Err(TorError::ProxyStopError(format!(
+                    "Tor proxy monitor failed: {error}"
+                ))),
+                Ok(Ok(())) => Ok(()),
             }
-        }
-        None => Ok(()),
+        }),
+        (Some(_), Err(error)) => Err(TorError::RuntimeError(error.to_string())),
+        (None, _) => Ok(()),
     };
 
     let task_result = tasks.map_or(Ok(()), |tasks| tasks.stop_and_wait());
@@ -442,6 +618,7 @@ pub fn set_nofile_limit(_limit: u64) -> Result<u64, TorError> {
 mod tests {
     use super::*;
     use arti_client::config::TorClientConfigBuilder;
+    use std::future::pending;
     use std::net::{TcpListener, TcpStream};
     use std::thread;
     use std::time::{Duration, Instant};
@@ -468,13 +645,8 @@ mod tests {
             "the published SOCKS port was not retained by the proxy"
         );
 
-        stop_proxy(TorProxyHandle {
-            state: Arc::new(std::sync::Mutex::new(TorProxyState {
-                accept_loop: Some(proxy_task),
-                tasks: Some(tasks),
-            })),
-        })
-        .unwrap();
+        let (proxy, _) = monitor_proxy(proxy_task, Some(tasks)).unwrap();
+        stop_proxy(proxy).unwrap();
 
         TcpListener::bind((Ipv4Addr::LOCALHOST, port)).unwrap();
     }
@@ -543,13 +715,8 @@ mod tests {
             "the idle connection was not accepted"
         );
 
-        stop_proxy(TorProxyHandle {
-            state: Arc::new(std::sync::Mutex::new(TorProxyState {
-                accept_loop: Some(proxy_task),
-                tasks: Some(tasks),
-            })),
-        })
-        .unwrap();
+        let (proxy, _) = monitor_proxy(proxy_task, Some(tasks)).unwrap();
+        stop_proxy(proxy).unwrap();
 
         assert_eq!(Arc::strong_count(&client), baseline_client_references);
     }
@@ -569,12 +736,45 @@ mod tests {
 
         // A proxy that already died is exactly when the caller has to be able
         // to restart, so a stale accept-loop error must not fail teardown.
-        stop_proxy(TorProxyHandle {
-            state: Arc::new(std::sync::Mutex::new(TorProxyState {
-                accept_loop: Some(accept_loop),
-                tasks: None,
-            })),
-        })
-        .unwrap();
+        let (proxy, _) = monitor_proxy(accept_loop, None).unwrap();
+        stop_proxy(proxy).unwrap();
+    }
+
+    #[test]
+    fn bootstrap_wait_can_be_cancelled_or_timed_out() {
+        let cancelled = CancellationToken::new();
+        cancelled.cancel();
+        let cancelled_result = RUNTIME.as_ref().unwrap().block_on(wait_for_bootstrap(
+            pending::<std::result::Result<(), ()>>(),
+            &cancelled,
+            Duration::from_secs(1),
+        ));
+        assert!(matches!(
+            cancelled_result,
+            Err(BootstrapWaitError::Cancelled)
+        ));
+
+        let timed_out = RUNTIME.as_ref().unwrap().block_on(wait_for_bootstrap(
+            pending::<std::result::Result<(), ()>>(),
+            &CancellationToken::new(),
+            Duration::from_millis(10),
+        ));
+        assert!(matches!(timed_out, Err(BootstrapWaitError::TimedOut)));
+    }
+
+    #[test]
+    fn proxy_exit_reports_whether_stop_was_expected() {
+        let rt = RUNTIME.as_ref().unwrap();
+        let failed_loop = rt.spawn(async { Err(anyhow::anyhow!("fatal accept error")) });
+        let (failed_proxy, failed_monitor) = monitor_proxy(failed_loop, None).unwrap();
+        let failed_exit = rt.block_on(wait_for_proxy_exit(failed_monitor)).unwrap();
+        assert!(failed_exit.unwrap().contains("fatal accept error"));
+        stop_proxy(failed_proxy).unwrap();
+
+        let running_loop = rt.spawn(pending::<Result<()>>());
+        let (running_proxy, running_monitor) = monitor_proxy(running_loop, None).unwrap();
+        stop_proxy(running_proxy).unwrap();
+        let stopped_exit = rt.block_on(wait_for_proxy_exit(running_monitor)).unwrap();
+        assert!(stopped_exit.is_none());
     }
 }
