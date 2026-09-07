@@ -3326,21 +3326,24 @@ dependencies = [
 
 [[package]]
 name = "rust_lib_tor"
-version = "0.2.0"
+version = "0.2.2"
 dependencies = [
  "anyhow",
  "arti",
  "arti-client",
  "flutter_rust_bridge",
+ "futures",
  "lazy_static",
  "libc",
  "liblzma",
  "log",
  "rlimit 0.10.2",
  "security-framework 2.10.0",
+ "tempfile",
  "thiserror 1.0.69",
  "time",
  "tokio",
+ "tokio-util",
  "tor-config",
  "tor-rtcompat",
 ]
@@ -4188,6 +4191,7 @@ dependencies = [
  "futures-core",
  "futures-io",
  "futures-sink",
+ "futures-util",
  "pin-project-lite",
  "tokio",
 ]
