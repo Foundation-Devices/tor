@@ -44,7 +44,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   socks5_proxy: 1.0.3+dev.3
   path_provider: ^2.1.6
-  socks_socket: ^1.1.0
+  socks_socket: ^2.0.0
 
 dev_dependencies:
   flutter_test:
