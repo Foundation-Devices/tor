@@ -1,5 +1,5 @@
 //! tor-netdoc reads `SystemTime::min_value()` while parsing every consensus.
-//! Upstream saturating-time 0.4.0 never finishes computing it on Windows,
+//! Upstream saturating-time 0.5.0 never finishes computing it on Windows,
 //! where `SystemTime` has 100ns resolution, so bootstrap hung forever.
 
 use saturating_time::SaturatingTime;

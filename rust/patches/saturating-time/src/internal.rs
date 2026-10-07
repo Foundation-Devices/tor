@@ -73,7 +73,8 @@ impl SaturatingTime for SystemTime {
 
 impl SaturatingTime for Instant {
     fn anchor() -> Self {
-        Self::now()
+        use web_time_compat::InstantExt;
+        Self::get()
     }
 
     fn max_value() -> Self {
@@ -127,9 +128,8 @@ fn find_min<T: SaturatingTime + PartialEq>() -> T {
 ///     2. If [`None`] or unchanged, and `step == 1ns`, return `res`.
 ///     3. Else, set `step` to `MAX{1ns, step / 2}` and continue.
 ///
-/// A step below the platform's clock resolution (100ns for Windows'
-/// [`SystemTime`]) rounds to zero and leaves `res` unchanged, so it is treated
-/// like [`None`]. Otherwise the loop would never terminate on such platforms.
+/// Steps below the platform clock resolution can leave `res` unchanged.
+/// Treat those steps as overflow so the search terminates on Windows.
 fn find_limit<T, F>(f: F) -> T
 where
     T: SaturatingTime + PartialEq,
@@ -147,13 +147,12 @@ where
         let next = f(&res, step);
         match next {
             Some(st) if st != res => {
-                // (2.1) If Some and changed, set res to the returned value and
-                // continue.
-                res = st
+                // (2.1) Advance only when the clock value changes.
+                res = st;
             }
             Some(_) | None => {
                 if step == ONE_NS {
-                    // (2.2) If None or unchanged and step == 1ns, return res.
+                    // (2.2) Stop when no representable step remains.
                     return res;
                 } else {
                     // (2.3) Else, set step to MAX{1ns, step / 2}.
@@ -166,12 +165,41 @@ where
 
 #[cfg(test)]
 mod tests {
+    // @@ begin test lint list maintained by maint/add_warning @@
+    #![allow(clippy::bool_assert_comparison)]
+    #![allow(clippy::clone_on_copy)]
+    #![allow(clippy::dbg_macro)]
+    #![allow(clippy::mixed_attributes_style)]
+    #![allow(clippy::print_stderr)]
+    #![allow(clippy::print_stdout)]
+    #![allow(clippy::single_char_pattern)]
+    #![allow(clippy::unwrap_used)]
+    #![allow(clippy::unchecked_time_subtraction)]
+    #![allow(clippy::useless_vec)]
+    #![allow(clippy::needless_pass_by_value)]
+    #![allow(clippy::string_slice)] // See arti#2571
+    //! <!-- @@ end test lint list maintained by maint/add_warning @@ -->
+
     use std::{
         fmt::Debug,
         ops::{Add, Sub},
     };
 
     use super::*;
+
+    #[test]
+    fn limit_search_handles_clock_resolution_below_one_nanosecond_precision() {
+        let calls = std::cell::Cell::new(0);
+        let minimum = find_limit::<SystemTime, _>(|time, step| {
+            calls.set(calls.get() + 1);
+            assert!(calls.get() < 1000, "limit search stopped making progress");
+            // Model Windows SystemTime's 100ns resolution on every platform.
+            let rounded = Duration::new(step.as_secs(), step.subsec_nanos() / 100 * 100);
+            time.checked_sub(rounded)
+        });
+        assert!(minimum < SystemTime::UNIX_EPOCH);
+        assert!(minimum.checked_sub(Duration::from_nanos(100)).is_none());
+    }
 
     /// Checks whether the minimum and maximum values are correct.
     fn min_max<T>()

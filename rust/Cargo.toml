@@ -15,10 +15,10 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 lazy_static = "1.4"
 tokio = { version = "1", features = ["full"] }
-arti-client = { version = "0.46.0", features = ["static", "onion-service-client"] }
-arti = { version = "2.6.0", features = ["experimental-api", "static"] }
-tor-rtcompat = { version = "0.46.0", features = ["static", "native-tls", "tokio"] }
-tor-config = "=0.46.0"
+arti-client = { version = "0.47.0", features = ["static", "onion-service-client"] }
+arti = { version = "2.7.0", features = ["experimental-api", "static"] }
+tor-rtcompat = { version = "0.47.0", features = ["static", "native-tls", "tokio"] }
+tor-config = "=0.47.0"
 log = "0.4.20"
 lzma-sys = { version = "0.1.20", features = ["static"] }
 #android_log-sys = "0.3.1"
@@ -37,11 +37,11 @@ cbindgen = "= 0.24.3"
 glob = "0.3.1"
 
 [dev-dependencies]
-saturating-time = "0.4.0"
+saturating-time = "0.5.0"
 
-# saturating-time 0.4.0 (via tor-netdoc) never finishes computing the minimum
+# saturating-time 0.5.0 (via tor-netdoc) never finishes computing the minimum
 # SystemTime on Windows, which hangs consensus parsing and therefore bootstrap.
-# The vendored copy only changes `find_limit` to stop on steps below the
-# platform's clock resolution.
+# The vendored copy guards `find_limit` against steps below the platform's
+# clock resolution and tests the same rounding behavior on every platform.
 [patch.crates-io]
 saturating-time = { path = "patches/saturating-time" }

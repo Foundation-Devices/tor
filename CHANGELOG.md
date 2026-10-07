@@ -1,6 +1,8 @@
 ## 0.2.0
 
-* Bump arti to 2.6.0; needs Rust 1.91.
+* Bump arti to 2.7.0 and its supporting crates to 0.47.0; needs Rust 1.92.
+* Rebase the Windows clock-resolution fix onto `saturating-time` 0.5.0;
+  the upstream release still hangs while computing `SystemTime` limits.
 * Fix `tor_client_bootstrap` and `tor_client_set_dormant` freeing the client
   handle Dart still holds. Add `tor_client_free`; `Tor.stop` now releases the
   client handle.
