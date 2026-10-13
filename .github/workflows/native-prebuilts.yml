@@ -1,6 +1,7 @@
-name: Build native prebuilts
+name: Native and package validation
 
 on:
+  pull_request:
   push:
     tags: ['native-*']
   workflow_dispatch:
@@ -10,9 +11,48 @@ permissions:
 
 concurrency:
   group: native-prebuilts-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  verify:
+    name: Rust, Dart, and lifecycle tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - name: Install Linux prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libgtk-3-dev liblzma-dev ninja-build pkg-config perl
+      - name: Install pinned Rust toolchain
+        run: |
+          toolchain=$(sed -n 's/^channel = "\([^"]*\)".*/\1/p' rust/rust-toolchain.toml)
+          rustup toolchain install "$toolchain" --profile minimal --component clippy,rustfmt
+          echo "RUSTUP_TOOLCHAIN=$toolchain" >> "$GITHUB_ENV"
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: rust
+      - uses: subosito/flutter-action@1508160852fb97248640997f7cfb38da241df0ba # v2.9.1
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Verify Rust
+        run: |
+          cargo fmt --manifest-path rust/Cargo.toml --check
+          cargo test --locked --all-targets --manifest-path rust/Cargo.toml
+          cargo clippy --locked --all-targets --manifest-path rust/Cargo.toml -- -D warnings
+      - name: Verify Dart and native lifecycle
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+      - uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: rust
+          ignore: RUSTSEC-2021-0145,RUSTSEC-2023-0071
+
   build:
     if: github.event.deleted != true
     name: ${{ matrix.target }}
@@ -52,7 +92,7 @@ jobs:
           "CARGO_TARGET_DIR=C:/t" >> $env:GITHUB_ENV
           "TEMP=C:\tmp" >> $env:GITHUB_ENV
           "TMP=C:\tmp" >> $env:GITHUB_ENV
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
       - name: Install Linux prerequisites
         if: runner.os == 'Linux'
         run: |
@@ -68,7 +108,7 @@ jobs:
           toolchain=$(sed -n 's/^channel = "\([^"]*\)".*/\1/p' rust/rust-toolchain.toml)
           rustup toolchain install "$toolchain" --profile minimal --target "$NATIVE_TARGET"
           echo "RUSTUP_TOOLCHAIN=$toolchain" >> "$GITHUB_ENV"
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
         with:
           workspaces: rust
           key: ${{ matrix.target }}
@@ -107,6 +147,9 @@ jobs:
           esac
           mkdir -p artifacts
           cp "$CARGO_TARGET_DIR/$NATIVE_TARGET/release/$library" "artifacts/$NATIVE_TARGET-$library"
+      - name: Test platform time limits
+        if: runner.os == 'Windows'
+        run: cargo test --locked --manifest-path rust/Cargo.toml --target "$NATIVE_TARGET" --test saturating_time
       - name: Smoke test desktop library
         if: ${{ !contains(matrix.target, 'android') && !contains(matrix.target, '-ios') }}
         run: |
@@ -118,25 +161,99 @@ jobs:
           library.tor_proxy_stop.restype = None
           library.tor_proxy_stop(None)
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: prebuilt-${{ matrix.target }}
           path: artifacts/*
           if-no-files-found: error
 
+  package:
+    if: github.event_name == 'pull_request'
+    name: Package example (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {platform: linux, runner: ubuntu-22.04}
+          - {platform: android, runner: ubuntu-22.04}
+          - {platform: ios, runner: macos-15}
+          - {platform: macos, runner: macos-15}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - name: Install Linux prerequisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang cmake libgtk-3-dev liblzma-dev ninja-build pkg-config perl
+      - name: Install Android NDK
+        if: matrix.platform == 'android'
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'ndk;28.2.13676358'
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+      - name: Install pinned Rust toolchain
+        run: |
+          toolchain=$(sed -n 's/^channel = "\([^"]*\)".*/\1/p' rust/rust-toolchain.toml)
+          rustup toolchain install "$toolchain" --profile minimal
+          case "${{ matrix.platform }}" in
+            linux) rustup target add x86_64-unknown-linux-gnu --toolchain "$toolchain" ;;
+            android) rustup target add aarch64-linux-android --toolchain "$toolchain" ;;
+            ios) rustup target add aarch64-apple-ios --toolchain "$toolchain" ;;
+            macos) rustup target add aarch64-apple-darwin --toolchain "$toolchain" ;;
+          esac
+          echo "RUSTUP_TOOLCHAIN=$toolchain" >> "$GITHUB_ENV"
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: rust
+          key: package-${{ matrix.platform }}
+      - uses: subosito/flutter-action@1508160852fb97248640997f7cfb38da241df0ba # v2.9.1
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Build packaged example
+        working-directory: example
+        run: |
+          case "${{ matrix.platform }}" in
+            linux) flutter build linux --release ;;
+            android) flutter build apk --release --target-platform android-arm64 ;;
+            ios) flutter build ios --release --no-codesign ;;
+            macos) flutter build macos --release ;;
+          esac
+      - name: Load packaged macOS library
+        if: matrix.platform == 'macos'
+        run: |
+          library=$(find example/build/macos/Build/Products/Release -type f -name libtor_ffi_plugin.dylib -print -quit)
+          test -n "$library"
+          nm -gj "$library" | grep -Fx _tor_proxy_stop
+          LIBRARY="$library" python3 - <<'PY'
+          import ctypes
+          import os
+
+          library = ctypes.CDLL(os.path.abspath(os.environ['LIBRARY']))
+          library.tor_proxy_stop.argtypes = [ctypes.c_void_p]
+          library.tor_proxy_stop.restype = None
+          library.tor_proxy_stop(None)
+          PY
+
   release:
-    needs: build
+    if: github.event_name != 'pull_request' && github.event.deleted != true
+    needs: [verify, build]
     runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           pattern: prebuilt-*
           path: artifacts
           merge-multiple: true
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1508160852fb97248640997f7cfb38da241df0ba # v2.9.1
         with:
           flutter-version: '3.47.2'
           channel: stable
@@ -144,7 +261,7 @@ jobs:
       - run: flutter pub get
       - name: Generate manifest
         run: dart --packages=.dart_tool/package_config.json tool/prebuilt_manifest.dart artifacts
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: native-release
           path: artifacts/*
