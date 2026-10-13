@@ -3,8 +3,8 @@
 * Update the example to socks_socket 2.0.0 and await Tor shutdown.
 
 * Bump arti to 2.7.0 and its supporting crates to 0.47.0; needs Rust 1.92.
-* Rebase the Windows clock-resolution fix onto `saturating-time` 0.5.0;
-  the upstream release still hangs while computing `SystemTime` limits.
+* Pin a reviewed `saturating-time` 0.5.0 fork with regression coverage for
+  coarse platform clocks.
 * Fix `tor_client_bootstrap` and `tor_client_set_dormant` freeing the client
   handle Dart still holds. Add `tor_client_free`; `Tor.stop` now releases the
   client handle.
@@ -30,12 +30,8 @@
   its state and cache files, and completes once they are released. Before,
   every start leaked a client that kept the cache open, so the data
   directory could not be deleted on Windows.
-* Include the vendored crates in `rust/patches/` in the prebuilt source
-  fingerprint, so editing them invalidates prebuilts and the hook cache.
 * Skip hidden files such as `.DS_Store` in the native source fingerprint and
   hash sources as bytes, so stray files no longer fail or invalidate builds.
-* Leave Cargo output from building a vendored crate on its own (`target/` and
-  `Cargo.lock`) out of the native source fingerprint.
 
 ## 0.1.0
 

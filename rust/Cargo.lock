@@ -3318,6 +3318,7 @@ dependencies = [
 [[package]]
 name = "saturating-time"
 version = "0.5.0"
+source = "git+https://github.com/cypherstack/tor.git?rev=e4c225da252ac866e9edc642ec218b0c4d2f6e52#e4c225da252ac866e9edc642ec218b0c4d2f6e52"
 dependencies = [
  "web-time-compat",
 ]

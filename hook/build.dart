@@ -9,8 +9,7 @@ Future<void> main(List<String> args) async {
     if (!input.config.buildCodeAssets) return;
     if (await usePrebuilt(input, output)) return;
 
-    // Cargo's dep-info, which RustBuilder tracks, omits the vendored crates in
-    // rust/patches, so declare the inputs the prebuilt fingerprint covers.
+    // Keep source builds and prebuilt releases keyed to the same native inputs.
     output.dependencies.addAll(
       (await sourceFingerprint(input.packageRoot)).dependencies,
     );

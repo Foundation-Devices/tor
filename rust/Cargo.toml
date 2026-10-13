@@ -44,9 +44,5 @@ glob = "0.3.1"
 [dev-dependencies]
 saturating-time = "0.5.0"
 
-# saturating-time 0.5.0 (via tor-netdoc) never finishes computing the minimum
-# SystemTime on Windows, which hangs consensus parsing and therefore bootstrap.
-# The vendored copy guards `find_limit` against steps below the platform's
-# clock resolution and tests the same rounding behavior on every platform.
 [patch.crates-io]
-saturating-time = { path = "patches/saturating-time" }
+saturating-time = { git = "https://github.com/cypherstack/tor.git", rev = "e4c225da252ac866e9edc642ec218b0c4d2f6e52" }
