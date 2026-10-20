@@ -93,7 +93,7 @@ class SOCKSSocket {
   StreamSubscription<List<int>>? get subscription => _subscription;
 
   /// Is SSL enabled?
-  final bool sslEnabled;
+  bool sslEnabled;
 
   /// Private constructor.
   SOCKSSocket._(this.proxyHost, this.proxyPort, this.sslEnabled);
@@ -216,6 +216,12 @@ class SOCKSSocket {
   /// Returns:
   ///   A Future that resolves to void.
   Future<void> connectTo(String domain, int port) async {
+    // Onion services provide their own end-to-end encryption, so disable the
+    // TLS upgrade when connecting to a .onion domain.
+    if (domain.endsWith('.onion')) {
+      sslEnabled = false;
+    }
+
     // Connect command.
     var request = [
       0x05, // SOCKS version.
