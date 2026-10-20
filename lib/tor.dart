@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'src/rust/api/tor.dart' as rust;
 import 'src/rust_lib_init.dart';
+import 'src/tor_lifecycle_gate.dart';
 
 export 'src/rust/api/tor.dart' show TorError;
 
@@ -37,6 +38,15 @@ class ClientNotActive implements Exception {
   String toString() => 'ClientNotActive: Tor client is not active';
 }
 
+class TorProxyFailure {
+  final String message;
+
+  TorProxyFailure(this.message);
+
+  @override
+  String toString() => 'TorProxyFailure: $message';
+}
+
 class Tor {
   rust.TorClientWrapper? _client;
   rust.TorProxyHandle? _proxy;
@@ -46,6 +56,20 @@ class Tor {
 
   /// Getter for the started flag.
   bool _started = false;
+
+  /// True while the client is starting or re-bootstrapping.
+  bool get starting => _startInFlight != null || _bootstrapInFlight != null;
+
+  Future<void>? _startInFlight;
+  int? _startGeneration;
+  Future<void>? _bootstrapInFlight;
+  int? _bootstrapGeneration;
+  Future<void>? _stopInFlight;
+  rust.TorBootstrapCancellationToken? _bootstrapCancellationToken;
+  final TorLifecycleGate _lifecycle = TorLifecycleGate();
+
+  /// Changes whenever the published Tor route is invalidated.
+  int get routeGeneration => _lifecycle.generation;
 
   /// Flag to indicate that traffic should flow through the proxy.
   bool _enabled = false;
@@ -63,7 +87,11 @@ class Tor {
   /// A stream of Tor events.
   ///
   /// This stream broadcast just the port for now (-1 if circuit not established or proxy not enabled)
-  final StreamController events = StreamController.broadcast();
+  final StreamController<int> events = StreamController<int>.broadcast();
+
+  /// Reports an unexpected loss of the published SOCKS proxy.
+  final StreamController<TorProxyFailure> failures =
+      StreamController<TorProxyFailure>.broadcast();
 
   /// Getter for the proxy port.
   ///
@@ -73,7 +101,7 @@ class Tor {
   ///
   /// This is the port that should be used for all requests.
   int get port {
-    if (!_enabled) {
+    if (!_enabled || !_started || !_bootstrapped) {
       return -1;
     }
     return _proxyPort;
@@ -125,24 +153,6 @@ class Tor {
     events.add(port);
   }
 
-  Future<int> _getRandomUnusedPort({List<int> excluded = const []}) async {
-    int port = 0;
-
-    retry:
-    while (port == 0 || excluded.contains(port)) {
-      try {
-        var socket = await ServerSocket.bind("0.0.0.0", 0);
-        port = socket.port;
-        socket.close();
-        return port;
-      } catch (_) {
-        continue retry;
-      }
-    }
-
-    return -1;
-  }
-
   /// Start the Tor service.
   ///
   /// This will start the Tor service and establish a Tor circuit.
@@ -154,7 +164,32 @@ class Tor {
   /// Throws an exception if the Tor service fails to start.
   ///
   /// Returns a Future that completes when the Tor service has started.
-  Future<void> start({String? dataDirPath}) async {
+  Future<void> start({String? dataDirPath}) {
+    if (_started) {
+      return _bootstrapped ? Future.value() : bootstrap();
+    }
+
+    final generation = _lifecycle.generation;
+    final inFlight = _startInFlight;
+    if (inFlight != null && _startGeneration == generation) return inFlight;
+
+    late final Future<void> start;
+    start = _lifecycle
+        .run(() => _startInternal(generation, dataDirPath))
+        .whenComplete(() {
+      if (identical(_startInFlight, start)) {
+        _startInFlight = null;
+        _startGeneration = null;
+      }
+    });
+    _startInFlight = start;
+    _startGeneration = generation;
+    return start;
+  }
+
+  Future<void> _startInternal(int generation, String? dataDirPath) async {
+    if (!_lifecycle.owns(generation)) return;
+
     broadcastState();
 
     await ensureRustLibInit();
@@ -165,25 +200,64 @@ class Tor {
     final stateDir = await Directory('$baseDirPath/tor_state').create();
     final cacheDir = await Directory('$baseDirPath/tor_cache').create();
 
-    // Generate a random port.
-    int newPort = await _getRandomUnusedPort();
+    if (!_lifecycle.owns(generation)) return;
 
     try {
-      // Start Tor - this is a blocking operation
-      final torInstance = await rust.startTor(
-        socksPort: newPort,
-        stateDir: stateDir.path,
-        cacheDir: cacheDir.path,
-      );
+      final cancellationToken = rust.TorBootstrapCancellationToken();
+      _bootstrapCancellationToken = cancellationToken;
 
-      _client = torInstance.client;
-      _proxy = torInstance.proxy;
-      _proxyPort = torInstance.socksPort;
+      // Start Tor - this is a blocking operation
+      late final rust.TorInstance torInstance;
+      try {
+        torInstance = await rust.startTor(
+          // Let the final native listener select and retain the ephemeral port.
+          socksPort: 0,
+          stateDir: stateDir.path,
+          cacheDir: cacheDir.path,
+          cancellationToken: cancellationToken,
+        );
+      } finally {
+        if (identical(_bootstrapCancellationToken, cancellationToken)) {
+          _bootstrapCancellationToken = null;
+        }
+        cancellationToken.dispose();
+      }
+
+      late final rust.TorClientWrapper client;
+      late final rust.TorProxyHandle proxy;
+      late final rust.TorProxyMonitor proxyMonitor;
+      late final int proxyPort;
+      try {
+        client = torInstance.client;
+        proxy = torInstance.proxy;
+        proxyMonitor = torInstance.proxyMonitor;
+        proxyPort = torInstance.socksPort;
+      } finally {
+        // The getters above clone; free the container now instead of at GC so
+        // it cannot keep an extra client reference (and dir.lock) alive.
+        torInstance.dispose();
+      }
+
+      if (!_lifecycle.owns(generation)) {
+        proxyMonitor.dispose();
+        await _stopResources(proxy, client);
+        return;
+      }
+
+      _client = client;
+      _proxy = proxy;
+      _proxyPort = proxyPort;
       _started = true;
       _bootstrapped = true; // startTor creates a bootstrapped client
 
       broadcastState();
+      unawaited(_monitorProxy(proxy, proxyMonitor, generation));
     } on rust.TorError catch (e) {
+      // Native cleanup failures are RuntimeError/ProxyStopError, not a normal
+      // bootstrap cancellation. Keep those observable even after stop().
+      if (!_lifecycle.owns(generation) && e is rust.TorError_BootstrapError) {
+        return;
+      }
       throw CouldntBootstrapDirectory(rustError: e.toString());
     } on PanicException catch (e) {
       // FRB converts Rust panics to PanicException - this is the key benefit!
@@ -201,16 +275,55 @@ class Tor {
   /// Throws an exception if the Tor service fails to bootstrap.
   ///
   /// Returns void.
-  Future<void> bootstrap() async {
-    if (_client == null) {
+  Future<void> bootstrap() {
+    final generation = _lifecycle.generation;
+    final inFlight = _bootstrapInFlight;
+    if (inFlight != null && _bootstrapGeneration == generation) {
+      return inFlight;
+    }
+
+    late final Future<void> bootstrap;
+    bootstrap =
+        _lifecycle.run(() => _bootstrapInternal(generation)).whenComplete(() {
+      if (identical(_bootstrapInFlight, bootstrap)) {
+        _bootstrapInFlight = null;
+        _bootstrapGeneration = null;
+      }
+    });
+    _bootstrapInFlight = bootstrap;
+    _bootstrapGeneration = generation;
+    return bootstrap;
+  }
+
+  Future<void> _bootstrapInternal(int generation) async {
+    if (!_lifecycle.owns(generation)) return;
+
+    final client = _client;
+    if (client == null) {
       throw ClientNotActive();
     }
 
     try {
-      await rust.bootstrap(client: _client!);
+      final cancellationToken = rust.TorBootstrapCancellationToken();
+      _bootstrapCancellationToken = cancellationToken;
+      try {
+        await rust.bootstrap(
+          client: client,
+          cancellationToken: cancellationToken,
+        );
+      } finally {
+        if (identical(_bootstrapCancellationToken, cancellationToken)) {
+          _bootstrapCancellationToken = null;
+        }
+        cancellationToken.dispose();
+      }
+      if (!_lifecycle.owns(generation) || !identical(_client, client)) return;
       _bootstrapped = true;
+      broadcastState();
     } on rust.TorError catch (e) {
+      if (!_lifecycle.owns(generation) || !identical(_client, client)) return;
       _bootstrapped = false;
+      broadcastState();
       throw CouldntBootstrapDirectory(rustError: e.toString());
     }
   }
@@ -222,58 +335,124 @@ class Tor {
   }
 
   /// Stops the proxy
-  Future<void> stop() async {
-    // Return early if already stopped
-    if (_proxy == null) {
-      return;
-    }
+  Future<void> stop() {
+    final proxy = _proxy;
+    final client = _client;
+    final previousStop = _stopInFlight;
 
-    try {
-      // This is now safe! FRB catches any panic and throws PanicException
-      await rust.stopProxy(proxy: _proxy!);
-    } on rust.TorError catch (e) {
-      if (kDebugMode) {
-        print('Error stopping proxy: $e');
-      }
-    } on PanicException catch (e) {
-      // Previously this would SIGABRT the app, now it's catchable!
-      if (kDebugMode) {
-        print('Proxy stop panicked (caught safely): ${e.message}');
-      }
-    }
+    // Invalidate a start or bootstrap before it can publish stale state. The
+    // queued stop then waits for that operation to release its native handles.
+    _lifecycle.invalidate();
+    _bootstrapCancellationToken?.cancel();
 
+    // Stop publishing the route before awaiting native shutdown so callers
+    // cannot start new work against a proxy that is being torn down.
     _proxy = null;
     _client = null;
+    _proxyPort = -1;
     _started = false;
     _bootstrapped = false;
     broadcastState();
+
+    // The queue continues after errors, so also observe the operations whose
+    // unpublished resources it is waiting to release. Wait for cleanup even
+    // when an operation fails before reporting the error to the stop caller.
+    late final Future<void> stop;
+    stop = Future.wait<void>([
+      if (previousStop != null) previousStop,
+      if (_startInFlight != null) _startInFlight!,
+      if (_bootstrapInFlight != null) _bootstrapInFlight!,
+      _lifecycle.run(() => _stopResources(proxy, client)),
+    ]).then((_) {}).whenComplete(() {
+      if (identical(_stopInFlight, stop)) {
+        _stopInFlight = null;
+      }
+    });
+    _stopInFlight = stop;
+    return stop;
   }
 
-  Future<void> setClientDormant(bool dormant) async {
-    if (_client == null || !started || !bootstrapped) {
-      throw ClientNotActive();
+  Future<void> _monitorProxy(
+    rust.TorProxyHandle proxy,
+    rust.TorProxyMonitor monitor,
+    int generation,
+  ) async {
+    try {
+      final message = await rust.waitForProxyExit(monitor: monitor);
+      if (message == null ||
+          !_lifecycle.owns(generation) ||
+          !identical(_proxy, proxy)) {
+        return;
+      }
+      await _handleProxyFailure(proxy, generation, message);
+    } catch (error) {
+      await _handleProxyFailure(proxy, generation, error.toString());
     }
+  }
 
-    await rust.setDormant(client: _client!, softMode: dormant);
+  Future<void> _handleProxyFailure(
+    rust.TorProxyHandle proxy,
+    int generation,
+    String message,
+  ) async {
+    if (!_lifecycle.owns(generation) || !identical(_proxy, proxy)) return;
+
+    try {
+      await stop();
+    } catch (error) {
+      message = '$message; teardown failed: $error';
+    } finally {
+      failures.add(TorProxyFailure(message));
+    }
+  }
+
+  Future<void> _stopResources(
+    rust.TorProxyHandle? proxy,
+    rust.TorClientWrapper? client,
+  ) async {
+    try {
+      if (proxy != null) {
+        await rust.stopProxy(proxy: proxy);
+      }
+    } finally {
+      // Drop the Rust client now instead of at GC: a lingering client holds
+      // tor_cache/dir.lock, forcing a restarted client's dirmgr into read-only.
+      client?.dispose();
+    }
+  }
+
+  Future<void> setClientDormant(bool dormant) {
+    final generation = _lifecycle.generation;
+    return _lifecycle.run(() async {
+      if (!_lifecycle.owns(generation)) return;
+
+      final client = _client;
+      if (client == null || !started || !bootstrapped) {
+        throw ClientNotActive();
+      }
+
+      await rust.setDormant(client: client, softMode: dormant);
+    });
   }
 
   Future<void> isReady() async {
     return await Future.doWhile(
-        () => Future.delayed(const Duration(seconds: 1)).then((_) {
-              // We are waiting and making absolutely no request unless:
-              // Tor is disabled
-              if (!enabled) {
-                return false;
-              }
+      () => Future.delayed(const Duration(seconds: 1)).then((_) {
+        // We are waiting and making absolutely no request unless:
+        // Tor is disabled
+        if (!enabled) {
+          return false;
+        }
 
-              // ...or Tor circuit is established
-              if (bootstrapped) {
-                return false;
-              }
+        // ...or Tor circuit is established
+        if (bootstrapped) {
+          return false;
+        }
 
-              // This way we avoid making clearnet req's while Tor is initialising
-              return true;
-            }));
+        // This way we avoid making clearnet req's while Tor is initialising
+        return true;
+      }),
+    );
   }
 
   void hello() {
