@@ -8,9 +8,10 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'tor.freezed.dart';
 
-// These functions are ignored because they are not marked as `pub`: `start_proxy_internal`
-// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `RUNTIME`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `deref`, `fmt`, `fmt`, `initialize`
+// These functions are ignored because they are not marked as `pub`: `create_arti_runtime`, `finish_failed_start`, `monitor_proxy`, `new`, `start_proxy_internal`, `stop_and_wait`, `wait_for_bootstrap`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `BootstrapWaitError`, `RUNTIME`, `TorProxyExit`, `TorProxyState`, `TrackedSpawner`, `TrackedTasks`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `block_on`, `blocking_io`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `initialize`, `reenter_block_on`, `spawn_blocking`, `spawn_obj`
+// These functions are ignored (category: IgnoreBecauseOwnerTyShouldIgnore): `default`
 
 /// Start Tor client and proxy
 ///
@@ -19,20 +20,30 @@ part 'tor.freezed.dart';
 Future<TorInstance> startTor(
         {required int socksPort,
         required String stateDir,
-        required String cacheDir}) =>
+        required String cacheDir,
+        required TorBootstrapCancellationToken cancellationToken}) =>
     RustLib.instance.api.crateApiTorStartTor(
-        socksPort: socksPort, stateDir: stateDir, cacheDir: cacheDir);
+        socksPort: socksPort,
+        stateDir: stateDir,
+        cacheDir: cacheDir,
+        cancellationToken: cancellationToken);
+
+Future<String?> waitForProxyExit({required TorProxyMonitor monitor}) =>
+    RustLib.instance.api.crateApiTorWaitForProxyExit(monitor: monitor);
 
 /// Re-bootstrap the Tor client
 ///
 /// Call this after network changes or to refresh the connection.
-Future<void> bootstrap({required TorClientWrapper client}) =>
-    RustLib.instance.api.crateApiTorBootstrap(client: client);
+Future<void> bootstrap(
+        {required TorClientWrapper client,
+        required TorBootstrapCancellationToken cancellationToken}) =>
+    RustLib.instance.api.crateApiTorBootstrap(
+        client: client, cancellationToken: cancellationToken);
 
 /// Set the client dormant mode
 ///
 /// * `soft_mode` - If true, uses Soft dormant mode (keeps some circuits warm)
-///                 If false, uses Normal mode (full operation)
+///   If false, uses Normal mode (full operation)
 Future<void> setDormant(
         {required TorClientWrapper client, required bool softMode}) =>
     RustLib.instance.api
@@ -40,8 +51,7 @@ Future<void> setDormant(
 
 /// Stop the Tor proxy
 ///
-/// This safely aborts the proxy task. Previously this could panic
-/// and crash the app - with FRB, any panic becomes a catchable exception.
+/// Stops the accept loop and the client runtime that owns accepted connections.
 Future<void> stopProxy({required TorProxyHandle proxy}) =>
     RustLib.instance.api.crateApiTorStopProxy(proxy: proxy);
 
@@ -54,6 +64,14 @@ Future<BigInt> getNofileLimit() =>
 Future<BigInt> setNofileLimit({required BigInt limit}) =>
     RustLib.instance.api.crateApiTorSetNofileLimit(limit: limit);
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>>
+abstract class TorBootstrapCancellationToken implements RustOpaqueInterface {
+  void cancel();
+
+  factory TorBootstrapCancellationToken() =>
+      RustLib.instance.api.crateApiTorTorBootstrapCancellationTokenNew();
+}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorClientWrapper>>
 abstract class TorClientWrapper implements RustOpaqueInterface {}
 
@@ -63,17 +81,24 @@ abstract class TorInstance implements RustOpaqueInterface {
 
   TorProxyHandle get proxy;
 
+  TorProxyMonitor get proxyMonitor;
+
   int get socksPort;
 
   set client(TorClientWrapper client);
 
   set proxy(TorProxyHandle proxy);
 
+  set proxyMonitor(TorProxyMonitor proxyMonitor);
+
   set socksPort(int socksPort);
 }
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyHandle>>
 abstract class TorProxyHandle implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>
+abstract class TorProxyMonitor implements RustOpaqueInterface {}
 
 @freezed
 sealed class TorError with _$TorError implements FrbException {

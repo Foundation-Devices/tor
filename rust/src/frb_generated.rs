@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 333622112;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1554608784;
 
 // Section: executor
 
@@ -46,6 +46,86 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire__crate__api__tor__TorBootstrapCancellationToken_cancel_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "TorBootstrapCancellationToken_cancel",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                    TorBootstrapCancellationToken,
+                >,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    crate::api::tor::TorBootstrapCancellationToken::cancel(&*api_that_guard);
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__tor__TorBootstrapCancellationToken_new_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "TorBootstrapCancellationToken_new",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok =
+                    Result::<_, ()>::Ok(crate::api::tor::TorBootstrapCancellationToken::new())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
 fn wire__crate__api__tor__TorInstance_auto_accessor_get_client_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -133,6 +213,52 @@ fn wire__crate__api__tor__TorInstance_auto_accessor_get_proxy_impl(
                 }
                 let api_that_guard = api_that_guard.unwrap();
                 let output_ok = Result::<_, ()>::Ok(api_that_guard.proxy.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__tor__TorInstance_auto_accessor_get_proxy_monitor_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "TorInstance_auto_accessor_get_proxy_monitor",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorInstance>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.proxy_monitor.clone())?;
                 Ok(output_ok)
             })())
         },
@@ -286,6 +412,57 @@ fn wire__crate__api__tor__TorInstance_auto_accessor_set_proxy_impl(
         },
     )
 }
+fn wire__crate__api__tor__TorInstance_auto_accessor_set_proxy_monitor_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "TorInstance_auto_accessor_set_proxy_monitor",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorInstance>,
+            >>::sse_decode(&mut deserializer);
+            let api_proxy_monitor = <TorProxyMonitor>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.proxy_monitor = api_proxy_monitor;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
 fn wire__crate__api__tor__TorInstance_auto_accessor_set_socks_port_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -362,10 +539,16 @@ fn wire__crate__api__tor__bootstrap_impl(
             let api_client = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorClientWrapper>,
             >>::sse_decode(&mut deserializer);
+            let api_cancellation_token = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                    TorBootstrapCancellationToken,
+                >,
+            >>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, crate::api::tor::TorError>((move || {
                     let mut api_client_guard = None;
+                    let mut api_cancellation_token_guard = None;
                     let decode_indices_ =
                         flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
                             flutter_rust_bridge::for_generated::LockableOrderInfo::new(
@@ -373,15 +556,28 @@ fn wire__crate__api__tor__bootstrap_impl(
                                 0,
                                 false,
                             ),
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_cancellation_token,
+                                1,
+                                false,
+                            ),
                         ]);
                     for i in decode_indices_ {
                         match i {
                             0 => api_client_guard = Some(api_client.lockable_decode_sync_ref()),
+                            1 => {
+                                api_cancellation_token_guard =
+                                    Some(api_cancellation_token.lockable_decode_sync_ref())
+                            }
                             _ => unreachable!(),
                         }
                     }
                     let api_client_guard = api_client_guard.unwrap();
-                    let output_ok = crate::api::tor::bootstrap(&*api_client_guard)?;
+                    let api_cancellation_token_guard = api_cancellation_token_guard.unwrap();
+                    let output_ok = crate::api::tor::bootstrap(
+                        &*api_client_guard,
+                        &*api_cancellation_token_guard,
+                    )?;
                     Ok(output_ok)
                 })())
             }
@@ -600,11 +796,39 @@ fn wire__crate__api__tor__start_tor_impl(
             let api_socks_port = <u16>::sse_decode(&mut deserializer);
             let api_state_dir = <String>::sse_decode(&mut deserializer);
             let api_cache_dir = <String>::sse_decode(&mut deserializer);
+            let api_cancellation_token = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                    TorBootstrapCancellationToken,
+                >,
+            >>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, crate::api::tor::TorError>((move || {
-                    let output_ok =
-                        crate::api::tor::start_tor(api_socks_port, api_state_dir, api_cache_dir)?;
+                    let mut api_cancellation_token_guard = None;
+                    let decode_indices_ =
+                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_cancellation_token,
+                                0,
+                                false,
+                            ),
+                        ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => {
+                                api_cancellation_token_guard =
+                                    Some(api_cancellation_token.lockable_decode_sync_ref())
+                            }
+                            _ => unreachable!(),
+                        }
+                    }
+                    let api_cancellation_token_guard = api_cancellation_token_guard.unwrap();
+                    let output_ok = crate::api::tor::start_tor(
+                        api_socks_port,
+                        api_state_dir,
+                        api_cache_dir,
+                        &*api_cancellation_token_guard,
+                    )?;
                     Ok(output_ok)
                 })())
             }
@@ -644,9 +868,48 @@ fn wire__crate__api__tor__stop_proxy_impl(
         },
     )
 }
+fn wire__crate__api__tor__wait_for_proxy_exit_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "wait_for_proxy_exit",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_monitor = <TorProxyMonitor>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, crate::api::tor::TorError>(
+                    (move || async move {
+                        let output_ok = crate::api::tor::wait_for_proxy_exit(api_monitor).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 
 // Section: related_funcs
 
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>
+);
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorClientWrapper>
 );
@@ -656,8 +919,21 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyHandle>
 );
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>
+);
 
 // Section: dart2rust
+
+impl SseDecode for TorBootstrapCancellationToken {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
 
 impl SseDecode for TorClientWrapper {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -686,6 +962,28 @@ impl SseDecode for TorProxyHandle {
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyHandle>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode for TorProxyMonitor {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode
+    for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
     }
 }
 
@@ -719,6 +1017,16 @@ impl SseDecode
     }
 }
 
+impl SseDecode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
 impl SseDecode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -743,6 +1051,17 @@ impl SseDecode for Vec<u8> {
             ans_.push(<u8>::sse_decode(deserializer));
         }
         return ans_;
+    }
+}
+
+impl SseDecode for Option<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<String>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
     }
 }
 
@@ -830,14 +1149,15 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        7 => wire__crate__api__tor__bootstrap_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__tor__get_nofile_limit_impl(port, ptr, rust_vec_len, data_len),
-        9 => wire__crate__api__tor__hello_impl(port, ptr, rust_vec_len, data_len),
-        10 => wire__crate__api__tor__init_app_impl(port, ptr, rust_vec_len, data_len),
-        11 => wire__crate__api__tor__set_dormant_impl(port, ptr, rust_vec_len, data_len),
-        12 => wire__crate__api__tor__set_nofile_limit_impl(port, ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__tor__start_tor_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__tor__stop_proxy_impl(port, ptr, rust_vec_len, data_len),
+        11 => wire__crate__api__tor__bootstrap_impl(port, ptr, rust_vec_len, data_len),
+        12 => wire__crate__api__tor__get_nofile_limit_impl(port, ptr, rust_vec_len, data_len),
+        13 => wire__crate__api__tor__hello_impl(port, ptr, rust_vec_len, data_len),
+        14 => wire__crate__api__tor__init_app_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__tor__set_dormant_impl(port, ptr, rust_vec_len, data_len),
+        16 => wire__crate__api__tor__set_nofile_limit_impl(port, ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__tor__start_tor_impl(port, ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__tor__stop_proxy_impl(port, ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__tor__wait_for_proxy_exit_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -850,32 +1170,52 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__tor__TorInstance_auto_accessor_get_client_impl(
+        1 => wire__crate__api__tor__TorBootstrapCancellationToken_cancel_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        2 => wire__crate__api__tor__TorInstance_auto_accessor_get_proxy_impl(
+        2 => wire__crate__api__tor__TorBootstrapCancellationToken_new_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        3 => wire__crate__api__tor__TorInstance_auto_accessor_get_socks_port_impl(
+        3 => wire__crate__api__tor__TorInstance_auto_accessor_get_client_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__tor__TorInstance_auto_accessor_set_client_impl(
+        4 => wire__crate__api__tor__TorInstance_auto_accessor_get_proxy_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        5 => wire__crate__api__tor__TorInstance_auto_accessor_set_proxy_impl(
+        5 => wire__crate__api__tor__TorInstance_auto_accessor_get_proxy_monitor_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        6 => wire__crate__api__tor__TorInstance_auto_accessor_set_socks_port_impl(
+        6 => wire__crate__api__tor__TorInstance_auto_accessor_get_socks_port_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        7 => wire__crate__api__tor__TorInstance_auto_accessor_set_client_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        8 => wire__crate__api__tor__TorInstance_auto_accessor_set_proxy_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => wire__crate__api__tor__TorInstance_auto_accessor_set_proxy_monitor_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        10 => wire__crate__api__tor__TorInstance_auto_accessor_set_socks_port_impl(
             ptr,
             rust_vec_len,
             data_len,
@@ -885,6 +1225,26 @@ fn pde_ffi_dispatcher_sync_impl(
 }
 
 // Section: rust2dart
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<TorBootstrapCancellationToken> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<TorBootstrapCancellationToken>
+{
+}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<TorBootstrapCancellationToken>>
+    for TorBootstrapCancellationToken
+{
+    fn into_into_dart(self) -> FrbWrapper<TorBootstrapCancellationToken> {
+        self.into()
+    }
+}
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<TorClientWrapper> {
@@ -932,6 +1292,21 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<TorProxyHandle>> for TorProxyH
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<TorProxyMonitor> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<TorProxyMonitor> {}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<TorProxyMonitor>> for TorProxyMonitor {
+    fn into_into_dart(self) -> FrbWrapper<TorProxyMonitor> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::tor::TorError {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -964,6 +1339,18 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::tor::TorError> for crate::api
     }
 }
 
+impl SseEncode for TorBootstrapCancellationToken {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+        >>::sse_encode(
+            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for TorClientWrapper {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -982,6 +1369,26 @@ impl SseEncode for TorProxyHandle {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyHandle>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+    }
+}
+
+impl SseEncode for TorProxyMonitor {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+    }
+}
+
+impl SseEncode
+    for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
     }
 }
 
@@ -1018,6 +1425,17 @@ impl SseEncode
     }
 }
 
+impl SseEncode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
 impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1038,6 +1456,16 @@ impl SseEncode for Vec<u8> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <u8>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <String>::sse_encode(value, serializer);
         }
     }
 }
@@ -1139,6 +1567,24 @@ mod io {
     flutter_rust_bridge::frb_generated_boilerplate_io!();
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_tor_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+        >::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_tor_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+        >::decrement_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_tor_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorClientWrapper(
         ptr: *const std::ffi::c_void,
     ) {
@@ -1179,6 +1625,20 @@ mod io {
     ) {
         MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyHandle>>::decrement_strong_count(ptr as _);
     }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_tor_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_tor_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>::decrement_strong_count(ptr as _);
+    }
 }
 #[cfg(not(target_family = "wasm"))]
 pub use io::*;
@@ -1204,6 +1664,24 @@ mod web {
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_web!();
+
+    #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+        >::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorBootstrapCancellationToken(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorBootstrapCancellationToken>,
+        >::decrement_strong_count(ptr as _);
+    }
 
     #[wasm_bindgen]
     pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorClientWrapper(
@@ -1245,6 +1723,20 @@ mod web {
         ptr: *const std::ffi::c_void,
     ) {
         MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyHandle>>::decrement_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTorProxyMonitor(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TorProxyMonitor>>::decrement_strong_count(ptr as _);
     }
 }
 #[cfg(target_family = "wasm")]
