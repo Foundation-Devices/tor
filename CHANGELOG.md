@@ -4,6 +4,14 @@ SPDX-FileCopyrightText: 2024 Foundation Devices Inc.
 SPDX-License-Identifier: MIT
 -->
 
+## 0.2.1
+
+* Migrated native bindings to `flutter_rust_bridge`.
+* Hardened Tor startup, liveness checks, cancellation, and deterministic shutdown.
+* Added support for a caller-configurable Tor data directory.
+* Fixed iOS initialization, plugin packaging, and `.onion` SOCKS connections.
+* Reduced sensitive environment output from Apple builds.
+
 ## 0.0.9
 
 * Bumped arti to version 1.4.3

@@ -20,11 +20,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1770689213,
-        "narHash": "sha256-N6JiSpfi0s8NjUTnjwo3c+YAmvYhCDzjCKCrTUC97xM=",
+        "lastModified": 1792506237,
+        "narHash": "sha256-Q/8KLB6jNfpaUN1HAedE/u/Et9feE/zYSsutBLKrCFk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "49d75834011c94a120a9cb874ac1c4d8b7bfc767",
+        "rev": "5adc50831c259f87faeb09ddf930d43597197473",
         "type": "github"
       },
       "original": {
@@ -34,10 +34,27 @@
         "type": "github"
       }
     },
+    "nixpkgs-flutter": {
+      "locked": {
+        "lastModified": 1792221042,
+        "narHash": "sha256-mowH7pijzlzVls3RkAuJGzt+DAB2DA4gbS+Wle7YXKw=",
+        "owner": "r-ryantm",
+        "repo": "nixpkgs",
+        "rev": "20e5b575be4b254021b1a8af2f5ae50d58b492c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "r-ryantm",
+        "repo": "nixpkgs",
+        "rev": "20e5b575be4b254021b1a8af2f5ae50d58b492c2",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-flutter": "nixpkgs-flutter",
         "rust-overlay": "rust-overlay"
       }
     },
