@@ -4,7 +4,7 @@
 
 [package]
 name = "rust_lib_tor"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Igor Cota <igor@foundation.xyz>"]
 edition = "2021"
 
