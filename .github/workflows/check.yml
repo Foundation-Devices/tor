@@ -45,5 +45,9 @@ jobs:
       - name: Analyze Dart project source
         run: flutter analyze
 
+      # Pure Dart; needs neither the native library nor a Tor network.
+      - name: Run SOCKS socket tests
+        run: flutter test test/socks_socket_test.dart
+
 #      - name: Run Dart tests
 #        run: flutter test
