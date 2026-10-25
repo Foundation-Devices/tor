@@ -8,6 +8,89 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
+/// A malformed or refused SOCKS5 handshake.
+class SOCKSException implements Exception {
+  SOCKSException(this.message, {this.replyCode});
+
+  final String message;
+
+  /// The REP field of a refused CONNECT reply, when the proxy sent one.
+  final int? replyCode;
+
+  @override
+  String toString() => 'SOCKSException: $message';
+}
+
+/// Length of the complete method-selection reply at the start of [buffer], or
+/// null while more bytes are needed. Throws [SOCKSException] when invalid.
+@visibleForTesting
+int? socks5MethodReplyLength(List<int> buffer) {
+  if (buffer.isNotEmpty && buffer[0] != 0x05) {
+    throw SOCKSException('unexpected SOCKS version ${buffer[0]}');
+  }
+  if (buffer.length < 2) return null;
+  if (buffer[1] != 0x00) {
+    throw SOCKSException('proxy refused the no-authentication method');
+  }
+  return 2;
+}
+
+/// Length of the complete CONNECT reply at the start of [buffer], including
+/// its variable-length bound address, or null while more bytes are needed.
+/// Throws [SOCKSException] for a refusal or a malformed reply.
+@visibleForTesting
+int? socks5ConnectReplyLength(List<int> buffer) {
+  if (buffer.isNotEmpty && buffer[0] != 0x05) {
+    throw SOCKSException('unexpected SOCKS version ${buffer[0]}');
+  }
+  if (buffer.length >= 2 && buffer[1] != 0x00) {
+    throw SOCKSException('proxy refused the connection', replyCode: buffer[1]);
+  }
+  if (buffer.length >= 3 && buffer[2] != 0x00) {
+    throw SOCKSException('invalid reserved byte ${buffer[2]}');
+  }
+  if (buffer.length < 4) return null;
+
+  final int addressLength;
+  switch (buffer[3]) {
+    case 0x01:
+      addressLength = 4;
+    case 0x04:
+      addressLength = 16;
+    case 0x03:
+      if (buffer.length < 5) return null;
+      if (buffer[4] == 0) throw SOCKSException('empty bound domain');
+      addressLength = 1 + buffer[4];
+    default:
+      throw SOCKSException('unknown address type ${buffer[3]}');
+  }
+  final length = 4 + addressLength + 2;
+  return buffer.length >= length ? length : null;
+}
+
+/// The CONNECT request for [domain]:[port]. Throws [ArgumentError] for a
+/// domain SOCKS5 cannot carry or a port outside 1-65535.
+@visibleForTesting
+List<int> socks5ConnectRequest(String domain, int port) {
+  final name = domain.codeUnits;
+  if (name.isEmpty || name.length > 255 || name.any((unit) => unit > 0x7F)) {
+    throw ArgumentError.value(domain, 'domain', 'must be 1-255 ASCII bytes');
+  }
+  if (port < 1 || port > 0xFFFF) {
+    throw ArgumentError.value(port, 'port', 'must be 1-65535');
+  }
+  return [
+    0x05, // SOCKS version.
+    0x01, // Connect command.
+    0x00, // Reserved.
+    0x03, // Domain name.
+    name.length,
+    ...name,
+    (port >> 8) & 0xFF,
+    port & 0xFF
+  ];
+}
+
 /// A SOCKS5 socket.
 ///
 /// A Dart 3 Socket wrapper that implements the SOCKS5 protocol.  Now with SSL!
@@ -72,8 +155,18 @@ class SOCKSSocket {
   late final Socket _secureSocksSocket;
 
   /// A StreamController that listens to the _socksSocket and broadcasts.
-  final StreamController<List<int>> _responseController =
-      StreamController.broadcast();
+  late final StreamController<List<int>> _responseController =
+      StreamController.broadcast(onListen: _flushPending);
+
+  /// Destination bytes received while nothing listens, such as bytes the
+  /// proxy coalesced with its CONNECT reply; delivered to the first listener.
+  final List<int> _pending = [];
+
+  /// Proxy bytes not yet consumed by the SOCKS5 handshake.
+  final List<int> _handshakeBuffer = [];
+  bool _handshakeDone = false;
+  Object? _handshakeError;
+  Completer<void>? _handshakeWaiter;
 
   /// A StreamController that listens to the _secureSocksSocket and broadcasts.
   final StreamController<List<int>> _secureResponseController =
@@ -167,10 +260,20 @@ class SOCKSSocket {
     // Listen to the socket.
     _subscription = _socksSocket.listen(
       (data) {
-        // Add the data to the response controller.
-        _responseController.add(data);
+        if (!_handshakeDone) {
+          _handshakeBuffer.addAll(data);
+          _wakeHandshake();
+          return;
+        }
+        _deliver(data);
       },
       onError: (e) {
+        if (!_handshakeDone) {
+          _handshakeError = e;
+          _wakeHandshake();
+          return;
+        }
+
         // Handle errors.
         if (e is Object) {
           _responseController.addError(e);
@@ -181,10 +284,55 @@ class SOCKSSocket {
         // TODO make sure sending error as string is acceptable.
       },
       onDone: () {
+        if (!_handshakeDone) {
+          _handshakeError ??=
+              SOCKSException('proxy closed the connection during handshake');
+          _wakeHandshake();
+        }
         // Close the response controller when the socket is closed.
         // _responseController.close();
       },
     );
+  }
+
+  void _wakeHandshake() {
+    final waiter = _handshakeWaiter;
+    _handshakeWaiter = null;
+    waiter?.complete();
+  }
+
+  /// Waits until [frameLength] finds a complete reply at the start of the
+  /// handshake buffer, then removes and returns it. TCP may split or coalesce
+  /// replies at any byte, so one socket event is never assumed to be a frame.
+  Future<List<int>> _readFrame(int? Function(List<int>) frameLength) async {
+    while (true) {
+      final length = frameLength(_handshakeBuffer);
+      if (length != null) {
+        final frame = _handshakeBuffer.sublist(0, length);
+        _handshakeBuffer.removeRange(0, length);
+        return frame;
+      }
+      final error = _handshakeError;
+      if (error != null) throw error;
+      final waiter = Completer<void>();
+      _handshakeWaiter = waiter;
+      await waiter.future;
+    }
+  }
+
+  void _deliver(List<int> data) {
+    if (_responseController.hasListener) {
+      _responseController.add(data);
+    } else {
+      _pending.addAll(data);
+    }
+  }
+
+  void _flushPending() {
+    if (_pending.isEmpty) return;
+    final data = List<int>.of(_pending);
+    _pending.clear();
+    _responseController.add(data);
   }
 
   /// Connects to the SOCKS socket.
@@ -195,16 +343,8 @@ class SOCKSSocket {
     // Greeting and method selection.
     _socksSocket.add([0x05, 0x01, 0x00]);
 
-    // Wait for server response.
-    var response = await _responseController.stream.first;
-
-    // Check if the connection was successful.
-    if (response[1] != 0x00) {
-      throw Exception(
-          'socks_socket.connect(): Failed to connect to SOCKS5 proxy.');
-    }
-
-    return;
+    // Wait for the complete method-selection reply; it is validated as read.
+    await _readFrame(socks5MethodReplyLength);
   }
 
   /// Connects to the specified [domain] and [port] through the SOCKS socket.
@@ -222,29 +362,24 @@ class SOCKSSocket {
       sslEnabled = false;
     }
 
-    // Connect command.
-    var request = [
-      0x05, // SOCKS version.
-      0x01, // Connect command.
-      0x00, // Reserved.
-      0x03, // Domain name.
-      domain.length,
-      ...domain.codeUnits,
-      (port >> 8) & 0xFF,
-      port & 0xFF
-    ];
+    // Connect command, validated before anything is written.
+    final request = socks5ConnectRequest(domain, port);
 
     // Send the connect command to the SOCKS proxy server.
     _socksSocket.add(request);
 
-    // Wait for server response.
-    var response = await _responseController.stream.first;
+    // Wait for the complete CONNECT reply; a refusal throws SOCKSException.
+    await _readFrame(socks5ConnectReplyLength);
+    _handshakeDone = true;
+    final leftover = List<int>.of(_handshakeBuffer);
+    _handshakeBuffer.clear();
 
-    // Check if the connection was successful.
-    if (response[1] != 0x00) {
-      throw Exception(
-          'socks_socket.connectTo(): Failed to connect to target through SOCKS5 proxy.');
+    // The TLS client speaks first, so destination bytes before its hello can
+    // only come from a misbehaving proxy and must not reach the TLS layer.
+    if (sslEnabled && leftover.isNotEmpty) {
+      throw SOCKSException('proxy sent data before the TLS handshake');
     }
+    if (leftover.isNotEmpty) _deliver(leftover);
 
     // Upgrade to SSL if needed.
     if (sslEnabled) {
