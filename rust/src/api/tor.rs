@@ -33,6 +33,9 @@ lazy_static! {
 
 const PROXY_SHUTDOWN_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 const BOOTSTRAP_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(180);
+// The app sandbox already keeps other apps out of Tor's directories on phones,
+// so Arti's ownership checks add nothing there and can stop Tor starting at all.
+const SANDBOXED_STORAGE: bool = cfg!(any(target_os = "ios", target_os = "android"));
 
 type TrackedTorRuntime = CompoundRuntime<
     TrackedSpawner,
@@ -189,6 +192,50 @@ fn finish_failed_start(tasks: TrackedTasks, error: TorError) -> TorError {
     }
 }
 
+fn tor_client_config(
+    state_dir: String,
+    cache_dir: String,
+    sandboxed_storage: bool,
+) -> Result<TorClientConfig, TorError> {
+    let mut cfg_builder = TorClientConfig::builder();
+    cfg_builder
+        .storage()
+        .state_dir(CfgPath::new(state_dir))
+        .cache_dir(CfgPath::new(cache_dir));
+    if sandboxed_storage {
+        cfg_builder
+            .storage()
+            .permissions()
+            .dangerously_trust_everyone();
+    }
+    cfg_builder.address_filter().allow_onion_addrs(true);
+    cfg_builder
+        .preemptive_circuits()
+        .disable_at_threshold(1)
+        .min_exit_circs_for_port(1)
+        .initial_predicted_ports()
+        .clear();
+
+    cfg_builder
+        .build()
+        .map_err(|e| TorError::ConfigError(e.to_string()))
+}
+
+// Arti's own message leaves out its causes, such as the path a check rejected.
+fn error_chain(error: &dyn std::error::Error) -> String {
+    let mut message = error.to_string();
+    let mut source = error.source();
+    while let Some(cause) = source {
+        let cause_message = cause.to_string();
+        if !message.contains(&cause_message) {
+            message.push_str(": ");
+            message.push_str(&cause_message);
+        }
+        source = cause.source();
+    }
+    message
+}
+
 /// Custom error types for Tor operations
 #[derive(Debug, thiserror::Error)]
 pub enum TorError {
@@ -310,22 +357,7 @@ pub fn start_tor(
     cache_dir: String,
     cancellation_token: &TorBootstrapCancellationToken,
 ) -> Result<TorInstance, TorError> {
-    let mut cfg_builder = TorClientConfig::builder();
-    cfg_builder
-        .storage()
-        .state_dir(CfgPath::new(state_dir))
-        .cache_dir(CfgPath::new(cache_dir));
-    cfg_builder.address_filter().allow_onion_addrs(true);
-    cfg_builder
-        .preemptive_circuits()
-        .disable_at_threshold(1)
-        .min_exit_circs_for_port(1)
-        .initial_predicted_ports()
-        .clear();
-
-    let cfg = cfg_builder
-        .build()
-        .map_err(|e| TorError::ConfigError(e.to_string()))?;
+    let cfg = tor_client_config(state_dir, cache_dir, SANDBOXED_STORAGE)?;
 
     let (runtime, tasks) =
         create_arti_runtime().map_err(|e| TorError::RuntimeError(e.to_string()))?;
@@ -357,7 +389,7 @@ pub fn start_tor(
         Err(BootstrapWaitError::Failed(error)) => {
             return Err(finish_failed_start(
                 tasks,
-                TorError::BootstrapError(error.to_string()),
+                TorError::BootstrapError(error_chain(&error)),
             ));
         }
     };
@@ -776,5 +808,34 @@ mod tests {
         stop_proxy(running_proxy).unwrap();
         let stopped_exit = rt.block_on(wait_for_proxy_exit(running_monitor)).unwrap();
         assert!(stopped_exit.is_none());
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn sandboxed_storage_accepts_a_state_dir_arti_would_reject() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let state_dir = tempfile::tempdir().unwrap();
+        let cache_dir = tempfile::tempdir().unwrap();
+        // World-writable, which fs-mistrust refuses for persistent state.
+        std::fs::set_permissions(state_dir.path(), std::fs::Permissions::from_mode(0o777)).unwrap();
+        let path = |dir: &tempfile::TempDir| dir.path().to_str().unwrap().to_owned();
+        let create = |sandboxed_storage| {
+            let config =
+                tor_client_config(path(&state_dir), path(&cache_dir), sandboxed_storage).unwrap();
+            let (runtime, _tasks) = create_arti_runtime().unwrap();
+            TorClient::with_runtime(runtime)
+                .config(config)
+                .create_unbootstrapped()
+        };
+
+        let rejection = error_chain(
+            &create(false)
+                .err()
+                .expect("Arti accepted a world-writable state directory"),
+        );
+        let state_dir_name = state_dir.path().file_name().unwrap().to_str().unwrap();
+        assert!(rejection.contains(state_dir_name), "{rejection}");
+        create(true).unwrap();
     }
 }
